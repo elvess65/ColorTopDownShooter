@@ -350,6 +350,7 @@ GameObject:
   - component: {fileID: 114850027788071514}
   - component: {fileID: 114021033372759136}
   - component: {fileID: 114560510724173644}
+  - component: {fileID: 114216067626134038}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: Untagged
@@ -720,6 +721,38 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114216067626134038
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1818096071287634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5778e5e62bdc02248ba9cfd83c52e3e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  VignetteFalloff: 1
+  VignetteOuterValue: 0.8729006
+  VignetteInnerValue: 0.05749735
+  VignetteInnerValueDistance: 0.49024057
+  VignetteOuterValueDistance: 0.77868116
+  VignetteMode: 1
+  VignetteCenter: {x: 0.5, y: 0.5}
+  VignetteInnerColor: {r: 0, g: 0, b: 0, a: 0}
+  VignetteOuterColor: {r: 0, g: 0, b: 0, a: 1}
+  VignetteInnerSaturation: 1
+  VignetteOuterSaturation: 0
+  VignetteDebugEnabled: 0
+  IsAnamorphicVignette: 0
+  EnableSaturationVignette: 0
+  IntegrationType: 2
+  IntegrationStage: 1
+  FinalVignetteShader: {fileID: 4800000, guid: d4c4c6a3a749d0f49a5275153224efbf, type: 3}
+  isHDR: 1
+  isSPSR: 0
+  pipelineFoldout: 0
+  aboutFoldout: 0
 --- !u!114 &114237426696245484
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -885,7 +918,7 @@ MonoBehaviour:
   tapCountOption: 0
   tapCountDuration: 0.5
   targetTapCount: 2
-  joystickName: 
+  joystickName: DodgeJoystick
   exposeValues: 0
   horizontalValue: 0
   verticalValue: 0
@@ -912,8 +945,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bb1760bc7e2643a29ab4cefe421987a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MainJoystickName: MainJoystick
-  ButtonJump: {fileID: 0}
+  MoveJoystickName: MoveJoystick
+  DodgeJoystickName: Dodge Joystick
 --- !u!114 &114430641651973684
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1145,7 +1178,7 @@ MonoBehaviour:
   tapCountOption: 0
   tapCountDuration: 0.5
   targetTapCount: 2
-  joystickName: 
+  joystickName: MoveJoystick
   exposeValues: 0
   horizontalValue: 0
   verticalValue: 0
@@ -1241,9 +1274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7da7db666ab51994fad95445b7e7ee7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  KeyboardInput: {fileID: 0}
-  VirtualJoystickInput: {fileID: 0}
-  PreferVirtualJoystickInEditor: 0
+  PreferVirtualJoystickInEditor: 1
 --- !u!114 &114850027788071514
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1545,8 +1576,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1046.3687, y: 91.48125}
-  m_SizeDelta: {x: 155.2875, y: 155.2875}
+  m_AnchoredPosition: {x: 1044.9363, y: 92.37375}
+  m_SizeDelta: {x: 156.8025, y: 156.8025}
   m_Pivot: {x: 0, y: 0}
 --- !u!224 &224396413223919300
 RectTransform:
@@ -1602,8 +1633,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 54.34375, y: 91.48125}
-  m_SizeDelta: {x: 155.2875, y: 155.2875}
+  m_AnchoredPosition: {x: 54.26123, y: 92.37375}
+  m_SizeDelta: {x: 156.8025, y: 156.8025}
   m_Pivot: {x: 0, y: 0}
 --- !u!224 &224512680254963974
 RectTransform:
@@ -1644,8 +1675,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.7687988, y: 0.76875305}
-  m_SizeDelta: {x: 153.75, y: 153.75}
+  m_AnchoredPosition: {x: 0.7762451, y: 0.7762451}
+  m_SizeDelta: {x: 155.25, y: 155.25}
   m_Pivot: {x: 0, y: 0}
 --- !u!224 &224625259436008216
 RectTransform:
@@ -1686,8 +1717,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.7687378, y: 0.76875305}
-  m_SizeDelta: {x: 153.75, y: 153.75}
+  m_AnchoredPosition: {x: 0.7762451, y: 0.7762451}
+  m_SizeDelta: {x: 155.25, y: 155.25}
   m_Pivot: {x: 0, y: 0}
 --- !u!224 &224842374047875238
 RectTransform:

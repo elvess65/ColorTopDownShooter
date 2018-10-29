@@ -59,7 +59,8 @@ namespace mytest2.UI
 
         void SubscribeForVirtualJoystick()
         {
-            InputManager.Instance.OnInputStateChange += JoystickAnimationController.PlayAnimation;
+            Debug.LogWarning("InputManager.Instance.OnInputStateChange += JoystickAnimationController.PlayAnimation;");
+            //InputManager.Instance.OnInputStateChange += JoystickAnimationController.PlayAnimation;
 
             if (ShowJumpButton && JumpButtonAnimationController != null)
                 InputManager.Instance.OnInputStateChange += JumpButtonAnimationController.PlayAnimation;
