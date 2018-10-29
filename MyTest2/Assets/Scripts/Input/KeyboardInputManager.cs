@@ -10,9 +10,6 @@ namespace mytest2.UI.InputSystem
 
             if (OnMove != null)
                 OnMove(new Vector3(dir.x, 0, dir.y));
-
-            if (Input.GetKeyUp(KeyCode.Space))
-                OnJump();
         }
     }
 }

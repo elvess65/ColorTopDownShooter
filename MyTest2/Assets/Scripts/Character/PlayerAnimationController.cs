@@ -50,7 +50,7 @@ public class PlayerAnimationController : MonoBehaviour
     {
         m_IsPaused = isPaused;
 
-        m_LerpData.TotalTime = PlayerController.ReduceSpeedAtLockInputTime;
+        //m_LerpData.TotalTime = PlayerController.ReduceSpeedAtLockInputTime;
         if (isPaused)
         {
             m_LerpData.From = 1;

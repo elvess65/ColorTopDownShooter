@@ -7,5 +7,9 @@ namespace mytest2.Character
     /// </summary>
     public class CreatureController : MonoBehaviour
     {
+        protected virtual void Start()
+        {
+
+        }
     }
 }
