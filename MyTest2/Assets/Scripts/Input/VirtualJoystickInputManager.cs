@@ -8,6 +8,8 @@ namespace mytest2.UI.InputSystem
 
         [Header("Virtual Joystick Wrappers")]
         public VirtualJoystickWrapper DodgeJoystickWrapper;
+        [Header(" - Ability Wrappers")]
+        public AbilityVirtualJoystickWrapper[] AbilityJoystickWrappers;
 
         public override void UpdateInput()
         {
@@ -32,6 +34,9 @@ namespace mytest2.UI.InputSystem
         void InitializeWrappers()
         {
             DodgeJoystickWrapper.Init();
+
+            for (int i = 0; i < AbilityJoystickWrappers.Length; i++)
+                AbilityJoystickWrappers[i].Init();
         }
     }
 }

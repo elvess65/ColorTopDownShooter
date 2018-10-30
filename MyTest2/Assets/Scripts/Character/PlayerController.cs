@@ -1,4 +1,5 @@
-﻿using mytest2.UI.InputSystem;
+﻿using mytest2.Character.Abilities;
+using mytest2.UI.InputSystem;
 using UnityEngine;
 
 namespace mytest2.Character
@@ -8,16 +9,9 @@ namespace mytest2.Character
         private Vector3 m_MoveDir = Vector3.zero;
         private float m_TargetRotAngle;
 
-        protected override void Start()
-        {
-            base.Start();
-
-            //Подписаться на события
-            SubscribeForInputEvents();
-        }
-
         void Update()
         {
+            //Передвижение и вращение если персонаж не уклоняеться
             if (!m_DodgeController.IsDodging)
             {
                 m_MoveController.Move(m_MoveDir);
@@ -25,7 +19,10 @@ namespace mytest2.Character
             }
         }
 
-
+        /// <summary>
+        /// Сохранить данные для передвижения (вызов реализации происходит в Update и за нее отвечает компонент iMovement)
+        /// </summary>
+        /// <param name="dir"></param>
         public override void Move(Vector3 dir)
         {
             //Кэш направления передвижения
@@ -39,31 +36,55 @@ namespace mytest2.Character
             }
         }
 
+
+        /// <summary>
+        /// Начать выполнять уклон (за реализацию уклона отвечает компонент iDodging)
+        /// </summary>
+        /// <param name="dir"></param>
         public override void Dodge(Vector2 dir)
         {
             m_DodgeController.Dodge(dir);
         }
 
+        /// <summary>
+        /// Нажатие на джойстик уклона
+        /// </summary>
         void DodgeInputStart(Vector2 dir)
         {
             //TODO: Translate to skill selection
         }
 
+        /// <summary>
+        /// Перемещение джойстика уклона 
+        /// </summary>
         void DodgeInputDrag(Vector2 dir)
         {
             //TODO: Translate to skill selection
         }
 
+        /// <summary>
+        /// Персонаж начал выполнять уклон
+        /// </summary>
         void DodgeStarted()
         {
             Debug.Log("DodgeStarted");
             //TODO: Translate to animation
         }
 
+        /// <summary>
+        /// Персонаж закончил выполнять уклон
+        /// </summary>
         void DodgeFinished()
         {
             Debug.Log("DodgeFinished");
             //TODO: Translate to animation
+        }
+
+   
+        void AbilityInputTouchEnd(Vector2 dir)
+        {
+            if (dir.sqrMagnitude > 0)
+                UseAbility(GameManager.Instance.GameState.SelectedAbilityController.CurAbilityType, dir);
         }
 
 
@@ -95,14 +116,23 @@ namespace mytest2.Character
 
         void SubscribeForJoystickEvents()
         {
+            //Передвижение
             InputManager.Instance.VirtualJoystickInput.OnMove += Move;
 
+            //Уклон
             InputManager.Instance.VirtualJoystickInput.DodgeJoystickWrapper.OnJoystickTouchStart += DodgeInputStart;
             InputManager.Instance.VirtualJoystickInput.DodgeJoystickWrapper.OnJoystickMove += DodgeInputDrag;
             InputManager.Instance.VirtualJoystickInput.DodgeJoystickWrapper.OnJoystickTouchEnd += Dodge;
+
+            //Способности
+            for (int i = 0; i < InputManager.Instance.VirtualJoystickInput.AbilityJoystickWrappers.Length; i++)
+                InputManager.Instance.VirtualJoystickInput.AbilityJoystickWrappers[i].OnJoystickTouchEnd += AbilityInputTouchEnd;
         }
 
-        
+        /// <summary>
+        /// Смена состояния ввода
+        /// </summary>
+        /// <param name="state"></param>
         void InputStatusChangeHandler(bool state)
         {
 

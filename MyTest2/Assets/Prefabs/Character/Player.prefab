@@ -39,6 +39,7 @@ GameObject:
   - component: {fileID: 114189207720716302}
   - component: {fileID: 114097145599716142}
   - component: {fileID: 114434448860177550}
+  - component: {fileID: 114855795973970398}
   - component: {fileID: 143663272898460696}
   - component: {fileID: 65186172515873526}
   m_Layer: 0
@@ -195,6 +196,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DodgeDist: 2
   DodgeSpeed: 5
+--- !u!114 &114855795973970398
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1567039618993562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0a94704c6cbcde4484a77f46c84289e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Abilities: 0000000001000000020000000300000004000000
 --- !u!143 &143663272898460696
 CharacterController:
   m_ObjectHideFlags: 1
