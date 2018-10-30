@@ -208,6 +208,7 @@ GameObject:
   - component: {fileID: 114361481207291448}
   - component: {fileID: 95654945891671648}
   - component: {fileID: 225747747859339434}
+  - component: {fileID: 114821069561845730}
   m_Layer: 5
   m_Name: Dodge Joystick
   m_TagString: Untagged
@@ -353,7 +354,7 @@ GameObject:
   - component: {fileID: 114216067626134038}
   m_Layer: 0
   m_Name: Main Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -946,7 +947,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveJoystickName: MoveJoystick
-  DodgeJoystickName: Dodge Joystick
+  DodgeJoystickWrapper: {fileID: 114821069561845730}
 --- !u!114 &114430641651973684
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1274,7 +1275,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7da7db666ab51994fad95445b7e7ee7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PreferVirtualJoystickInEditor: 1
+  PreferVirtualJoystickInEditor: 0
+--- !u!114 &114821069561845730
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1507132450728668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc11d24e39600ea499dda18b32bc3d4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  JoystickName: 
 --- !u!114 &114850027788071514
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1576,8 +1589,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1044.9363, y: 92.37375}
-  m_SizeDelta: {x: 156.8025, y: 156.8025}
+  m_AnchoredPosition: {x: 702.6925, y: 93.11749}
+  m_SizeDelta: {x: 158.065, y: 158.065}
   m_Pivot: {x: 0, y: 0}
 --- !u!224 &224396413223919300
 RectTransform:
@@ -1633,8 +1646,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 54.26123, y: 92.37375}
-  m_SizeDelta: {x: 156.8025, y: 156.8025}
+  m_AnchoredPosition: {x: 36.242493, y: 93.11749}
+  m_SizeDelta: {x: 158.065, y: 158.065}
   m_Pivot: {x: 0, y: 0}
 --- !u!224 &224512680254963974
 RectTransform:
@@ -1675,8 +1688,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.7762451, y: 0.7762451}
-  m_SizeDelta: {x: 155.25, y: 155.25}
+  m_AnchoredPosition: {x: 0.7824707, y: 0.7825012}
+  m_SizeDelta: {x: 156.5, y: 156.5}
   m_Pivot: {x: 0, y: 0}
 --- !u!224 &224625259436008216
 RectTransform:
@@ -1717,8 +1730,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.7762451, y: 0.7762451}
-  m_SizeDelta: {x: 155.25, y: 155.25}
+  m_AnchoredPosition: {x: 0.7825012, y: 0.7825012}
+  m_SizeDelta: {x: 156.5, y: 156.5}
   m_Pivot: {x: 0, y: 0}
 --- !u!224 &224842374047875238
 RectTransform:
