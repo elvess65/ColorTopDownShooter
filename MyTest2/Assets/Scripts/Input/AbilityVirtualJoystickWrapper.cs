@@ -8,10 +8,11 @@ namespace mytest2.UI.InputSystem
     /// </summary>
     public class AbilityVirtualJoystickWrapper : VirtualJoystickWrapper
     {
-        public System.Action<AbilityTypes> OnAbilitySelect;
+        public System.Action<AbilityTypes> OnAbilityActivate;
 
         public AbilityTypes AbilityType;
 
+        private bool m_AbilityIsActivated = false;
         private bool m_AbilitySelected = false;
         private Vector3 m_TouchStartMousePos;
         private const float m_SQR_DISTANCE_TO_USE_ABILITY = 200;
@@ -22,9 +23,7 @@ namespace mytest2.UI.InputSystem
 
             //Являеться ли способность этого джойстика выделенной
             m_AbilitySelected = AbilityType == GameManager.Instance.GameState.SelectedAbilityController.CurAbilityType;
-
-            if (OnAbilitySelect != null)
-                OnAbilitySelect(AbilityType);
+            m_AbilityIsActivated = false;
 
             m_TouchStartMousePos = Input.mousePosition;
         }
@@ -33,11 +32,24 @@ namespace mytest2.UI.InputSystem
         {
             base.HandleDrag();
 
-            //Если способность этого джойстика не выделенна
-            if (!m_AbilitySelected && MouseDeltaIsEnough())
+            //Если дистанция, которую прошел джойстик достаточна
+            if (MouseDeltaIsEnough())
             {
-                m_AbilitySelected = true;
-                SelectAbility(AbilityType);
+                //Если способность этого джойстика не выделенна
+                if (!m_AbilitySelected)
+                {
+                    m_AbilitySelected = true;
+                    SelectAbility(AbilityType);
+                }
+
+                if (!m_AbilityIsActivated)
+                {
+                    Debug.Log("Ability is activated");
+                    m_AbilityIsActivated = true;
+
+                    if (OnAbilityActivate != null)
+                        OnAbilityActivate(AbilityType);
+                }
             }
         }
 

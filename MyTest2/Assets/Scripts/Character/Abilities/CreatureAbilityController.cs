@@ -34,14 +34,18 @@ namespace mytest2.Character.Abilities
         /// <returns>true если способность была применена</returns>
         public bool UseAbility(AbilityTypes type, Vector2 dir)
         {
+            //Если у персонажа есть способность
             if (m_Abilities.ContainsKey(type))
             {
                 CreatureAbility ability = m_Abilities[type];
-                if (ability.HasAmmo && !ability.IsCooldown) //Если у способности есть заряды и она не в откате
+
+                //Если у способности есть заряды и она не в откате
+                if (ability.HasAmmo && !ability.IsCooldown) 
                 {
                     ability.Use();
 
                     //TODO: Create effect
+                    //TODO: Subscribe for ability events only for player
 
                     DataAbility abilityData = GameManager.Instance.GameState.DataTableAbilities.GetAbilityData(type);
                     Debug.Log("Using ability: " + type + " Dir: " + dir + " " + abilityData.Damage + " " +
@@ -76,6 +80,9 @@ namespace mytest2.Character.Abilities
     /// </summary>
     public class CreatureAbility
     {
+        public System.Action<AbilityTypes, int> OnReduceAmmo;
+        public System.Action<AbilityTypes> OnCooldown;
+
         private int m_Ammo;
         private float m_UseTime = float.NegativeInfinity;
 
@@ -124,6 +131,9 @@ namespace mytest2.Character.Abilities
         void Cooldown()
         {
             m_UseTime = Time.time;
+
+            if (OnCooldown != null)
+                OnCooldown(Type);
         }
 
         void ReduceAmmo()
@@ -131,6 +141,9 @@ namespace mytest2.Character.Abilities
             m_Ammo -= 1;
             if (m_Ammo < 0)
                 m_Ammo = 0;
+
+            if (OnReduceAmmo != null)
+                OnReduceAmmo(Type, m_Ammo);
         }
     }
 }
