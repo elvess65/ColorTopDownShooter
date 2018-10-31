@@ -7,6 +7,8 @@ namespace mytest2.Character.Dodging
     /// </summary>
     public interface iDodging
     {
+        int Stamina { get; }
+
         event System.Action OnDodgeStarted;
         event System.Action OnDodgeFinished;
 

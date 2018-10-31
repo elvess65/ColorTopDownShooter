@@ -26,59 +26,111 @@ namespace mytest2.Character.Abilities
             }
         }
 
-        public void UseAbility(AbilityTypes type, Vector2 dir)
+        /// <summary>
+        /// Использовать способность
+        /// </summary>
+        /// <param name="type">Тип способности</param>
+        /// <param name="dir">Направление способности</param>
+        /// <returns>true если способность была применена</returns>
+        public bool UseAbility(AbilityTypes type, Vector2 dir)
         {
             if (m_Abilities.ContainsKey(type))
             {
                 CreatureAbility ability = m_Abilities[type];
-                ability.ReduceAmount();
+                if (ability.HasAmmo && !ability.IsCooldown) //Если у способности есть заряды и она не в откате
+                {
+                    ability.Use();
 
-                DataAbility abilityData = GameManager.Instance.GameState.DataTableAbilities.GetAbilityData(type);
-                Debug.Log("Using ability: " + type + " Dir: " + dir + " " + abilityData.Damage + " " +
-                                                                            abilityData.CooldownMiliseconds + " " +
-                                                                            abilityData.Stamina);
+                    //TODO: Create effect
+
+                    DataAbility abilityData = GameManager.Instance.GameState.DataTableAbilities.GetAbilityData(type);
+                    Debug.Log("Using ability: " + type + " Dir: " + dir + " " + abilityData.Damage + " " +
+                                                                                abilityData.CooldownMiliseconds + " " +
+                                                                                abilityData.Stamina);
+
+                    return true;
+                }
+                else if (!ability.HasAmmo)
+                    Debug.LogWarning("No ammo");
+                else 
+                    Debug.LogWarning("Is in cooldown");
             }
+
+            return false;
         }
 
-        public void Add(AbilityTypes type)
+        /// <summary>
+        /// Добавить определенное количество зарядов конкретной способности
+        /// </summary>
+        /// <param name="type">Тип способности</param>
+        /// <param name="ammoAmount">Количество зарядов</param>
+        public void AddAmmo(AbilityTypes type, int ammoAmount)
         {
             if (m_Abilities.ContainsKey(type))
-            {
-                CreatureAbility ability = m_Abilities[type];
-                ability.AddAmount();
-            }
+                m_Abilities[type].AddAmmo(ammoAmount);
         }
     }
 
     /// <summary>
-    /// Информация о способности, которая принадлежит персонажу
+    /// Способность, которая принадлежит персонажу
     /// </summary>
     public class CreatureAbility
     {
-        private AbilityTypes m_Type;
-        private int m_Amount;
+        private int m_Ammo;
+        private float m_UseTime = float.NegativeInfinity;
 
         public AbilityTypes Type
         {
-            get { return m_Type; }
+            get; private set;
+        }
+        public bool IsCooldown
+        {
+            get
+            {
+                float leftTimeSeconds = Time.time - m_UseTime;
+                return (leftTimeSeconds * 1000) < GameManager.Instance.GameState.DataTableAbilities.GetAbilityData(Type).CooldownMiliseconds;
+            }
+        }
+        public bool HasAmmo
+        {
+            get { return m_Ammo > 0; }
         }
 
         public CreatureAbility(AbilityTypes type)
         {
-            m_Type = type;
-            m_Amount = 0;
+            Type = type;
+            m_Ammo = 2;
         }
 
-        public void ReduceAmount()
+        /// <summary>
+        /// Использовать способность (уменьшить количество зарядов и начат откат)
+        /// </summary>
+        public void Use()
         {
-            m_Amount -= 1;
-            if (m_Amount < 0)
-                m_Amount = 0;
+            ReduceAmmo();
+            Cooldown();
         }
 
-        public void AddAmount()
+        /// <summary>
+        /// Добавить определенное количество зарядов
+        /// </summary>
+        /// <param name="ammoAmount">Количество зарядов</param>
+        public void AddAmmo(int ammoAmount)
         {
-            m_Amount++;
+            m_Ammo += ammoAmount;
+        }
+
+
+        void Cooldown()
+        {
+            m_UseTime = Time.time;
+        }
+
+        void ReduceAmmo()
+        {
+            m_Ammo -= 1;
+            if (m_Ammo < 0)
+                m_Ammo = 0;
         }
     }
 }

@@ -10,6 +10,7 @@ namespace mytest2.Character.Dodging
 
         public float DodgeDist = 5;
         public float DodgeSpeed = 5;
+        public int StaminaPerDodge = 2;
 
         private Vector3 m_DodgeDir;
         private CharacterController m_CharacterController;
@@ -19,7 +20,10 @@ namespace mytest2.Character.Dodging
         {
             get { return m_DodgeTimeLerpData.IsStarted; }
         }
-
+        public int Stamina
+        {
+            get { return StaminaPerDodge; }
+        }
 
         public void Init()
         {

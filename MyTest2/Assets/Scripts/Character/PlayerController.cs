@@ -36,16 +36,6 @@ namespace mytest2.Character
             }
         }
 
-
-        /// <summary>
-        /// Начать выполнять уклон (за реализацию уклона отвечает компонент iDodging)
-        /// </summary>
-        /// <param name="dir"></param>
-        public override void Dodge(Vector2 dir)
-        {
-            m_DodgeController.Dodge(dir);
-        }
-
         /// <summary>
         /// Нажатие на джойстик уклона
         /// </summary>
@@ -80,13 +70,22 @@ namespace mytest2.Character
             //TODO: Translate to animation
         }
 
-   
+
+        /// <summary>
+        /// окончание нажатия на джойстик способности
+        /// </summary>
+        /// <param name="dir">Направление способности</param>
         void AbilityInputTouchEnd(Vector2 dir)
         {
             if (dir.sqrMagnitude > 0)
                 UseAbility(GameManager.Instance.GameState.SelectedAbilityController.CurAbilityType, dir);
         }
 
+
+        void StaminaUpdate(float progress)
+        {
+            GameManager.Instance.UIManager.StaminaController.SetState(progress);
+        }
 
         protected override void SubscribeForInputEvents()
         {
@@ -112,6 +111,8 @@ namespace mytest2.Character
         {
             m_DodgeController.OnDodgeStarted += DodgeStarted;
             m_DodgeController.OnDodgeFinished += DodgeFinished;
+
+            m_StaminaController.OnStaminaUpdate += StaminaUpdate;
         }
 
         void SubscribeForJoystickEvents()
