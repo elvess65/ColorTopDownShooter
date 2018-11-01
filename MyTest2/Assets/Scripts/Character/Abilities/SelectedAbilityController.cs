@@ -19,7 +19,7 @@ namespace mytest2.Character.Abilities
             if (m_CurAbilityType != type)
             {
                 m_CurAbilityType = type;
-                Debug.LogWarning("Select ability of type " + CurAbilityType);
+                GameManager.Instance.UIManager.SelectAbilityJoystick(type);
             }
         }
     }

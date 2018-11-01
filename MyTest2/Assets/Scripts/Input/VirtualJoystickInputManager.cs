@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using mytest2.Character.Abilities;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace mytest2.UI.InputSystem
 {
@@ -11,6 +13,16 @@ namespace mytest2.UI.InputSystem
         [Header(" - Ability Wrappers")]
         public AbilityVirtualJoystickWrapper[] AbilityJoystickWrappers;
 
+        private Dictionary<AbilityTypes, AbilityVirtualJoystickWrapper> m_JoystickWrappers; //Словарь создан для более удобного доступа с джойстикам способностей
+
+        public AbilityVirtualJoystickWrapper GetAbilityJoystick(AbilityTypes type)
+        {
+            if (m_JoystickWrappers.ContainsKey(type))
+                return m_JoystickWrappers[type];
+
+            return null;
+        }
+
         public override void UpdateInput()
         {
             Vector2 movePosition = UltimateJoystick.GetPosition(MoveJoystickName);
@@ -22,6 +34,14 @@ namespace mytest2.UI.InputSystem
         {
             base.Start();
 
+            //Создать словать джойстиков способностей
+            m_JoystickWrappers = new Dictionary<AbilityTypes, AbilityVirtualJoystickWrapper>();
+            for (int i = 0; i < AbilityJoystickWrappers.Length; i++)
+            {
+                if (!m_JoystickWrappers.ContainsKey(AbilityJoystickWrappers[i].AbilityType))
+                    m_JoystickWrappers.Add(AbilityJoystickWrappers[i].AbilityType, AbilityJoystickWrappers[i]);
+            }
+
 #if UNITY_EDITOR
             if (InputManager.Instance.PreferVirtualJoystickInEditor)
                 InitializeWrappers();
@@ -29,7 +49,6 @@ namespace mytest2.UI.InputSystem
             InitializeWrappers();
 #endif
         }
-
 
         void InitializeWrappers()
         {

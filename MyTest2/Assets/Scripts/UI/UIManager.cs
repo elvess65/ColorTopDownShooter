@@ -1,4 +1,5 @@
-﻿using mytest2.UI.Animations;
+﻿using mytest2.Character.Abilities;
+using mytest2.UI.Animations;
 using mytest2.UI.Controllers;
 using mytest2.UI.InputSystem;
 using mytest2.UI.Windows;
@@ -20,9 +21,12 @@ namespace mytest2.UI
             get; private set;
         }
 
+        private UIJoystickSelectionController m_JoystickSelectionController;
+
         void Start()
         {
             WindowManager = GetComponent<UIWindowsManager>();
+            m_JoystickSelectionController = GetComponent<UIJoystickSelectionController>();
 
             //Animation Controller
 #if UNITY_EDITOR
@@ -33,10 +37,37 @@ namespace mytest2.UI
 #endif
         }
 
+        public void CooldownAbilityJoystick(AbilityTypes type, float timeMiliseconds)
+        {
+            AbilityVirtualJoystickWrapper targetJoystick = InputManager.Instance.VirtualJoystickInput.GetAbilityJoystick(type);
+            if (targetJoystick != null)
+            {
+                UIJoystickCooldownController joystickCooldownController = Instantiate(GameManager.Instance.PrefabLibrary.UIJoystickCooldownPrefab);
+                RectTransform joystickRectTransform = targetJoystick.GetComponent<RectTransform>();
+                RectTransform cooldownControllerRectTransform = joystickCooldownController.GetComponent<RectTransform>();
+
+                cooldownControllerRectTransform.SetParent(joystickRectTransform.parent);
+                cooldownControllerRectTransform.anchorMin = joystickRectTransform.anchorMin;
+                cooldownControllerRectTransform.anchorMax = joystickRectTransform.anchorMax;
+                cooldownControllerRectTransform.offsetMin = joystickRectTransform.offsetMin;
+                cooldownControllerRectTransform.offsetMax = joystickRectTransform.offsetMax;
+
+                joystickCooldownController.Cooldown(timeMiliseconds);
+            }
+        }
+
+        public void SelectAbilityJoystick(AbilityTypes type)
+        {
+            AbilityVirtualJoystickWrapper targetJoystick = InputManager.Instance.VirtualJoystickInput.GetAbilityJoystick(type);
+            if (targetJoystick != null)
+                m_JoystickSelectionController.Select(targetJoystick.transform);
+        }
+
         public UIWindow_Base ShowWindow(UIWindow_Base source)
         {
             return WindowManager.ShowWindow(source);
         }
+
 
         void SubscribeForVirtualJoystick()
         {

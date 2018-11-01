@@ -17,6 +17,7 @@ namespace mytest2.UI.InputSystem
         private Vector3 m_TouchStartMousePos;
         private const float m_SQR_DISTANCE_TO_USE_ABILITY = 200;
 
+
         protected override void HandleTouchStart()
         {
             base.HandleTouchStart();

@@ -55,3 +55,5 @@ MonoBehaviour:
     type: 2}
   UIAbilityDirectionPrefab: {fileID: 114077405250451758, guid: 38b4ae0b2721bb149bab6f7a94ad0cee,
     type: 2}
+  UIJoystickCooldownPrefab: {fileID: 114476327918838136, guid: 08c786d09ac49874b8e3dbc2e22ecfd3,
+    type: 2}

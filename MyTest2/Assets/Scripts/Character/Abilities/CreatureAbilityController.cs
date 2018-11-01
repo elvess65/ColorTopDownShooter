@@ -47,10 +47,14 @@ namespace mytest2.Character.Abilities
                     //TODO: Create effect
                     //TODO: Subscribe for ability events only for player
 
+                  
+
                     DataAbility abilityData = GameManager.Instance.GameState.DataTableAbilities.GetAbilityData(type);
                     Debug.Log("Using ability: " + type + " Dir: " + dir + " " + abilityData.Damage + " " +
                                                                                 abilityData.CooldownMiliseconds + " " +
                                                                                 abilityData.Stamina);
+
+                    GameManager.Instance.UIManager.CooldownAbilityJoystick(type, abilityData.CooldownMiliseconds);
 
                     return true;
                 }
