@@ -6,8 +6,10 @@ namespace mytest2.Character.Abilities
     /// <summary>
     /// Контроллер способностей персонажа (задает какими способностями персонаж может владеть и их использование)
     /// </summary>
-    public class CreatureAbilityController : MonoBehaviour
+    public class AbilityController : MonoBehaviour
     {
+        public System.Action<AbilityTypes> OnAbilityUse;
+
         [Tooltip("Доступные способности")]
         public AbilityTypes[] Abilities;
 
@@ -43,18 +45,12 @@ namespace mytest2.Character.Abilities
                 if (ability.HasAmmo && !ability.IsCooldown) 
                 {
                     ability.Use();
+                    Debug.Log("Use ablity " + type);
 
                     //TODO: Create effect
-                    //TODO: Subscribe for ability events only for player
 
-                  
-
-                    DataAbility abilityData = GameManager.Instance.GameState.DataTableAbilities.GetAbilityData(type);
-                    Debug.Log("Using ability: " + type + " Dir: " + dir + " " + abilityData.Damage + " " +
-                                                                                abilityData.CooldownMiliseconds + " " +
-                                                                                abilityData.Stamina);
-
-                    GameManager.Instance.UIManager.CooldownAbilityJoystick(type, abilityData.CooldownMiliseconds);
+                    if (OnAbilityUse != null)
+                        OnAbilityUse(type);
 
                     return true;
                 }

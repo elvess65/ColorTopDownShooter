@@ -12,7 +12,7 @@ namespace mytest2.Character
     {
         protected iMovement m_MoveController;
         protected iDodging m_DodgeController;
-        protected CreatureAbilityController m_AbilityController;
+        protected AbilityController m_AbilityController;
         protected StaminaController m_StaminaController;
         //TODO
         //Health
@@ -74,7 +74,7 @@ namespace mytest2.Character
             m_DodgeController = GetComponent<iDodging>();
             m_DodgeController.Init();
 
-            m_AbilityController = GetComponent<CreatureAbilityController>();
+            m_AbilityController = GetComponent<AbilityController>();
             m_AbilityController.Init();
 
             m_StaminaController = GetComponent<StaminaController>();

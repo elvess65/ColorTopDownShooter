@@ -11,6 +11,13 @@ namespace mytest2.Character
         private Vector3 m_MoveDir = Vector3.zero;
         private float m_TargetRotAngle;
 
+        private static AbilityTypes m_CurAbilityType = AbilityTypes.None;
+
+        public static AbilityTypes SelectedAbility
+        {
+            get { return m_CurAbilityType; }
+        }
+
         void Update()
         {
             //Передвижение и вращение если персонаж не уклоняеться
@@ -92,6 +99,19 @@ namespace mytest2.Character
         }
 
         /// <summary>
+        /// Выбор способности
+        /// </summary>
+        /// <param name="abilityType">Тип способности</param>
+        void AbilityInputSelect(AbilityTypes abilityType)
+        {
+            if (m_CurAbilityType != abilityType)
+            {
+                m_CurAbilityType = abilityType;
+                GameManager.Instance.UIManager.SelectAbilityJoystick(abilityType);
+            }
+        }
+
+        /// <summary>
         /// Перемещение джойстика способности 
         /// </summary>
         void AbilityInputDrag(Vector2 dir)
@@ -108,10 +128,20 @@ namespace mytest2.Character
         {
             //Если нельзя использовать способность длина вектора 0 (если способность была только выделена, но не использована)
             if (dir.sqrMagnitude > 0)
-                UseAbility(GameManager.Instance.GameState.SelectedAbilityController.CurAbilityType, dir);
+                UseAbility(SelectedAbility, dir);
 
             if (m_UIActionDirectionController != null)
                 Destroy(m_UIActionDirectionController.gameObject);
+        }
+
+        /// <summary>
+        /// Обновить состояние джойстика способности (откат)
+        /// </summary>
+        /// <param name="type"></param>
+        void AbilityUseHandler(AbilityTypes type)
+        {
+            DataAbility abilityData = GameManager.Instance.GameState.DataTableAbilities.GetAbilityData(type);
+            GameManager.Instance.UIManager.CooldownAbilityJoystick(type, abilityData.CooldownMiliseconds);
         }
 
 
@@ -122,6 +152,8 @@ namespace mytest2.Character
         void StaminaUpdateHandler(float progress)
         {
             GameManager.Instance.UIManager.StaminaController.SetState(progress);
+
+   
         }
 
 
@@ -151,6 +183,7 @@ namespace mytest2.Character
             m_DodgeController.OnDodgeFinished += DodgeFinishedHandler;
 
             m_StaminaController.OnStaminaUpdate += StaminaUpdateHandler;
+            m_AbilityController.OnAbilityUse += AbilityUseHandler;
         }
 
 
@@ -169,6 +202,7 @@ namespace mytest2.Character
             for (int i = 0; i < InputManager.Instance.VirtualJoystickInput.AbilityJoystickWrappers.Length; i++)
             {
                 InputManager.Instance.VirtualJoystickInput.AbilityJoystickWrappers[i].OnAbilityActivate += AbilityInputActivate;
+                InputManager.Instance.VirtualJoystickInput.AbilityJoystickWrappers[i].OnAbilitySelect += AbilityInputSelect;
                 InputManager.Instance.VirtualJoystickInput.AbilityJoystickWrappers[i].OnJoystickTouchEnd += AbilityInputTouchEnd;
                 InputManager.Instance.VirtualJoystickInput.AbilityJoystickWrappers[i].OnJoystickMove += AbilityInputDrag;
             }

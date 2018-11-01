@@ -1,4 +1,5 @@
-﻿using mytest2.Character.Abilities;
+﻿using mytest2.Character;
+using mytest2.Character.Abilities;
 using UnityEngine;
 
 namespace mytest2.UI.InputSystem
@@ -9,6 +10,7 @@ namespace mytest2.UI.InputSystem
     public class AbilityVirtualJoystickWrapper : VirtualJoystickWrapper
     {
         public System.Action<AbilityTypes> OnAbilityActivate;
+        public System.Action<AbilityTypes> OnAbilitySelect;
 
         public AbilityTypes AbilityType;
 
@@ -23,7 +25,7 @@ namespace mytest2.UI.InputSystem
             base.HandleTouchStart();
 
             //Являеться ли способность этого джойстика выделенной
-            m_AbilitySelected = AbilityType == GameManager.Instance.GameState.SelectedAbilityController.CurAbilityType;
+            m_AbilitySelected = AbilityType == PlayerController.SelectedAbility;
             m_AbilityIsActivated = false;
 
             m_TouchStartMousePos = Input.mousePosition;
@@ -40,12 +42,13 @@ namespace mytest2.UI.InputSystem
                 if (!m_AbilitySelected)
                 {
                     m_AbilitySelected = true;
-                    SelectAbility(AbilityType);
+
+                    if (OnAbilitySelect != null)
+                        OnAbilitySelect(AbilityType);
                 }
 
                 if (!m_AbilityIsActivated)
                 {
-                    Debug.Log("Ability is activated");
                     m_AbilityIsActivated = true;
 
                     if (OnAbilityActivate != null)
@@ -60,17 +63,14 @@ namespace mytest2.UI.InputSystem
             if (!MouseDeltaIsEnough())
             {
                 m_JoystickPosition = Vector2.zero;
-                SelectAbility(AbilityType);
+
+                if (OnAbilitySelect != null)
+                    OnAbilitySelect(AbilityType);
             }
             
             base.HandleTouchEnd();
         }
 
-
-        void SelectAbility(AbilityTypes abilityType)
-        {
-            GameManager.Instance.GameState.SelectedAbilityController.SelectAbility(abilityType);
-        }
 
         bool MouseDeltaIsEnough()
         {
