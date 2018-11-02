@@ -14,6 +14,10 @@ namespace mytest2.Character
         protected iDodging m_DodgeController;
         protected AbilityController m_AbilityController;
         protected StaminaController m_StaminaController;
+
+        private float m_TargetAngleToUseAbility = -1;
+        private Vector2 m_AbilityDir;
+        private const float m_DELTA_TO_ANGLE = 0.1f;
         //TODO
         //Health
         //Attack
@@ -43,7 +47,10 @@ namespace mytest2.Character
         /// <param name="dir">направление способности</param>
         public void UseAbility(AbilityTypes type, Vector2 dir)
         {
-            if (!m_DodgeController.IsDodging)
+            m_AbilityDir = dir;
+            m_TargetAngleToUseAbility = Mathf.Atan2(dir.x, dir.y) * Mathf.Rad2Deg;
+
+            /*if (!m_DodgeController.IsDodging)
             {
                 if (m_StaminaController.HasEnoughStamina(GameManager.Instance.GameState.DataTableAbilities.GetAbilityData(type).Stamina))
                 {
@@ -52,15 +59,34 @@ namespace mytest2.Character
                 }
                 else
                     Debug.LogWarning("Not enought stamina");
-            }
+            }*/
         }
     
+
         protected virtual void Start()
         {
             InitializeControllers();
             SubscribeForInputEvents();
             SubscribeForControllerEvents();
             FinishInitialization();
+        }
+        protected virtual void Update()
+        {
+            if (m_TargetAngleToUseAbility > -1)
+            {
+                if (m_TargetAngleToUseAbility > 0)
+                {
+                    m_MoveController.Rotate(m_TargetAngleToUseAbility);
+
+                    if (DeltaToDir(m_AbilityDir) < m_DELTA_TO_ANGLE)
+                    {
+                        Debug.Log("Rotation finished");
+                        m_TargetAngleToUseAbility = -1;
+                    }
+                }
+            }
+            
+            Debug.Log(Vector2.Angle(new Vector2(transform.forward.x, transform.forward.z), m_AbilityDir));
         }
         protected virtual void SubscribeForInputEvents()
         { }
@@ -82,6 +108,11 @@ namespace mytest2.Character
 
             m_StaminaController = GetComponent<StaminaController>();
             m_StaminaController.Init();
+        }
+        private float DeltaToDir(Vector2 dir)
+        {
+            Vector2 transformV2 = new Vector2(transform.forward.x, transform.forward.z);
+            return Vector2.Angle(new Vector2(transform.forward.x, transform.forward.z), dir);
         }
     }
 }

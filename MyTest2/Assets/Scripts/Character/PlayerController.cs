@@ -19,14 +19,16 @@ namespace mytest2.Character
             get { return m_CurAbilityType; }
         }
 
-        void Update()
+        protected override void Update()
         {
+            base.Update();
+
             //Передвижение и вращение если персонаж не уклоняеться
-            if (!m_DodgeController.IsDodging)
+            /*if (!m_DodgeController.IsDodging)
             {
                 m_MoveController.Move(m_MoveDir);
                 m_MoveController.Rotate(m_TargetRotAngle);
-            }
+            }*/
         }
 
         /// <summary>
