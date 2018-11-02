@@ -1,4 +1,6 @@
-﻿namespace mytest2.Utils
+﻿using UnityEngine;
+
+namespace mytest2.Utils
 {
     public struct InterpolationData<T>
     {
@@ -50,6 +52,39 @@
         public bool Overtime()
         {
             return m_CurTime >= TotalTime;
+        }
+    }
+
+    public static class Utils
+    {
+        //Timer
+        public static Timer StartTimer(Timer.TimeElapsedHandler onStep, Timer.TimeElapsedHandler onElapsed, long timeSeconds, GameObject target)
+        {
+            Timer timer = target.GetComponent<Timer>();
+
+            if (timer == null)
+                timer = target.AddComponent<Timer>();
+            else
+            {
+                timer.ResetCountdown();
+                timer.ResetEvents();
+            }
+
+            timer.OnStep += onStep;
+            timer.OnTotalTimeElapsed += onElapsed;
+            timer.Init(timeSeconds);
+            timer.StartCountdown();
+
+            return timer;
+        }
+
+        public static void RemoveTimer(Timer timer)
+        {
+            if (timer != null)
+            {
+                timer.StopCountdown();
+                MonoBehaviour.Destroy(timer);
+            }
         }
     }
 }

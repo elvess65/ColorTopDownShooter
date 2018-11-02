@@ -1,4 +1,5 @@
 ﻿using mytest2.Character.Abilities;
+using mytest2.Utils.Pool;
 using UnityEngine;
 
 namespace mytest2.UI.Controllers3D
@@ -6,7 +7,7 @@ namespace mytest2.UI.Controllers3D
     /// <summary>
     /// Контроллер объекта, который задает отображает стрелку направления способности
     /// </summary>
-    public class UIPlayerActionDirectionController : MonoBehaviour
+    public class UIPlayerActionDirectionController : PoolObject
     {
         public MeshRenderer Renderer;
 
@@ -21,8 +22,11 @@ namespace mytest2.UI.Controllers3D
             m_Parent = parent;
             m_TargetRot = m_Parent.rotation;
 
-            m_Material = new Material(Renderer.sharedMaterial);
-            Renderer.sharedMaterial = m_Material;
+            if (m_Material == null)
+            {
+                m_Material = new Material(Renderer.sharedMaterial);
+                Renderer.sharedMaterial = m_Material;
+            }
 
             switch(type)
             {
@@ -40,6 +44,9 @@ namespace mytest2.UI.Controllers3D
                     break;
                 case AbilityTypes.Yellow:
                     m_Material.color = Color.yellow;
+                    break;
+                default:
+                    m_Material.color = Color.white;
                     break;
             }
         }

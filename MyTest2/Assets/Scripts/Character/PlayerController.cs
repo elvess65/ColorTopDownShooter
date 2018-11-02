@@ -1,6 +1,7 @@
 ﻿using mytest2.Character.Abilities;
 using mytest2.UI.Controllers3D;
 using mytest2.UI.InputSystem;
+using mytest2.Utils.Pool;
 using UnityEngine;
 
 namespace mytest2.Character
@@ -45,13 +46,13 @@ namespace mytest2.Character
             }
         }
 
+
         /// <summary>
         /// Нажатие на джойстик уклона
         /// </summary>
         void DodgeInputTouchStart(Vector2 dir)
         {
-            m_UIActionDirectionController = Instantiate(GameManager.Instance.PrefabLibrary.UIAbilityDirectionPrefab, transform.position, Quaternion.identity);
-            m_UIActionDirectionController.Init(transform, AbilityTypes.None);
+            ShowUIActionDirectionController(AbilityTypes.None);
         }
 
         /// <summary>
@@ -59,15 +60,19 @@ namespace mytest2.Character
         /// </summary>
         void DodgeInputDrag(Vector2 dir)
         {
-            if (m_UIActionDirectionController != null)
-                m_UIActionDirectionController.SetDirection(dir);
+            UpdateUIActionDirectionController(dir);
         }
 
+        /// <summary>
+        /// Окончание нажатия на джойстик уклона
+        /// </summary>
+        /// <param name="dir"></param>
         void DodgeInputTouchEnd(Vector2 dir)
         {
-            if (m_UIActionDirectionController != null)
-                Destroy(m_UIActionDirectionController.gameObject);
+            //Спрятать указатель направления
+            HideUIActionDirectionController();
         }
+
 
         /// <summary>
         /// Персонаж начал выполнять уклон
@@ -94,8 +99,7 @@ namespace mytest2.Character
         /// <param name="type">Тип способности</param>
         void AbilityInputActivate(AbilityTypes type)
         {
-            m_UIActionDirectionController = Instantiate(GameManager.Instance.PrefabLibrary.UIAbilityDirectionPrefab, transform.position, Quaternion.identity);
-            m_UIActionDirectionController.Init(transform, type);
+            ShowUIActionDirectionController(type);
         }
 
         /// <summary>
@@ -116,8 +120,7 @@ namespace mytest2.Character
         /// </summary>
         void AbilityInputDrag(Vector2 dir)
         {
-            if (m_UIActionDirectionController != null)
-                m_UIActionDirectionController.SetDirection(dir);
+            UpdateUIActionDirectionController(dir);
         }
 
         /// <summary>
@@ -130,18 +133,28 @@ namespace mytest2.Character
             if (dir.sqrMagnitude > 0)
                 UseAbility(SelectedAbility, dir);
 
-            if (m_UIActionDirectionController != null)
-                Destroy(m_UIActionDirectionController.gameObject);
+            //Спрятать указатель направления
+            HideUIActionDirectionController();
         }
 
         /// <summary>
         /// Обновить состояние джойстика способности (откат)
         /// </summary>
-        /// <param name="type"></param>
+        /// <param name="type">Тип способности</param>
         void AbilityUseHandler(AbilityTypes type)
         {
             DataAbility abilityData = GameManager.Instance.GameState.DataTableAbilities.GetAbilityData(type);
-            GameManager.Instance.UIManager.CooldownAbilityJoystick(type, abilityData.CooldownMiliseconds);
+            GameManager.Instance.UIManager.CooldownAbilityJoystick(type, abilityData.CooldownMiliseconds); 
+        }
+
+        /// <summary>
+        /// Обносить количество заряжов способности
+        /// </summary>
+        /// <param name="type">Тип способности</param>
+        /// <param name="ammoAmmount">Количество зарядов</param>
+        void AbilityUpdateAmmoHandler(AbilityTypes type, int ammoAmmount)
+        {
+            GameManager.Instance.UIManager.UpdateAbilityAmmo(type, ammoAmmount);
         }
 
 
@@ -184,6 +197,12 @@ namespace mytest2.Character
 
             m_StaminaController.OnStaminaUpdate += StaminaUpdateHandler;
             m_AbilityController.OnAbilityUse += AbilityUseHandler;
+            m_AbilityController.OnUpdateAmmo += AbilityUpdateAmmoHandler;
+        }
+
+        protected override void FinishInitialization()
+        {
+            m_AbilityController.SetAndCallUpdateAmmoEventForAllAbilities();
         }
 
 
@@ -215,6 +234,26 @@ namespace mytest2.Character
         void InputStatusChangeHandler(bool state)
         {
 
+        }
+
+
+        void ShowUIActionDirectionController(AbilityTypes type)
+        {
+            m_UIActionDirectionController = PoolManager.GetObject(GameManager.Instance.PrefabLibrary.UIAbilityDirectionPrefab) as UIPlayerActionDirectionController;
+            m_UIActionDirectionController.transform.position = transform.position;
+            m_UIActionDirectionController.Init(transform, type);
+        }
+
+        void UpdateUIActionDirectionController(Vector2 dir)
+        {
+            if (m_UIActionDirectionController != null && m_UIActionDirectionController.IsEnabled)
+                m_UIActionDirectionController.SetDirection(dir);
+        }
+
+        void HideUIActionDirectionController()
+        {
+            if (m_UIActionDirectionController != null && m_UIActionDirectionController.IsEnabled)
+                m_UIActionDirectionController.Disable();
         }
     }
 }

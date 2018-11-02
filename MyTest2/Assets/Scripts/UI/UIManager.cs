@@ -42,7 +42,7 @@ namespace mytest2.UI
             AbilityVirtualJoystickWrapper targetJoystick = InputManager.Instance.VirtualJoystickInput.GetAbilityJoystick(type);
             if (targetJoystick != null)
             {
-                UIJoystickCooldownController joystickCooldownController = Instantiate(GameManager.Instance.PrefabLibrary.UIJoystickCooldownPrefab);
+                UIJoystickCooldownController joystickCooldownController = Utils.Pool.PoolManager.GetObject(GameManager.Instance.PrefabLibrary.UIJoystickCooldownPrefab) as UIJoystickCooldownController;
                 RectTransform joystickRectTransform = targetJoystick.GetComponent<RectTransform>();
                 RectTransform cooldownControllerRectTransform = joystickCooldownController.GetComponent<RectTransform>();
 
@@ -54,6 +54,13 @@ namespace mytest2.UI
 
                 joystickCooldownController.Cooldown(timeMiliseconds);
             }
+        }
+
+        public void UpdateAbilityAmmo(AbilityTypes type, int ammoAmount)
+        {
+            AbilityVirtualJoystickWrapper targetJoystick = InputManager.Instance.VirtualJoystickInput.GetAbilityJoystick(type);
+            if (targetJoystick != null)
+                targetJoystick.UpdateAbilityAmmo(ammoAmount);
         }
 
         public void SelectAbilityJoystick(AbilityTypes type)

@@ -8,7 +8,8 @@ namespace mytest2.Character.Abilities
     /// </summary>
     public class AbilityController : MonoBehaviour
     {
-        public System.Action<AbilityTypes> OnAbilityUse;
+        public System.Action<AbilityTypes> OnAbilityUse; 
+        public System.Action<AbilityTypes, int> OnUpdateAmmo;
 
         [Tooltip("Доступные способности")]
         public AbilityTypes[] Abilities;
@@ -25,6 +26,15 @@ namespace mytest2.Character.Abilities
                     CreatureAbility ability = new CreatureAbility(Abilities[i]);
                     m_Abilities.Add(Abilities[i], ability);
                 }
+            }
+        }
+
+        public void SetAndCallUpdateAmmoEventForAllAbilities()
+        {
+            foreach (CreatureAbility ability in m_Abilities.Values)
+            {
+                ability.OnUpdateAmmo += OnUpdateAmmo;
+                OnUpdateAmmo(ability.Type, ability.AmmoAmmount);
             }
         }
 
@@ -80,10 +90,9 @@ namespace mytest2.Character.Abilities
     /// </summary>
     public class CreatureAbility
     {
-        public System.Action<AbilityTypes, int> OnReduceAmmo;
+        public System.Action<AbilityTypes, int> OnUpdateAmmo;
         public System.Action<AbilityTypes> OnCooldown;
 
-        private int m_Ammo;
         private float m_UseTime = float.NegativeInfinity;
 
         public AbilityTypes Type
@@ -100,13 +109,17 @@ namespace mytest2.Character.Abilities
         }
         public bool HasAmmo
         {
-            get { return m_Ammo > 0; }
+            get { return AmmoAmmount > 0; }
+        }
+        public int AmmoAmmount
+        {
+            get; private set;
         }
 
         public CreatureAbility(AbilityTypes type)
         {
             Type = type;
-            m_Ammo = 2;
+            AmmoAmmount = 2;
         }
 
         /// <summary>
@@ -124,7 +137,10 @@ namespace mytest2.Character.Abilities
         /// <param name="ammoAmount">Количество зарядов</param>
         public void AddAmmo(int ammoAmount)
         {
-            m_Ammo += ammoAmount;
+            AmmoAmmount += ammoAmount;
+
+            if (OnUpdateAmmo != null)
+                OnUpdateAmmo(Type, AmmoAmmount);
         }
 
 
@@ -138,12 +154,12 @@ namespace mytest2.Character.Abilities
 
         void ReduceAmmo()
         {
-            m_Ammo -= 1;
-            if (m_Ammo < 0)
-                m_Ammo = 0;
+            AmmoAmmount -= 1;
+            if (AmmoAmmount < 0)
+                AmmoAmmount = 0;
 
-            if (OnReduceAmmo != null)
-                OnReduceAmmo(Type, m_Ammo);
+            if (OnUpdateAmmo != null)
+                OnUpdateAmmo(Type, AmmoAmmount);
         }
     }
 }

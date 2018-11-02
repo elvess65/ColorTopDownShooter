@@ -1,6 +1,7 @@
 ﻿using mytest2.Character;
 using mytest2.Character.Abilities;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace mytest2.UI.InputSystem
 {
@@ -13,11 +14,18 @@ namespace mytest2.UI.InputSystem
         public System.Action<AbilityTypes> OnAbilitySelect;
 
         public AbilityTypes AbilityType;
+        public Text Text_AbilityAmmo;
 
         private bool m_AbilityIsActivated = false;
         private bool m_AbilitySelected = false;
         private Vector3 m_TouchStartMousePos;
         private const float m_SQR_DISTANCE_TO_USE_ABILITY = 200;
+
+
+        public void UpdateAbilityAmmo(int ammoAmount)
+        {
+            Text_AbilityAmmo.text = ammoAmount.ToString();
+        }
 
 
         protected override void HandleTouchStart()

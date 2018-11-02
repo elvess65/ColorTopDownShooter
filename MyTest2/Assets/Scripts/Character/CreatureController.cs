@@ -60,13 +60,16 @@ namespace mytest2.Character
             InitializeControllers();
             SubscribeForInputEvents();
             SubscribeForControllerEvents();
+            FinishInitialization();
         }
         protected virtual void SubscribeForInputEvents()
         { }
         protected virtual void SubscribeForControllerEvents()
         { }
+        protected virtual void FinishInitialization()
+        { }
 
-        protected void InitializeControllers()
+        private void InitializeControllers()
         {
             m_MoveController = GetComponent<iMovement>();
             m_MoveController.Init();
