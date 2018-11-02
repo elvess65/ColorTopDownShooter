@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using mytest2.Projectiles;
+using mytest2.Utils.Pool;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace mytest2.Character.Abilities
@@ -11,6 +13,7 @@ namespace mytest2.Character.Abilities
         public System.Action<AbilityTypes> OnAbilityUse; 
         public System.Action<AbilityTypes, int> OnUpdateAmmo;
 
+        public Transform AbilitySpawnPoint;
         [Tooltip("Доступные способности")]
         public AbilityTypes[] Abilities;
 
@@ -29,6 +32,9 @@ namespace mytest2.Character.Abilities
             }
         }
 
+        /// <summary>
+        /// Задать всем способностям событие для обновления зарядов и вызвать это событие (вызываеться на старте игроком - обновить UI)
+        /// </summary>
         public void SetAndCallUpdateAmmoEventForAllAbilities()
         {
             foreach (CreatureAbility ability in m_Abilities.Values)
@@ -55,9 +61,8 @@ namespace mytest2.Character.Abilities
                 if (ability.HasAmmo && !ability.IsCooldown) 
                 {
                     ability.Use();
-                    Debug.Log("Use ablity " + type);
 
-                    //TODO: Create effect
+                    LaunchProjectile(type, dir);
 
                     if (OnAbilityUse != null)
                         OnAbilityUse(type);
@@ -82,6 +87,14 @@ namespace mytest2.Character.Abilities
         {
             if (m_Abilities.ContainsKey(type))
                 m_Abilities[type].AddAmmo(ammoAmount);
+        }
+
+
+        void LaunchProjectile(AbilityTypes type, Vector2 dir)
+        {
+            Projectile projectile = PoolManager.GetObject(GameManager.Instance.PrefabLibrary.GetAbilityProjectilePrefab(type)) as Projectile;
+            projectile.transform.position = AbilitySpawnPoint.position;
+            projectile.Launch(dir);
         }
     }
 

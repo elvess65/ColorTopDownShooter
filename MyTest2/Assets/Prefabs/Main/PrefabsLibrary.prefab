@@ -57,3 +57,19 @@ MonoBehaviour:
     type: 2}
   UIJoystickCooldownPrefab: {fileID: 114476327918838136, guid: 08c786d09ac49874b8e3dbc2e22ecfd3,
     type: 2}
+  AbilityProjectilePrefabs:
+  - Type: 0
+    ProjectilePrefab: {fileID: 114913794172199788, guid: 4a99df9ae182e0f4f83744258eff80cf,
+      type: 2}
+  - Type: 1
+    ProjectilePrefab: {fileID: 114330191204469894, guid: 986126e987443424285bd2d3ec72c973,
+      type: 2}
+  - Type: 2
+    ProjectilePrefab: {fileID: 114143067700736300, guid: 4a0b64182070fa1428c8bacdc882bd8f,
+      type: 2}
+  - Type: 3
+    ProjectilePrefab: {fileID: 114788919233353344, guid: e09361ca35988f94e825d6c823cfb30f,
+      type: 2}
+  - Type: 4
+    ProjectilePrefab: {fileID: 114291063827526880, guid: 23b24650af752724ebd2a4ee82236bfc,
+      type: 2}
