@@ -9,7 +9,7 @@ namespace mytest2.Character
     public class PlayerController : CreatureController
     {
         private UIPlayerActionDirectionController m_UIActionDirectionController;
-        private Vector3 m_MoveDir = Vector3.zero;
+		private Vector3 m_TargetMoveDir = Vector3.zero;
         private float m_TargetRotAngle;
 
         private static AbilityTypes m_CurAbilityType = AbilityTypes.None;
@@ -23,12 +23,12 @@ namespace mytest2.Character
         {
             base.Update();
 
-            //Передвижение и вращение если персонаж не уклоняеться
-            /*if (!m_DodgeController.IsDodging)
+			//Передвижение и вращение если персонаж не уклоняеться или не вращаеться к направлению способности (применение)
+			if (!m_DodgeController.IsDodging && !m_IsRotating2Ability)
             {
-                m_MoveController.Move(m_MoveDir);
+                m_MoveController.Move(m_TargetMoveDir);
                 m_MoveController.Rotate(m_TargetRotAngle);
-            }*/
+            }
         }
 
         /// <summary>
@@ -38,13 +38,13 @@ namespace mytest2.Character
         public override void Move(Vector3 dir)
         {
             //Кэш направления передвижения
-            m_MoveDir = dir;
+            m_TargetMoveDir = dir;
 
             //Если игрок хочет переместиться
-            if (m_MoveDir != Vector3.zero)
+            if (m_TargetMoveDir != Vector3.zero)
             {
                 //Вращение в направлении движения
-                m_TargetRotAngle = Mathf.Atan2(m_MoveDir.x, m_MoveDir.z) * Mathf.Rad2Deg;
+                m_TargetRotAngle = Mathf.Atan2(m_TargetMoveDir.x, m_TargetMoveDir.z) * Mathf.Rad2Deg;
             }
         }
 
@@ -133,7 +133,7 @@ namespace mytest2.Character
         {
             //Если нельзя использовать способность длина вектора 0 (если способность была только выделена, но не использована)
             if (dir.sqrMagnitude > 0)
-                UseAbility(SelectedAbility, dir);
+                TryUseAbility(SelectedAbility, dir);
 
             //Спрятать указатель направления
             HideUIActionDirectionController();
@@ -174,6 +174,8 @@ namespace mytest2.Character
 
         protected override void SubscribeForInputEvents()
         {
+			base.SubscribeForInputEvents ();
+
 #if UNITY_EDITOR
             if (InputManager.Instance.PreferVirtualJoystickInEditor)
                 SubscribeForJoystickEvents();
@@ -194,6 +196,8 @@ namespace mytest2.Character
 
         protected override void SubscribeForControllerEvents()
         {
+			base.SubscribeForControllerEvents ();
+
             m_DodgeController.OnDodgeStarted += DodgeStartedHandler;
             m_DodgeController.OnDodgeFinished += DodgeFinishedHandler;
 
@@ -204,8 +208,17 @@ namespace mytest2.Character
 
         protected override void FinishInitialization()
         {
+			base.FinishInitialization ();
+
             m_AbilityController.SetAndCallUpdateAmmoEventForAllAbilities();
         }
+
+		protected override void HandleUseAbility (AbilityTypes type, Vector2 dir)
+		{
+			base.HandleUseAbility (type, dir);
+
+			m_TargetRotAngle = m_CachedAbilityAngle;
+		}
 
 
         void SubscribeForJoystickEvents()

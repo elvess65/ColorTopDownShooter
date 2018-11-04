@@ -18,6 +18,9 @@ namespace mytest2.Character.Abilities
         public AbilityTypes[] Abilities;
 
         private Dictionary<AbilityTypes, CreatureAbility> m_Abilities;
+		public static int ABILITY_CODE_COOLDOWN = -1;
+		public static int ABILITY_CODE_NO_AMMO = -2;
+		public static int ABILITY_CAN_USE = 0;
 
         public void Init()
         {
@@ -50,32 +53,28 @@ namespace mytest2.Character.Abilities
         /// <param name="type">Тип способности</param>
         /// <param name="dir">Направление способности</param>
         /// <returns>true если способность была применена</returns>
-        public bool UseAbility(AbilityTypes type, Vector2 dir)
+        public void TryUseAbility(AbilityTypes type, Vector2 dir)
         {
             //Если у персонажа есть способность
             if (m_Abilities.ContainsKey(type))
             {
                 CreatureAbility ability = m_Abilities[type];
+			
+				int abilityCode = CanUseABility (ability);
+				if (abilityCode == ABILITY_CAN_USE) 
+				{
+					ability.Use ();
 
-                //Если у способности есть заряды и она не в откате
-                if (ability.HasAmmo && !ability.IsCooldown) 
-                {
-                    ability.Use();
+					LaunchProjectile (type, dir);
 
-                    LaunchProjectile(type, dir);
-
-                    if (OnAbilityUse != null)
-                        OnAbilityUse(type);
-
-                    return true;
-                }
-                else if (!ability.HasAmmo)
-                    Debug.LogWarning("No ammo");
-                else 
-                    Debug.LogWarning("Is in cooldown");
+					if (OnAbilityUse != null)
+						OnAbilityUse (type);
+				} 
+				else 
+				{
+					Debug.Log ("CANT USE ABILITY. REASON " + abilityCode);
+				}
             }
-
-            return false;
         }
 
         /// <summary>
@@ -89,7 +88,44 @@ namespace mytest2.Character.Abilities
                 m_Abilities[type].AddAmmo(ammoAmount);
         }
 
+		/// <summary>
+		/// Можно ли использовать способность (хватает патронов и способность не в откате)
+		/// </summary>
+		public bool CanUseABility(AbilityTypes type)
+		{
+			//Если у персонажа есть способность
+			if (m_Abilities.ContainsKey (type)) 
+				return CanUseABility (m_Abilities [type]) == ABILITY_CAN_USE;
 
+			return false;
+		}
+
+
+		/// <summary>
+		/// Внутреняя функция проверки возможности использовать способность с получением типов причин отказа
+		/// </summary>
+		int CanUseABility(CreatureAbility ability)
+		{
+			//Если у способности нет зарядов и она не в откате
+			if (!ability.HasAmmo) 
+			{
+				Debug.LogWarning ("No ammo");
+				return ABILITY_CODE_NO_AMMO;
+			} 
+			else if (ability.IsCooldown) //Если способность в откате
+			{
+				Debug.LogWarning ("Is in cooldown");
+				return ABILITY_CODE_COOLDOWN;
+			}
+
+			return ABILITY_CAN_USE;;
+		}
+
+		/// <summary>
+		/// Заупск снаряда способности
+		/// </summary>
+		/// <param name="type">Type.</param>
+		/// <param name="dir">Dir.</param>
         void LaunchProjectile(AbilityTypes type, Vector2 dir)
         {
             Projectile projectile = PoolManager.GetObject(GameManager.Instance.PrefabLibrary.GetAbilityProjectilePrefab(type)) as Projectile;

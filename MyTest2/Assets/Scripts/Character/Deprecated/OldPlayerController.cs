@@ -1,7 +1,7 @@
-﻿
-using mytest2.UI.InputSystem;
+﻿using mytest2.UI.InputSystem;
 using System.Collections;
 using UnityEngine;
+using mytest2.Character.Collisions;
 
 [RequireComponent(typeof(PlayerCollisionController))]
 [RequireComponent(typeof(PlayerAnimationController))]
@@ -18,7 +18,7 @@ public class OldPlayerController : MonoBehaviour
     public Transform PointBonusCollect;
 
     //Objects
-    private CollisionController m_CollisionController;
+    private TriggerCollisionController m_CollisionController;
     private CharacterController m_CharacterController;
     private PlayerAnimationController m_PlayerAnimationController;
     private IEnumerator m_ReduceSpeedCoroutine;
