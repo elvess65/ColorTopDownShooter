@@ -13,6 +13,8 @@ namespace mytest2.Main
         public CreatureController PlayerPrefab;
         public UIPlayerActionDirectionController UIAbilityDirectionPrefab;
         public UIJoystickCooldownController UIJoystickCooldownPrefab;
+        public UIHealthBarController UIHealthBarPrefab;
+        public UIHealthBarSegment UIHealthBarSegmentPrefab; 
         public AbilityProjectile[] AbilityProjectilePrefabs;
 
         private Dictionary<AbilityTypes, AbilityProjectile> m_AbilityProjectiles;

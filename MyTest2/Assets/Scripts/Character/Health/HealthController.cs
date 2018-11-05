@@ -1,4 +1,6 @@
 ﻿using mytest2.Character.Abilities;
+using mytest2.UI.Controllers3D;
+using mytest2.Utils.Pool;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +12,7 @@ namespace mytest2.Character.Health
         public System.Action OnDestroy;
         public System.Action<AbilityTypes> OnWrongAbility;
 
+        public Transform HealthBarSpawnPoint;
         public HealthSegment[] HealthData;
 
         private Dictionary<AbilityTypes, HealthSegment> m_HealthData;
@@ -25,6 +28,10 @@ namespace mytest2.Character.Health
                     m_HealthData.Add(HealthData[i].Type, HealthData[i]);
                 }
             }
+
+            UIHealthBarController healthBarController = PoolManager.GetObject(GameManager.Instance.PrefabLibrary.UIHealthBarPrefab) as UIHealthBarController;
+            healthBarController.transform.position = HealthBarSpawnPoint.position;
+            healthBarController.Init(transform, m_HealthData);
         }
 
         public void TakeDamage(AbilityTypes type, int damage)
