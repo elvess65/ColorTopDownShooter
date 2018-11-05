@@ -15,7 +15,7 @@ namespace mytest2.Character
         private static AbilityTypes m_CurAbilityType = AbilityTypes.None;
 
         public static AbilityTypes SelectedAbility
-        {
+        { 
             get { return m_CurAbilityType; }
         }
 
@@ -161,6 +161,16 @@ namespace mytest2.Character
 
 
         /// <summary>
+        /// Смена состояния ввода
+        /// </summary>
+        /// <param name="state"></param>
+        void InputStatusChangeHandler(bool state)
+        {
+
+        }
+
+
+        /// <summary>
         /// Вывести состояние силы на UI
         /// </summary>
         /// <param name="progress"></param>
@@ -171,7 +181,7 @@ namespace mytest2.Character
    
         }
 
-
+        //Инициализация
         protected override void SubscribeForInputEvents()
         {
 			base.SubscribeForInputEvents ();
@@ -193,7 +203,6 @@ namespace mytest2.Character
 
             InputManager.Instance.OnInputStateChange += InputStatusChangeHandler;
         }
-
         protected override void SubscribeForControllerEvents()
         {
 			base.SubscribeForControllerEvents ();
@@ -205,23 +214,13 @@ namespace mytest2.Character
             m_AbilityController.OnAbilityUse += AbilityUseHandler;
             m_AbilityController.OnUpdateAmmo += AbilityUpdateAmmoHandler;
         }
-
         protected override void FinishInitialization()
         {
 			base.FinishInitialization ();
 
             m_AbilityController.SetAndCallUpdateAmmoEventForAllAbilities();
         }
-
-		protected override void HandleUseAbility (AbilityTypes type, Vector2 dir)
-		{
-			base.HandleUseAbility (type, dir);
-
-			m_TargetRotAngle = m_CachedAbilityAngle;
-		}
-
-
-        void SubscribeForJoystickEvents()
+        private void SubscribeForJoystickEvents()
         {
             //Передвижение
             InputManager.Instance.VirtualJoystickInput.OnMove += Move;
@@ -242,29 +241,26 @@ namespace mytest2.Character
             }
         }
 
-        /// <summary>
-        /// Смена состояния ввода
-        /// </summary>
-        /// <param name="state"></param>
-        void InputStatusChangeHandler(bool state)
-        {
+        //Обработка
+        protected override void HandleUseAbility (AbilityTypes type, Vector2 dir)
+		{
+			base.HandleUseAbility (type, dir);
 
-        }
+			m_TargetRotAngle = m_CachedAbilityAngle;
+		}
 
-
+        //UI направления дейтсвия
         void ShowUIActionDirectionController(AbilityTypes type)
         {
             m_UIActionDirectionController = PoolManager.GetObject(GameManager.Instance.PrefabLibrary.UIAbilityDirectionPrefab) as UIPlayerActionDirectionController;
             m_UIActionDirectionController.transform.position = transform.position;
             m_UIActionDirectionController.Init(transform, type);
         }
-
         void UpdateUIActionDirectionController(Vector2 dir)
         {
             if (m_UIActionDirectionController != null && m_UIActionDirectionController.IsEnabled)
                 m_UIActionDirectionController.SetDirection(dir);
         }
-
         void HideUIActionDirectionController()
         {
             if (m_UIActionDirectionController != null && m_UIActionDirectionController.IsEnabled)
