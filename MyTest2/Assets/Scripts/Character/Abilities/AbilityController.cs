@@ -14,6 +14,7 @@ namespace mytest2.Character.Abilities
         public System.Action<AbilityTypes, int> OnUpdateAmmo;
 
         public Transform AbilitySpawnPoint;
+        
         [Tooltip("Доступные способности")]
         public AbilityTypes[] Abilities;
 
@@ -130,7 +131,7 @@ namespace mytest2.Character.Abilities
         {
             Projectile projectile = PoolManager.GetObject(GameManager.Instance.PrefabLibrary.GetAbilityProjectilePrefab(type)) as Projectile;
             projectile.transform.position = AbilitySpawnPoint.position;
-            projectile.Launch(dir);
+            projectile.Launch(dir, type);
         }
     }
 
@@ -168,7 +169,7 @@ namespace mytest2.Character.Abilities
         public CreatureAbility(AbilityTypes type)
         {
             Type = type;
-            AmmoAmmount = 2;
+            AmmoAmmount = 5;
         }
 
         /// <summary>

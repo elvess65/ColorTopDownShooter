@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 using mytest2.Character.Collisions;
 
-[RequireComponent(typeof(PlayerCollisionController))]
 [RequireComponent(typeof(PlayerAnimationController))]
 public class OldPlayerController : MonoBehaviour
 {
@@ -18,7 +17,6 @@ public class OldPlayerController : MonoBehaviour
     public Transform PointBonusCollect;
 
     //Objects
-    private TriggerCollisionController m_CollisionController;
     private CharacterController m_CharacterController;
     private PlayerAnimationController m_PlayerAnimationController;
     private IEnumerator m_ReduceSpeedCoroutine;
@@ -42,7 +40,6 @@ public class OldPlayerController : MonoBehaviour
     void Awake()
     {
         m_CharacterController = GetComponent<CharacterController>();
-        m_CollisionController = GetComponent<PlayerCollisionController>();
         m_PlayerAnimationController = GetComponent<PlayerAnimationController>();
     }
 
@@ -150,7 +147,6 @@ public class OldPlayerController : MonoBehaviour
 
         m_PlayerAnimationController.PlayMoveAnimation(0, Vector3.zero, Quaternion.identity);
         m_PlayerAnimationController.enabled = false;
-        m_CollisionController.enabled = false;
         enabled = false;
     }
 
@@ -185,15 +181,5 @@ public class OldPlayerController : MonoBehaviour
         m_PlayerAnimationController.StopPlayerMoveAnimation();
 
         m_ReduceSpeedCoroutine = null;
-	}
-
-    void OnTriggerEnter(Collider other)
-    {
-        m_CollisionController.HandleEnterCollision(other); 
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        m_CollisionController.HandlerExitCollision(other);
 	}
 }

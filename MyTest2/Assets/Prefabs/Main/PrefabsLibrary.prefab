@@ -53,6 +53,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerPrefab: {fileID: 114189207720716302, guid: 0ca3b25f70e445c4392090ea516d8e71,
     type: 2}
+  EnemyPrefab: {fileID: 114743178601191196, guid: e6421e80670436c4db824d45dc06eda4,
+    type: 2}
   UIAbilityDirectionPrefab: {fileID: 114077405250451758, guid: 38b4ae0b2721bb149bab6f7a94ad0cee,
     type: 2}
   UIJoystickCooldownPrefab: {fileID: 114476327918838136, guid: 08c786d09ac49874b8e3dbc2e22ecfd3,

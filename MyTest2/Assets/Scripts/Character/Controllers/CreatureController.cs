@@ -1,7 +1,9 @@
 ﻿using mytest2.Character.Abilities;
+using mytest2.Character.Collisions;
 using mytest2.Character.Dodging;
 using mytest2.Character.Health;
 using mytest2.Character.Movement;
+using mytest2.Projectiles;
 using UnityEngine;
 
 namespace mytest2.Character
@@ -16,6 +18,7 @@ namespace mytest2.Character
         protected AbilityController m_AbilityController;
         protected StaminaController m_StaminaController;
         protected HealthController m_HealthController;
+        protected TriggerCollisionController m_CollisionController;
 
         protected bool m_IsRotating2Ability = false;
         protected float m_CachedAbilityAngle;
@@ -29,7 +32,7 @@ namespace mytest2.Character
         /// <summary>
         /// Начать выполнять уклон (за реализацию уклона отвечает компонент iDodging)
         /// </summary>
-        /// <param name="dir">Направление уклона</param>
+        /// <param name="dir">Направление уклона в 2D координатах</param>
         public void Dodge(Vector2 dir)
         {
             if (m_StaminaController.HasEnoughStamina(m_DodgeController.Stamina))
@@ -46,7 +49,7 @@ namespace mytest2.Character
         /// Использовать способность
         /// </summary>
         /// <param name="type">Тип способности</param>
-        /// <param name="dir">направление способности</param>
+        /// <param name="dir">Направление способности в 2D координатах</param>
         public void TryUseAbility(AbilityTypes type, Vector2 dir)
         {
             if (!m_DodgeController.IsDodging)
@@ -98,35 +101,50 @@ namespace mytest2.Character
 
             m_HealthController = GetComponent<HealthController>();
             m_HealthController.Init();
+
+            m_CollisionController = GetComponent<TriggerCollisionController>();
         }                 //Инициализация всех контроллеров
         protected virtual void SubscribeForInputEvents() { }    //Подписаться на события ввода
         protected virtual void SubscribeForControllerEvents()   //Подписаться на события контроллеров
         {
+            //Способности
 			m_AbilityController.OnAbilityUse += (AbilityTypes type) => 
 			{
 				m_StaminaController.ReduceStamina(GameManager.Instance.GameState.DataTableAbilities.GetAbilityData(type).Stamina);
-
-                TakeDamage(type, GameManager.Instance.GameState.DataTableAbilities.GetAbilityData(type).Damage);
 			};
 
+            //ХП
             m_HealthController.OnDestroy += HandleDestroyCreature;
-            m_HealthController.OnTakeDamage += HandleTakeDamage;
             m_HealthController.OnWrongAbility += HandleWrongAbilityDamage;
+
+            //Взаимодейтсвие с триггером
+            m_CollisionController.OnTriggerEnterEvent = HandleTriggerEnter;
         }
         protected virtual void FinishInitialization() { }       //Окончание инициализации
         //Обработка
 		protected virtual void HandleUseAbility(AbilityTypes type, Vector2 dir)
 		{
+            //Начать вращение в направлении применения способности
+
+            //Событие окончания вращения
 			m_OnRotation2AbilityFinished = () => 
 			{
 				m_AbilityController.TryUseAbility (type, dir);
 			};
 
+            //Направление способности и угол, на который надо повернуться, для применения
 			m_CachedAbilityDir = dir;
 			m_CachedAbilityAngle = Mathf.Atan2(dir.x, dir.y) * Mathf.Rad2Deg;
 
+            //Начать вращение в направлении способности
 			m_IsRotating2Ability = true;
 		}
+        protected virtual void HandleTriggerEnter(Collider collider)
+        {
+            Projectile projectile = collider.GetComponent<Projectile>();
+            if (projectile != null)
+                TakeDamage(projectile.Type, GameManager.Instance.GameState.DataTableAbilities.GetAbilityData(projectile.Type).Damage);
+        }
         private void HandleRotatation2AbilityDir()
         {
             if (m_IsRotating2Ability)
@@ -146,10 +164,6 @@ namespace mytest2.Character
         protected virtual void HandleDestroyCreature()
         {
             Debug.Log("Is destroyed");
-        }
-        protected virtual void HandleTakeDamage(AbilityTypes type, int currentHealth)
-        {
-            Debug.Log("Take damage " + type + " Current health: " + currentHealth);
         }
         protected virtual void HandleWrongAbilityDamage(AbilityTypes type)
         {

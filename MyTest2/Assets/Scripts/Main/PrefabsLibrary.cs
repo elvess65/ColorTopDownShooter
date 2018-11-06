@@ -11,6 +11,7 @@ namespace mytest2.Main
     public class PrefabsLibrary : MonoBehaviour
     {
         public CreatureController PlayerPrefab;
+        public CreatureController EnemyPrefab;
         public UIPlayerActionDirectionController UIAbilityDirectionPrefab;
         public UIJoystickCooldownController UIJoystickCooldownPrefab;
         public UIHealthBarController UIHealthBarPrefab;

@@ -12,7 +12,6 @@ namespace mytest2.UI.Controllers3D
         public float AnimationTime = 0.5f;
 
         private int m_MaxHealth;
-        private int m_CurHealth;
         private Utils.InterpolationData<float> m_LerpData;
 
         public void Init(AbilityTypes type, int health)
@@ -45,8 +44,6 @@ namespace mytest2.UI.Controllers3D
 
 		public void UpdateUI(int currentHealth)
 		{
-            m_CurHealth = currentHealth;
-
             float progress = (float)currentHealth / m_MaxHealth;
             m_LerpData.From = Image_FG.fillAmount;
             m_LerpData.To = progress;

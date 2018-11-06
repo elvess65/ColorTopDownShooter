@@ -22,35 +22,35 @@ namespace mytest2.UI.Controllers3D
 
         public void Init(Transform parent, Dictionary<AbilityTypes, Character.Health.HealthController.HealthSegment> healthData)
         {
-			//Follow
-			if (m_FollowController == null)
-				m_FollowController = GetComponent<FollowTransformController> ();
+            //Follow
+            if (m_FollowController == null)
+                m_FollowController = GetComponent<FollowTransformController>();
 
-			m_FollowController.Init (parent);
+            m_FollowController.Init(parent);
 
-			//Healthbar
-			int segments = 0;
+            //Healthbar
+            int segments = 0;
             m_Segments = new Dictionary<AbilityTypes, UIHealthBarSegment>();
-            foreach(Character.Health.HealthController.HealthSegment segmentData in healthData.Values)
+            foreach (Character.Health.HealthController.HealthSegment segmentData in healthData.Values)
             {
-				//Create segment
+                //Create segment
                 UIHealthBarSegment segment = PoolManager.GetObject(GameManager.Instance.PrefabLibrary.UIHealthBarSegmentPrefab) as UIHealthBarSegment;
 
-				//Position segment
+                //Position segment
                 RectTransform segmentRectTransform = segment.GetComponent<RectTransform>();
                 segmentRectTransform.SetParent(SegmentParent);
                 segmentRectTransform.anchoredPosition = Vector3.zero;
-				segmentRectTransform.localPosition = Vector3.zero;
+                segmentRectTransform.localPosition = Vector3.zero;
                 segmentRectTransform.localEulerAngles = Vector3.zero;
 
-				//Scale segment
+                //Scale segment
                 float scale = m_InitSize - m_StepDelta * segments;
                 segmentRectTransform.localScale = new Vector3(scale, scale, scale);
 
-				//Init segment
+                //Init segment
                 segment.Init(segmentData.Type, segmentData.Health);
 
-				//Other
+                //Other
                 m_Segments.Add(segmentData.Type, segment);
                 segments++;
             }
@@ -58,8 +58,22 @@ namespace mytest2.UI.Controllers3D
 
 		public void UpdateUI(AbilityTypes type, int currentHealth)
 		{
-            if (m_Segments.ContainsKey(type))
-                m_Segments[type].UpdateUI(currentHealth);
+            UIHealthBarSegment segment = GetSegmentForTakeDamage(type);
+            if (segment != null)
+                segment.UpdateUI(currentHealth);
 		}
+
+        /// <summary>
+        /// Получить сегмент хп, которому наноситься урон
+        /// </summary>
+        UIHealthBarSegment GetSegmentForTakeDamage(AbilityTypes type)
+        {
+            if (m_Segments.ContainsKey(AbilityTypes.None))
+                return m_Segments[AbilityTypes.None];
+            else if (m_Segments.ContainsKey(type))
+                return m_Segments[type];
+
+            return null;
+        }
     }
 }

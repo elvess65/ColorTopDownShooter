@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace mytest2.Character.Health
 {
+    /// <summary>
+    /// Контроллер ХП персонажа
+    /// </summary>
     public class HealthController : MonoBehaviour
     {
         public System.Action<AbilityTypes, int> OnTakeDamage;

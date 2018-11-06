@@ -1,6 +1,7 @@
 ﻿using mytest2.Utils.Pool;
 using UnityEngine;
 using mytest2.Character.Collisions;
+using mytest2.Character.Abilities;
 
 namespace mytest2.Projectiles
 {
@@ -17,14 +18,18 @@ namespace mytest2.Projectiles
         private bool m_IsActive = false;
 		private TriggerCollisionController m_CollisionController;
 
-        public void Launch(Vector2 dir)
+        public AbilityTypes Type
+        { get; private set; }
+
+        public void Launch(Vector2 dir, AbilityTypes type)
         {
 			if (m_CollisionController == null) 
 			{
 				m_CollisionController = GetComponent<TriggerCollisionController> ();
 				m_CollisionController.OnTriggerEnterEvent = CollisionWithAnythingHandler;
 			}
-				
+
+            Type = type;
             m_Dir = new Vector3(dir.x, 0, dir.y);
             m_LaunchPos = transform.position;
             m_IsActive = true;

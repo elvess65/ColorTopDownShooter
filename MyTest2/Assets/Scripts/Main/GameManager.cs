@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     public CameraController CameraController;
     public GameStateController GameState;
     public Transform PlayerSpawnPoint;
+    public Transform EnemySpawnPoint;
 
     private bool m_IsActive = false;
     private PrefabsLibrary m_PrefabsLibrary;
@@ -64,6 +65,7 @@ public class GameManager : MonoBehaviour
     void CreatePlayer()
     {
         GameState.Player = Instantiate(m_PrefabsLibrary.PlayerPrefab, PlayerSpawnPoint.position, Quaternion.identity);
+        Instantiate(m_PrefabsLibrary.EnemyPrefab, EnemySpawnPoint.position, Quaternion.identity);
     }
 
     void StartLoop()
