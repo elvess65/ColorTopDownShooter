@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4907730545553678}
   - component: {fileID: 114077405250451758}
+  - component: {fileID: 114258080893139864}
   m_Layer: 0
   m_Name: AbilityDirection
   m_TagString: Untagged
@@ -125,3 +126,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Renderer: {fileID: 23798022286800052}
+--- !u!114 &114258080893139864
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1694057523165420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bafa265fb371af44ab775db853907d2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FollowSpeed: 10

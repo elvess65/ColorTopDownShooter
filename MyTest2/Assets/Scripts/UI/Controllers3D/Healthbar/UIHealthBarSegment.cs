@@ -13,6 +13,10 @@ namespace mytest2.UI.Controllers3D
         {
 
         }
+
+		public void UpdateUI(int currentHealth)
+		{
+		}
         
 
         // Update is called once per frame

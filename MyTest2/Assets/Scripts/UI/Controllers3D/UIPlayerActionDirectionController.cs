@@ -7,21 +7,31 @@ namespace mytest2.UI.Controllers3D
     /// <summary>
     /// Контроллер объекта, который задает отображает стрелку направления способности
     /// </summary>
+	[RequireComponent(typeof(FollowTransformController))]
     public class UIPlayerActionDirectionController : PoolObject
     {
         public MeshRenderer Renderer;
 
+		private bool m_IsActive = false;
         private Quaternion m_TargetRot;
-        private Transform m_Parent;
-
         private Material m_Material;
-        private const float m_SPEED = 10f;
+		private FollowTransformController m_FollowController;
+
+		private const float m_ROTATION_SPEED = 10;
 
         public void Init(Transform parent, AbilityTypes type)
         {
-            m_Parent = parent;
-            m_TargetRot = m_Parent.rotation;
+			//Follow
+			if (m_FollowController == null)
+				m_FollowController = GetComponent<FollowTransformController> ();
 
+			m_FollowController.Init (parent);
+
+			//Rotation
+			m_TargetRot = parent.rotation;
+
+
+			//Color
             if (m_Material == null)
             {
                 m_Material = new Material(Renderer.sharedMaterial);
@@ -49,6 +59,8 @@ namespace mytest2.UI.Controllers3D
                     m_Material.color = Color.white;
                     break;
             }
+
+			m_IsActive = true;
         }
 
         public void SetDirection(Vector2 dir)
@@ -57,14 +69,17 @@ namespace mytest2.UI.Controllers3D
             m_TargetRot = Quaternion.AngleAxis(targetRotAngle, Vector3.up);
         }
 
+		protected override void DisableObject ()
+		{
+			base.DisableObject ();
 
-        void Update()
+			m_IsActive = false;
+		}
+			
+        private void Update()
         {
-            if (m_Parent != null)
-            {
-                transform.rotation = Quaternion.Slerp(transform.rotation, m_TargetRot, Time.deltaTime * m_SPEED);
-                transform.position = m_Parent.position;
-            }
+			if (m_IsActive)
+				transform.rotation = Quaternion.Slerp(transform.rotation, m_TargetRot, Time.deltaTime * m_ROTATION_SPEED);
         }
     }
 }
