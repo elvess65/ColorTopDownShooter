@@ -15,10 +15,12 @@ namespace mytest2.Character.Health
         public Transform HealthBarSpawnPoint;
         public HealthSegment[] HealthData;
 
+        private UIHealthBarController m_UIHealthBarController;
         private Dictionary<AbilityTypes, HealthSegment> m_HealthData;
 
         public void Init()
         {
+            //Инициализировать данные
             m_HealthData = new Dictionary<AbilityTypes, HealthSegment>();
             for (int i = 0; i < HealthData.Length; i++)
             {
@@ -29,17 +31,25 @@ namespace mytest2.Character.Health
                 }
             }
 
-            UIHealthBarController healthBarController = PoolManager.GetObject(GameManager.Instance.PrefabLibrary.UIHealthBarPrefab) as UIHealthBarController;
-            healthBarController.transform.position = HealthBarSpawnPoint.position;
-            healthBarController.Init(transform, m_HealthData);
+            //Инициализировать UI
+            m_UIHealthBarController = PoolManager.GetObject(GameManager.Instance.PrefabLibrary.UIHealthBarPrefab) as UIHealthBarController;
+            m_UIHealthBarController.transform.position = HealthBarSpawnPoint.position;
+            m_UIHealthBarController.Init(transform, m_HealthData);
         }
 
+        /// <summary>
+        /// Нанести урон персонажу
+        /// </summary>
         public void TakeDamage(AbilityTypes type, int damage)
         {
             HealthSegment healthSegment = GetSegmentForTakeDamage(type);
             if (healthSegment != null)
             {
+                //Нанести  урон
                 healthSegment.TakeDamage(damage);
+
+                //Обновить UI
+                m_UIHealthBarController.UpdateUI(type, healthSegment.CurHealth);
 
                 //Персонаж уничтожен
                 if (CreatureIsDestroyed())
@@ -60,6 +70,9 @@ namespace mytest2.Character.Health
             }
         }
 
+        /// <summary>
+        /// Получить сегмент хп, которому наноситься урон
+        /// </summary>
         HealthSegment GetSegmentForTakeDamage(AbilityTypes type)
         {
             if (m_HealthData.ContainsKey(AbilityTypes.None))

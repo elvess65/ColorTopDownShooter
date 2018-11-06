@@ -58,6 +58,8 @@ namespace mytest2.UI.Controllers3D
 
 		public void UpdateUI(AbilityTypes type, int currentHealth)
 		{
+            if (m_Segments.ContainsKey(type))
+                m_Segments[type].UpdateUI(currentHealth);
 		}
     }
 }

@@ -40,7 +40,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 477c1eb9d00d2f24fb1528efccd342eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Image_FG: {fileID: 0}
+  Image_FG: {fileID: 114648168699628442}
+  AnimationTime: 0.5
 --- !u!114 &114648168699628442
 MonoBehaviour:
   m_ObjectHideFlags: 1
