@@ -37,14 +37,9 @@ namespace mytest2.Character
 
                 if (Time.time - m_LastAttackTime >= m_TimeBetweenAttack)
                 {
-                    HideUIActionDirectionController();
-                    ShowUIActionDirectionController(m_AbilityController.Abilities[0]);
-
                     TryUseAbility(m_AbilityController.Abilities[0], vecToPlayer2D);
                     m_LastAttackTime = Time.time;
                 }
-                else
-                    UpdateUIActionDirectionController(vecToPlayer2D);
             }
         }
 
@@ -54,24 +49,8 @@ namespace mytest2.Character
             Gizmos.DrawWireSphere(transform.position, DetectDisatnce);
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, AttackDistance);
-        }
 
-        private UIPlayerActionDirectionController m_UIActionDirectionController;
-        void ShowUIActionDirectionController(AbilityTypes type)
-        {
-            m_UIActionDirectionController = PoolManager.GetObject(GameManager.Instance.PrefabLibrary.UIAbilityDirectionPrefab) as UIPlayerActionDirectionController;
-            m_UIActionDirectionController.transform.position = transform.position;
-            m_UIActionDirectionController.Init(transform, type);
-        }
-        void UpdateUIActionDirectionController(Vector2 dir)
-        {
-            if (m_UIActionDirectionController != null && m_UIActionDirectionController.IsEnabled)
-                m_UIActionDirectionController.SetDirection(dir);
-        }
-        void HideUIActionDirectionController()
-        {
-            if (m_UIActionDirectionController != null && m_UIActionDirectionController.IsEnabled)
-                m_UIActionDirectionController.Disable();
+            Gizmos.DrawLine(transform.position, GameManager.Instance.GameState.Player.transform.position);
         }
     }
 }

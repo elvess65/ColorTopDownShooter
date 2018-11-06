@@ -17,6 +17,10 @@ namespace mytest2.Main
         {
             get; private set;
         }
+        public ObjectsController SceneObjectsController
+        {
+            get; private set;
+        }
 
         public void GameOver()
         {
@@ -27,6 +31,7 @@ namespace mytest2.Main
         {
             m_GameOverController = GetComponent<GameOverController>();
             DataTableAbilities = GetComponent<DataTableAbilities>();
+            SceneObjectsController = GetComponent<ObjectsController>();
         }
     }
 }

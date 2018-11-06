@@ -60,13 +60,49 @@ namespace mytest2.UI.InputSystem
         void Update()
         {
             if (GameManager.Instance.IsActive && m_InputState)
+            {
                 m_Input.UpdateInput();
+
+                HandleShieldInput();
+            }
 
             if (Input.GetKeyDown(KeyCode.L))
                 InputIsEnabled = false;
 
             if (Input.GetKeyDown(KeyCode.U))
                 InputIsEnabled = true;
+        }
+
+        public System.Action<Vector2> OnInputStart;
+        public System.Action<Vector2> OnInputUpdate;
+        public System.Action OnInputEnd;
+        void HandleShieldInput()
+        {
+            if (Input.GetMouseButtonDown(1))
+            {
+                Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+                Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
+                Vector2 dirFromCenterToMouse = mousePos - screenCenter;
+
+                if (OnInputStart != null)
+                    OnInputStart(dirFromCenterToMouse.normalized);
+            }
+
+            if(Input.GetMouseButton(1))
+            {
+                Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+                Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
+                Vector2 dirFromCenterToMouse = mousePos - screenCenter;
+
+                if (OnInputUpdate != null)
+                    OnInputUpdate(dirFromCenterToMouse.normalized);
+            }
+
+            if (Input.GetMouseButtonUp(1))
+            {
+                if (OnInputEnd != null)
+                    OnInputEnd();
+            }
         }
     }
 

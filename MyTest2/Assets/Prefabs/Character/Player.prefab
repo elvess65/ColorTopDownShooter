@@ -77,6 +77,7 @@ GameObject:
   - component: {fileID: 114314873851937520}
   - component: {fileID: 143663272898460696}
   - component: {fileID: 65186172515873526}
+  - component: {fileID: 114630413703338230}
   m_Layer: 11
   m_Name: Player
   m_TagString: Untagged
@@ -355,6 +356,17 @@ MonoBehaviour:
   DodgeDist: 2
   DodgeSpeed: 5
   StaminaPerDodge: 2
+--- !u!114 &114630413703338230
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1567039618993562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e47f5824a7882cf40a99ec74fbde1b00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114855795973970398
 MonoBehaviour:
   m_ObjectHideFlags: 1

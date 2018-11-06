@@ -48,13 +48,23 @@ namespace mytest2.Projectiles
             if (m_IsActive)
             {
                 transform.Translate(m_Dir * m_Speed * Time.deltaTime);
+                CheckShieldCollision();
 
                 if ((transform.position - m_LaunchPos).sqrMagnitude > m_MaxSQRDist)
                     Disable();
             }
         }
 
-		void CollisionWithAnythingHandler(Collider other)
+        void CheckShieldCollision()
+        {
+            for (int i = 0; i < GameManager.Instance.GameState.SceneObjectsController.ShieldsCount; i++)
+            {
+                if (GameManager.Instance.GameState.SceneObjectsController.GetShield(i).Intersects(transform.position))
+                    DisableObject();
+            }
+        }
+
+        void CollisionWithAnythingHandler(Collider other)
 		{
 			Disable ();
 		}

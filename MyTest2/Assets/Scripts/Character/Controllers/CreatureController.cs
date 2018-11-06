@@ -3,6 +3,7 @@ using mytest2.Character.Collisions;
 using mytest2.Character.Dodging;
 using mytest2.Character.Health;
 using mytest2.Character.Movement;
+using mytest2.Character.Shield;
 using mytest2.Projectiles;
 using UnityEngine;
 
@@ -13,12 +14,15 @@ namespace mytest2.Character
     /// </summary>
     public abstract class CreatureController : MonoBehaviour
     {
+        public int TeamID;
+
         protected iMovement m_MoveController;
         protected iDodging m_DodgeController;
         protected AbilityController m_AbilityController;
         protected StaminaController m_StaminaController;
         protected HealthController m_HealthController;
         protected TriggerCollisionController m_CollisionController;
+        protected ShieldController m_ShieldController;
 
         protected bool m_IsRotating2Ability = false;
         protected float m_CachedAbilityAngle;
@@ -103,6 +107,7 @@ namespace mytest2.Character
             m_HealthController.Init();
 
             m_CollisionController = GetComponent<TriggerCollisionController>();
+            m_ShieldController = GetComponent<ShieldController>();
         }                 //Инициализация всех контроллеров
         protected virtual void SubscribeForInputEvents() { }    //Подписаться на события ввода
         protected virtual void SubscribeForControllerEvents()   //Подписаться на события контроллеров

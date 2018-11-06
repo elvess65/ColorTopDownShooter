@@ -159,6 +159,14 @@ namespace mytest2.Character
             GameManager.Instance.UIManager.UpdateAbilityAmmo(type, ammoAmmount);
         }
 
+        /// <summary>
+        /// Вывести состояние силы на UI
+        /// </summary>
+        /// <param name="progress"></param>
+        void StaminaUpdateHandler(float progress)
+        {
+            GameManager.Instance.UIManager.StaminaController.SetState(progress);
+        }
 
         /// <summary>
         /// Смена состояния ввода
@@ -170,15 +178,66 @@ namespace mytest2.Character
         }
 
 
-        /// <summary>
-        /// Вывести состояние силы на UI
-        /// </summary>
-        /// <param name="progress"></param>
-        void StaminaUpdateHandler(float progress)
-        {
-            GameManager.Instance.UIManager.StaminaController.SetState(progress);
+        public static Vector3 m_ShieldOrigin;
+        Vector3 m_InputBound;
+        Vector3 m_AutoBound;
+        Vector3 m_PerpendicularToOrigin;
+        Vector2 m_PerpendicularToOrigin2D;
+        public static float m_AngleBetweenOriginAndBound;
 
-   
+        void OnShieldInputStart(Vector2 dirToTarget)
+        {
+            //Вектор начала щита
+            m_ShieldOrigin = new Vector3(dirToTarget.x, 0, dirToTarget.y);
+            //Перпендикуляр к началу щита 2D
+            m_PerpendicularToOrigin2D = new Vector2(dirToTarget.y, -dirToTarget.x);
+            //Перпендикуляр к началу щита 
+            m_PerpendicularToOrigin = new Vector3(m_PerpendicularToOrigin2D.x, 0, m_PerpendicularToOrigin2D.y);
+            //Граница щита, которая автоматически сдвигаеться
+            m_AutoBound = m_ShieldOrigin;
+        }
+        void OnShieldInputUpdate(Vector2 dirToTarget)
+        {
+            //Текущая граница контролируемая вводом
+            m_InputBound = new Vector3(dirToTarget.x, 0, dirToTarget.y);
+            //Угол между началом щита и текущей границей
+            m_AngleBetweenOriginAndBound = Vector3.Angle(m_ShieldOrigin, m_InputBound);
+
+            Debug.Log(m_AngleBetweenOriginAndBound);
+
+            //Сравнение Dot с пермендикуляром к началу щита для определения знака угла 
+            float dot = Vector2.Dot(m_PerpendicularToOrigin2D, dirToTarget);
+            float dir = Mathf.Sign(dot);
+
+            //Автоматическое смещение границы
+            m_AutoBound = Quaternion.Euler(0, -m_AngleBetweenOriginAndBound * dir, 0) * m_ShieldOrigin;
+        }
+
+        void OnShieldInputEnd()
+        {
+            m_ShieldController.CreateShield(transform.position, m_ShieldOrigin, m_AngleBetweenOriginAndBound);
+        }
+
+        private void OnDrawGizmos()
+        {
+            //Радиус щита
+            Gizmos.DrawWireSphere(transform.position, m_ShieldController.ShieldRadius);
+
+            //Начало щита
+            Gizmos.color = Color.white;
+            Gizmos.DrawLine(transform.position, transform.position + m_ShieldOrigin * m_ShieldController.ShieldRadius);
+
+            //Перпендикуляр к началу щита
+            Gizmos.color = Color.black;
+            Gizmos.DrawLine(transform.position, transform.position + m_PerpendicularToOrigin * m_ShieldController.ShieldRadius);
+
+            //Автоматическая граница
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position, transform.position + m_AutoBound * m_ShieldController.ShieldRadius);
+
+            //Граница контролируемая вводом
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(transform.position, transform.position + m_InputBound * m_ShieldController.ShieldRadius);
         }
 
         //Инициализация
@@ -202,6 +261,9 @@ namespace mytest2.Character
 #endif
 
             InputManager.Instance.OnInputStateChange += InputStatusChangeHandler;
+            InputManager.Instance.OnInputStart += OnShieldInputStart;
+            InputManager.Instance.OnInputUpdate += OnShieldInputUpdate;
+            InputManager.Instance.OnInputEnd += OnShieldInputEnd;
         }
         protected override void SubscribeForControllerEvents()
         {
