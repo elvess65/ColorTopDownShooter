@@ -4,6 +4,7 @@ using mytest2.Character.Dodging;
 using mytest2.Character.Health;
 using mytest2.Character.Movement;
 using mytest2.Character.Shield;
+using mytest2.Items;
 using mytest2.Projectiles;
 using UnityEngine;
 
@@ -160,6 +161,14 @@ namespace mytest2.Character
             Projectile projectile = collider.GetComponent<Projectile>();
             if (projectile != null)
                 TakeDamage(projectile.Type, GameManager.Instance.GameState.DataTableAbilities.GetAbilityData(projectile.Type).Damage);
+
+            Item item = collider.GetComponent<Item>();
+            if (item != null)
+            {
+                Debug.Log("Collide with item");
+                m_AbilityController.AddAmmo(item.Type, 1);
+                item.Pick();
+            }
         }
         private void HandleRotatation2AbilityDir()
         {
