@@ -178,12 +178,12 @@ namespace mytest2.Character
         }
 
 
-        public static Vector3 m_ShieldOrigin;
+        Vector3 m_ShieldOrigin;
         Vector3 m_InputBound;
         Vector3 m_AutoBound;
         Vector3 m_PerpendicularToOrigin;
         Vector2 m_PerpendicularToOrigin2D;
-        public static float m_AngleBetweenOriginAndBound;
+        float m_ShieldAngle;
 
         void OnShieldInputStart(Vector2 dirToTarget)
         {
@@ -196,26 +196,25 @@ namespace mytest2.Character
             //Граница щита, которая автоматически сдвигаеться
             m_AutoBound = m_ShieldOrigin;
         }
+
         void OnShieldInputUpdate(Vector2 dirToTarget)
         {
             //Текущая граница контролируемая вводом
             m_InputBound = new Vector3(dirToTarget.x, 0, dirToTarget.y);
             //Угол между началом щита и текущей границей
-            m_AngleBetweenOriginAndBound = Vector3.Angle(m_ShieldOrigin, m_InputBound);
-
-            Debug.Log(m_AngleBetweenOriginAndBound);
+            m_ShieldAngle = Vector3.Angle(m_ShieldOrigin, m_InputBound);
 
             //Сравнение Dot с пермендикуляром к началу щита для определения знака угла 
             float dot = Vector2.Dot(m_PerpendicularToOrigin2D, dirToTarget);
             float dir = Mathf.Sign(dot);
 
             //Автоматическое смещение границы
-            m_AutoBound = Quaternion.Euler(0, -m_AngleBetweenOriginAndBound * dir, 0) * m_ShieldOrigin;
+            m_AutoBound = Quaternion.Euler(0, -m_ShieldAngle * dir, 0) * m_ShieldOrigin;
         }
 
         void OnShieldInputEnd()
         {
-            m_ShieldController.CreateShield(transform.position, m_ShieldOrigin, m_AngleBetweenOriginAndBound);
+            CreateShield(m_ShieldOrigin, m_ShieldAngle, m_CurAbilityType);
         }
 
         private void OnDrawGizmos()

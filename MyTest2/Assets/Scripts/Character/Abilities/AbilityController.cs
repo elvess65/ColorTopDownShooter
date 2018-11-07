@@ -19,6 +19,7 @@ namespace mytest2.Character.Abilities
         public AbilityTypes[] Abilities;
 
         private Dictionary<AbilityTypes, CreatureAbility> m_Abilities;
+
 		public static int ABILITY_CODE_COOLDOWN = -1;
 		public static int ABILITY_CODE_NO_AMMO = -2;
 		public static int ABILITY_CAN_USE = 0;
@@ -54,7 +55,7 @@ namespace mytest2.Character.Abilities
         /// <param name="type">Тип способности</param>
         /// <param name="dir">Направление способности</param>
         /// <returns>true если способность была применена</returns>
-        public void TryUseAbility(AbilityTypes type, Vector2 dir)
+        public void TryUseAbility(AbilityTypes type, Vector2 dir, int senderTeamID)
         {
             //Если у персонажа есть способность
             if (m_Abilities.ContainsKey(type))
@@ -66,7 +67,7 @@ namespace mytest2.Character.Abilities
 				{
 					ability.Use ();
 
-					LaunchProjectile (type, dir);
+					LaunchProjectile (type, dir, senderTeamID);
 
 					if (OnAbilityUse != null)
 						OnAbilityUse (type);
@@ -127,11 +128,11 @@ namespace mytest2.Character.Abilities
 		/// </summary>
 		/// <param name="type">Type.</param>
 		/// <param name="dir">Dir.</param>
-        void LaunchProjectile(AbilityTypes type, Vector2 dir)
+        void LaunchProjectile(AbilityTypes type, Vector2 dir, int senderTeamID)
         {
             Projectile projectile = PoolManager.GetObject(GameManager.Instance.PrefabLibrary.GetAbilityProjectilePrefab(type)) as Projectile;
             projectile.transform.position = AbilitySpawnPoint.position;
-            projectile.Launch(dir, type);
+            projectile.Launch(dir, type, senderTeamID);
         }
     }
 

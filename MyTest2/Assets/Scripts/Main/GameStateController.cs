@@ -1,5 +1,6 @@
 ﻿using mytest2.Character;
 using mytest2.Character.Abilities;
+using mytest2.Character.Container;
 using UnityEngine;
 
 namespace mytest2.Main
@@ -17,21 +18,21 @@ namespace mytest2.Main
         {
             get; private set;
         }
-        public ObjectsController SceneObjectsController
+        public DataContainerController DataContainerController
         {
             get; private set;
-        }
-
-        public void GameOver()
-        {
-            m_GameOverController.GameOver();
         }
 
         void Start()
         {
             m_GameOverController = GetComponent<GameOverController>();
             DataTableAbilities = GetComponent<DataTableAbilities>();
-            SceneObjectsController = GetComponent<ObjectsController>();
+            DataContainerController = GetComponent<DataContainerController>();
+        }
+
+        public void GameOver()
+        {
+            m_GameOverController.GameOver();
         }
     }
 }

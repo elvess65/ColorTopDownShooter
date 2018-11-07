@@ -79,3 +79,19 @@ MonoBehaviour:
   - Type: 4
     ProjectilePrefab: {fileID: 114291063827526880, guid: 23b24650af752724ebd2a4ee82236bfc,
       type: 2}
+  AbilityShieldPrefabs:
+  - Type: 0
+    ProjectilePrefab: {fileID: 114031307352420916, guid: fb0625c488821154093f1a4965c1121a,
+      type: 2}
+  - Type: 1
+    ProjectilePrefab: {fileID: 114107548252431568, guid: 1f90da9f81043034dbcb2a2c460b4050,
+      type: 2}
+  - Type: 2
+    ProjectilePrefab: {fileID: 114729968408382018, guid: 303926aad5708b34b9a2f95c4e7c2ed5,
+      type: 2}
+  - Type: 3
+    ProjectilePrefab: {fileID: 114671828048507940, guid: 744fb367d3ac23d498bd6a73e1277e3b,
+      type: 2}
+  - Type: 4
+    ProjectilePrefab: {fileID: 114799265689409630, guid: 3b1fd63274594cb42a2e00d684ba0f32,
+      type: 2}

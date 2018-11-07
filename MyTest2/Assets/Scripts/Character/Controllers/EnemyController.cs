@@ -1,7 +1,4 @@
-﻿using mytest2.Character.Abilities;
-using mytest2.UI.Controllers3D;
-using mytest2.Utils.Pool;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace mytest2.Character
 {

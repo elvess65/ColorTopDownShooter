@@ -76,6 +76,17 @@ namespace mytest2.Character
             m_HealthController.TakeDamage(type, damage);
         }
 
+        /// <summary>
+        /// Создать щит
+        /// </summary>
+        /// <param name="position">Позиция, где находиться игрок, который создал щит</param>
+        /// <param name="origin">Ветор направления щита</param>
+        /// <param name="angle">Угол щита</param>
+        /// <param name="type">Тип щита</param>
+        public void CreateShield(Vector3 origin, float angle, AbilityTypes type)
+        {
+            m_ShieldController.CreateShield(transform.position, origin, angle, type, TeamID);
+        }
 
         protected virtual void Start()
         {
@@ -134,7 +145,7 @@ namespace mytest2.Character
             //Событие окончания вращения
 			m_OnRotation2AbilityFinished = () => 
 			{
-				m_AbilityController.TryUseAbility (type, dir);
+				m_AbilityController.TryUseAbility (type, dir, TeamID);
 			};
 
             //Направление способности и угол, на который надо повернуться, для применения

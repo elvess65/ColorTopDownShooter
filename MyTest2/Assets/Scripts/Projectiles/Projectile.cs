@@ -2,6 +2,7 @@
 using UnityEngine;
 using mytest2.Character.Collisions;
 using mytest2.Character.Abilities;
+using mytest2.Character.Shield;
 
 namespace mytest2.Projectiles
 {
@@ -11,6 +12,7 @@ namespace mytest2.Projectiles
 	[RequireComponent(typeof(TriggerCollisionController))]
     public class Projectile : PoolObject
     {
+        private int m_SenderTeamID;
         private float m_Speed = 10;
         private float m_MaxSQRDist = 100;
         private Vector3 m_Dir;
@@ -21,7 +23,7 @@ namespace mytest2.Projectiles
         public AbilityTypes Type
         { get; private set; }
 
-        public void Launch(Vector2 dir, AbilityTypes type)
+        public void Launch(Vector2 dir, AbilityTypes type, int senderTeamID)
         {
 			if (m_CollisionController == null) 
 			{
@@ -30,6 +32,7 @@ namespace mytest2.Projectiles
 			}
 
             Type = type;
+            m_SenderTeamID = senderTeamID;
             m_Dir = new Vector3(dir.x, 0, dir.y);
             m_LaunchPos = transform.position;
             m_IsActive = true;
@@ -57,9 +60,13 @@ namespace mytest2.Projectiles
 
         void CheckShieldCollision()
         {
-            for (int i = 0; i < GameManager.Instance.GameState.SceneObjectsController.ShieldsCount; i++)
+            //Проходимся по всем активным щитам в игре
+            for (int i = 0; i < GameManager.Instance.GameState.DataContainerController.ShieldContainer.ShieldsCount; i++)
             {
-                if (GameManager.Instance.GameState.SceneObjectsController.GetShield(i).Intersects(transform.position))
+                Shield curShield = GameManager.Instance.GameState.DataContainerController.ShieldContainer.GetShield(i);
+
+                //Если создатель текущего щита враг, тип щита такой же как и тип снаряда и позиция снаряда пересекает щит - попадание в щит
+                if (curShield.SenderTeamID != m_SenderTeamID && curShield.Type == Type && curShield.Intersects(transform.position))
                     DisableObject();
             }
         }
