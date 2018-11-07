@@ -13,15 +13,17 @@ namespace mytest2.Main
     {
         public CreatureController PlayerPrefab;
         public CreatureController EnemyPrefab;
+        //UI Prefabs
         public UIPlayerActionDirectionController UIAbilityDirectionPrefab;
         public UIJoystickCooldownController UIJoystickCooldownPrefab;
         public UIHealthBarController UIHealthBarPrefab;
         public UIHealthBarSegment UIHealthBarSegmentPrefab; 
-        public AbilityProjectile[] AbilityProjectilePrefabs;
-        public AbilityShield[] AbilityShieldPrefabs;
+        //Ability prefabs
+        public AbilityProjectilePrefab[] AbilityProjectilePrefabs;
+        public AbilityShieldPrefab[] AbilityShieldPrefabs;
 
-        private Dictionary<AbilityTypes, AbilityProjectile> m_AbilityProjectiles;
-        private Dictionary<AbilityTypes, AbilityShield> m_AbilityShields;
+        private Dictionary<AbilityTypes, AbilityProjectilePrefab> m_AbilityProjectiles;
+        private Dictionary<AbilityTypes, AbilityShieldPrefab> m_AbilityShields;
 
         void Awake()
         {
@@ -30,14 +32,16 @@ namespace mytest2.Main
 
         void InitializeDictionaries()
         {
-            m_AbilityProjectiles = new Dictionary<AbilityTypes, AbilityProjectile>();
+            //Projectiles
+            m_AbilityProjectiles = new Dictionary<AbilityTypes, AbilityProjectilePrefab>();
             for (int i = 0; i < AbilityProjectilePrefabs.Length; i++)
             {
                 if (!m_AbilityProjectiles.ContainsKey(AbilityProjectilePrefabs[i].Type))
                     m_AbilityProjectiles.Add(AbilityProjectilePrefabs[i].Type, AbilityProjectilePrefabs[i]);
             }
 
-            m_AbilityShields = new Dictionary<AbilityTypes, AbilityShield>();
+            //Shields
+            m_AbilityShields = new Dictionary<AbilityTypes, AbilityShieldPrefab>();
             for (int i = 0; i < AbilityShieldPrefabs.Length; i++)
             {
                 if (!m_AbilityShields.ContainsKey(AbilityShieldPrefabs[i].Type))
@@ -49,7 +53,7 @@ namespace mytest2.Main
         public Projectile GetAbilityProjectilePrefab(AbilityTypes type)
         {
             if (m_AbilityProjectiles.ContainsKey(type))
-                return m_AbilityProjectiles[type].ProjectilePrefab;
+                return m_AbilityProjectiles[type].Prefab;
 
             return null;
         }
@@ -57,25 +61,24 @@ namespace mytest2.Main
         public ShieldObject GetAbilityShieldPrefab(AbilityTypes type)
         {
             if (m_AbilityShields.ContainsKey(type))
-                return m_AbilityShields[type].ProjectilePrefab;
+                return m_AbilityShields[type].Prefab;
 
             return null;
         }
 
 
         [System.Serializable]
-        public class AbilityProjectile
+        public class AbilityProjectilePrefab
         {
             public AbilityTypes Type;
-            public Projectile ProjectilePrefab;
+            public Projectile Prefab;
         }
+
         [System.Serializable]
-        public class AbilityShield
+        public class AbilityShieldPrefab
         {
             public AbilityTypes Type;
-            public ShieldObject ProjectilePrefab;
+            public ShieldObject Prefab;
         }
-
-
     }
 }

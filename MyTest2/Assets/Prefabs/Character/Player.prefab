@@ -75,9 +75,9 @@ GameObject:
   - component: {fileID: 114033010073045036}
   - component: {fileID: 114870563508695720}
   - component: {fileID: 114314873851937520}
+  - component: {fileID: 114630413703338230}
   - component: {fileID: 143663272898460696}
   - component: {fileID: 65186172515873526}
-  - component: {fileID: 114630413703338230}
   m_Layer: 11
   m_Name: Player
   m_TagString: Untagged
@@ -331,6 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 461d4e5167a8f3b42b029ff7bb82f9f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TeamID: 0
 --- !u!114 &114314873851937520
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -367,6 +368,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e47f5824a7882cf40a99ec74fbde1b00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShieldRadius: 2
+  ShieldExistsTimeMiliseconds: 1500
 --- !u!114 &114855795973970398
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -12,18 +12,27 @@ namespace mytest2.Character.Shield
         public System.Action OnShieldCreated;
 
         public float ShieldRadius = 2;
+        public int ShieldExistsTimeMiliseconds = 1500;
 
         public void CreateShield(Vector3 position, Vector3 origin, float angle, AbilityTypes type, int senderTeamID)
         {
+            //Создать визуальное отображение щита
             ShieldObject shieldObj = PoolManager.GetObject(GameManager.Instance.PrefabLibrary.GetAbilityShieldPrefab(type)) as ShieldObject;
             shieldObj.transform.position = position;
-            shieldObj.Init(type, origin, ShieldRadius, angle, 1000);
 
+            //Создать програмное представление щита
             Shield shield = new Shield(position, origin, ShieldRadius, angle, type, senderTeamID, shieldObj);
+
+            //Задать событие на уничтожение щита
+            shieldObj.OnTimeElapsed = () => 
+            {
+                GameManager.Instance.GameState.DataContainerController.ShieldContainer.RemoveShield(shield);
+            };
+
+            //Добавить програмное представление щита в список активных щитов
             GameManager.Instance.GameState.DataContainerController.ShieldContainer.AddShield(shield);
-            //Create shield object
-            //Set timer
-            //Assign onTimerFinish event
+            //Инициализировать визуальное обображение щита
+            shieldObj.Init(type, origin, ShieldRadius, angle, ShieldExistsTimeMiliseconds);
         }
     }
 

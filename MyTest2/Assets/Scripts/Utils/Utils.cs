@@ -70,6 +70,7 @@ namespace mytest2.Utils
                 timer.ResetEvents();
             }
 
+            Debug.Log(timeSeconds);
             timer.OnStep += onStep;
             timer.OnTotalTimeElapsed += onElapsed;
             timer.Init(timeSeconds);
