@@ -49,10 +49,10 @@ public class OldPlayerController : MonoBehaviour
 
         //Подписаться на события
 #if UNITY_EDITOR  
-        if (InputManager.Instance.PreferVirtualJoystickInEditor)
+        /*if (InputManager.Instance.PreferVirtualJoystickInEditor)
             InputManager.Instance.VirtualJoystickInput.OnMove += MoveInDir;
         else
-            InputManager.Instance.KeyboardInput.OnMove += MoveInDir;
+            InputManager.Instance.KeyboardInput.OnMove += MoveInDir;*/
 #else
         InputManager.Instance.VirtualJoystickInput.OnMove += MoveInDir;
 #endif
@@ -142,8 +142,8 @@ public class OldPlayerController : MonoBehaviour
 
     public void DestroyPlayer()
     {
-        InputManager.Instance.VirtualJoystickInput.OnMove -= MoveInDir;
-        InputManager.Instance.KeyboardInput.OnMove -= MoveInDir;
+        //InputManager.Instance.VirtualJoystickInput.OnMove -= MoveInDir;
+        //InputManager.Instance.KeyboardInput.OnMove -= MoveInDir;
 
         m_PlayerAnimationController.PlayMoveAnimation(0, Vector3.zero, Quaternion.identity);
         m_PlayerAnimationController.enabled = false;

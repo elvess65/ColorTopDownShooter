@@ -13,7 +13,7 @@ namespace mytest2.UI.InputSystem
         [Header(" - Ability Wrappers")]
         public AbilityVirtualJoystickWrapper[] AbilityJoystickWrappers;
 
-        private Dictionary<AbilityTypes, AbilityVirtualJoystickWrapper> m_JoystickWrappers; //Словарь создан для более удобного доступа с джойстикам способностей
+        private Dictionary<AbilityTypes, AbilityVirtualJoystickWrapper> m_JoystickWrappers; //Словарь создан для более удобного доступа к джойстикам способностей
 
         public AbilityVirtualJoystickWrapper GetAbilityJoystick(AbilityTypes type)
         {
@@ -27,7 +27,7 @@ namespace mytest2.UI.InputSystem
         {
             Vector2 movePosition = UltimateJoystick.GetPosition(MoveJoystickName);
             if (OnMove != null)
-                OnMove(new Vector3(movePosition.x, 0, movePosition.y));
+                OnMove(movePosition);
         }
 
         protected override void Start()

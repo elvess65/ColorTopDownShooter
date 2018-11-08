@@ -5,7 +5,7 @@ namespace mytest2.UI.Controllers
     /// <summary>
     /// Контроллер UI - визуальное отображение выделение джойстика (игрок выделяет способность)
     /// </summary>
-    public class UIJoystickSelectionController : MonoBehaviour
+    public class UIAbilitySelectionController : MonoBehaviour
     {
         public GameObject SelectionObj;
 

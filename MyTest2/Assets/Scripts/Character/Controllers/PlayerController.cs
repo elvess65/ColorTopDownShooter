@@ -10,7 +10,15 @@ namespace mytest2.Character
     {
         private UIPlayerActionDirectionController m_UIActionDirectionController;
 		private Vector3 m_TargetMoveDir = Vector3.zero;
+        private Vector2 m_LastMoveDir2D;
         private float m_TargetRotAngle;
+        //Shield
+        private float m_ShieldAngle;                //Для создания щита
+        private Vector3 m_ShieldOrigin;             //Для создания щита
+        private Vector3 m_InputBound;               //Для просчета угла
+        private Vector3 m_AutoBound;                //Для отрисовки Gizmo
+        private Vector3 m_PerpendicularToOrigin;    //Для отрисовки Gizmo 
+        private Vector2 m_PerpendicularToOrigin2D;  //Для отрисовки Gizmo (скорее всего)
 
         private static AbilityTypes m_CurAbilityType = AbilityTypes.None;
 
@@ -26,6 +34,7 @@ namespace mytest2.Character
 			//Передвижение и вращение если персонаж не уклоняеться или не вращаеться к направлению способности (применение)
 			if (!m_DodgeController.IsDodging && !m_IsRotating2Ability)
             {
+                //Debug.Log(m_LastMoveDir2D);
                 m_MoveController.Move(m_TargetMoveDir);
                 m_MoveController.Rotate(m_TargetRotAngle);
             }
@@ -35,26 +44,28 @@ namespace mytest2.Character
         /// Сохранить данные для передвижения (вызов реализации происходит в Update и за нее отвечает компонент iMovement)
         /// </summary>
         /// <param name="dir"></param>
-        public override void Move(Vector3 dir)
+        public override void Move(Vector2 dir)
         {
             //Кэш направления передвижения
-            m_TargetMoveDir = dir;
+            m_TargetMoveDir = new Vector3(dir.x, 0, dir.y);
 
             //Если игрок хочет переместиться
             if (m_TargetMoveDir != Vector3.zero)
             {
+                m_LastMoveDir2D = dir;
+
                 //Вращение в направлении движения
                 m_TargetRotAngle = Mathf.Atan2(m_TargetMoveDir.x, m_TargetMoveDir.z) * Mathf.Rad2Deg;
             }
         }
 
-
+        #region Dodge Handlers
         /// <summary>
         /// Нажатие на джойстик уклона
         /// </summary>
         void DodgeInputTouchStart(Vector2 dir)
         {
-            ShowUIActionDirectionController(AbilityTypes.None);
+            //ShowUIActionDirectionController(AbilityTypes.None);
         }
 
         /// <summary>
@@ -62,7 +73,7 @@ namespace mytest2.Character
         /// </summary>
         void DodgeInputDrag(Vector2 dir)
         {
-            UpdateUIActionDirectionController(dir);
+            //UpdateUIActionDirectionController(dir);
         }
 
         /// <summary>
@@ -71,8 +82,22 @@ namespace mytest2.Character
         /// <param name="dir"></param>
         void DodgeInputTouchEnd(Vector2 dir)
         {
+            if (m_IsRotating2Ability)
+            {
+                //TODO: Возможно следует прерывать вразение для применения способности если игрок хочет сделать уклон
+                Debug.Log("Cant dodge: is rotating to ability");
+                return;
+            }
+
             //Спрятать указатель направления
-            HideUIActionDirectionController();
+            //HideUIActionDirectionController();
+
+            //Два варианта
+            //1 Уклон в сторону последнего передвижения
+
+            Dodge(m_LastMoveDir2D);
+            //2 Уклон в выбранную сторону
+            //Dodge(dir);
         }
 
 
@@ -93,8 +118,8 @@ namespace mytest2.Character
             Debug.Log("DodgeFinished");
             //TODO: Translate to animation
         }
-
-
+        #endregion
+        #region Ability Handlers
         /// <summary>
         /// Активация способности
         /// </summary>
@@ -110,11 +135,7 @@ namespace mytest2.Character
         /// <param name="abilityType">Тип способности</param>
         void AbilityInputSelect(AbilityTypes abilityType)
         {
-            if (m_CurAbilityType != abilityType)
-            {
-                m_CurAbilityType = abilityType;
-                GameManager.Instance.UIManager.SelectAbilityJoystick(abilityType);
-            }
+            SelectAbility(abilityType);
         }
 
         /// <summary>
@@ -159,32 +180,16 @@ namespace mytest2.Character
             GameManager.Instance.UIManager.UpdateAbilityAmmo(type, ammoAmmount);
         }
 
-        /// <summary>
-        /// Вывести состояние силы на UI
-        /// </summary>
-        /// <param name="progress"></param>
-        void StaminaUpdateHandler(float progress)
+        void SelectAbility(AbilityTypes abilityType)
         {
-            GameManager.Instance.UIManager.StaminaController.SetState(progress);
+            if (m_CurAbilityType != abilityType)
+            {
+                m_CurAbilityType = abilityType;
+                GameManager.Instance.UIManager.SelectAbilityVisuals(abilityType);
+            }
         }
-
-        /// <summary>
-        /// Смена состояния ввода
-        /// </summary>
-        /// <param name="state"></param>
-        void InputStatusChangeHandler(bool state)
-        {
-
-        }
-
-
-        Vector3 m_ShieldOrigin;
-        Vector3 m_InputBound;
-        Vector3 m_AutoBound;
-        Vector3 m_PerpendicularToOrigin;
-        Vector2 m_PerpendicularToOrigin2D;
-        float m_ShieldAngle;
-
+        #endregion
+        #region Shield Handlers
         void OnShieldInputStart(Vector2 dirToTarget)
         {
             //Вектор начала щита
@@ -238,6 +243,26 @@ namespace mytest2.Character
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(transform.position, transform.position + m_InputBound * m_ShieldController.ShieldRadius);
         }
+        #endregion
+        #region Other Handlers
+        /// <summary>
+        /// Вывести состояние силы на UI
+        /// </summary>
+        /// <param name="progress"></param>
+        void StaminaUpdateHandler(float progress)
+        {
+            GameManager.Instance.UIManager.StaminaController.SetState(progress);
+        }
+
+        /// <summary>
+        /// Смена состояния ввода
+        /// </summary>
+        /// <param name="inputIsEnabled"></param>
+        void InputStatusChangeHandler(bool inputIsEnabled)
+        {
+            SelectAbility(AbilityTypes.Blue);
+        }
+        #endregion
 
         //Инициализация
         protected override void SubscribeForInputEvents()
@@ -253,7 +278,12 @@ namespace mytest2.Character
             
                 InputManager.Instance.KeyboardInput.OnDodgeStart += DodgeInputTouchStart;
                 InputManager.Instance.KeyboardInput.OnDodgeDrag += DodgeInputDrag;
-                InputManager.Instance.KeyboardInput.OnDodge += Dodge;
+                InputManager.Instance.KeyboardInput.OnDodge += DodgeInputTouchEnd;
+
+                InputManager.Instance.KeyboardInput.OnAbilityActivate += AbilityInputActivate;
+                InputManager.Instance.KeyboardInput.OnAbilitySelect += AbilityInputSelect;
+                InputManager.Instance.KeyboardInput.OnAbilityEnd += AbilityInputTouchEnd;
+                InputManager.Instance.KeyboardInput.OnAbilityMove += AbilityInputDrag;
             }
 #else
             SubscribeForJoystickEvents();
@@ -279,8 +309,11 @@ namespace mytest2.Character
         {
 			base.FinishInitialization ();
 
+            //Подписаться на событие обновления зарядов способностей и вызвать это событие
             m_AbilityController.SetAndCallUpdateAmmoEventForAllAbilities();
-
+            //По умолчанию последнее направление движения - назад относительно персонажа
+            m_LastMoveDir2D = new Vector2(transform.forward.x, -transform.forward.z);
+            //Создать предметы для подъема
             GameManager.Instance.GameState.ItemSpawnController.SpawnItems();
         }
         private void SubscribeForJoystickEvents()
@@ -291,7 +324,6 @@ namespace mytest2.Character
             //Уклон
             InputManager.Instance.VirtualJoystickInput.DodgeJoystickWrapper.OnJoystickTouchStart += DodgeInputTouchStart;
             InputManager.Instance.VirtualJoystickInput.DodgeJoystickWrapper.OnJoystickMove += DodgeInputDrag;
-            InputManager.Instance.VirtualJoystickInput.DodgeJoystickWrapper.OnJoystickTouchEnd += Dodge;
             InputManager.Instance.VirtualJoystickInput.DodgeJoystickWrapper.OnJoystickTouchEnd += DodgeInputTouchEnd;
 
             //Способности

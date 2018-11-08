@@ -12,18 +12,15 @@ namespace mytest2.Main
         private DataTableAbilities m_DataTableAbilities;
 
         public CreatureController Player
-        {
-            get; set;
-        }
+        { get; set; }
         public DataTableAbilities DataTableAbilities
-        {
-            get; private set;
-        }
+        { get; private set; }
         public DataContainerController DataContainerController
-        {
-            get; private set;
-        }
-        public ItemSpawmController ItemSpawnController;
+        { get; private set; }
+        public ItemSpawmController ItemSpawnController
+        { get; private set; }
+        public AbilityColorController AbilityColorController
+        { get; private set; }
 
         void Start()
         {
@@ -31,6 +28,7 @@ namespace mytest2.Main
             DataTableAbilities = GetComponent<DataTableAbilities>();
             DataContainerController = GetComponent<DataContainerController>();
             ItemSpawnController = GetComponent<ItemSpawmController>();
+            AbilityColorController = GetComponent<AbilityColorController>();
         }
 
         public void GameOver()

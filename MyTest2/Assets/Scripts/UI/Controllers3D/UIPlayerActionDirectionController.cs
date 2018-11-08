@@ -38,27 +38,7 @@ namespace mytest2.UI.Controllers3D
                 Renderer.sharedMaterial = m_Material;
             }
 
-            switch(type)
-            {
-                case AbilityTypes.Blue:
-                    m_Material.color = Color.blue;
-                    break;
-                case AbilityTypes.Green:
-                    m_Material.color = Color.green;
-                    break;
-                case AbilityTypes.Red:
-                    m_Material.color = Color.red;
-                    break;
-                case AbilityTypes.Violet:
-                    m_Material.color = Color.magenta;
-                    break;
-                case AbilityTypes.Yellow:
-                    m_Material.color = Color.yellow;
-                    break;
-                default:
-                    m_Material.color = Color.white;
-                    break;
-            }
+            m_Material.color = GameManager.Instance.GameState.AbilityColorController.GetAbilityColor(type);
 
 			m_IsActive = true;
         }

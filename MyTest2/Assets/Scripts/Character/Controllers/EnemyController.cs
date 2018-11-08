@@ -10,7 +10,7 @@ namespace mytest2.Character
         private float m_LastAttackTime = float.NegativeInfinity;
         private float m_TimeBetweenAttack = 2;
 
-        public override void Move(Vector3 dir)
+        public override void Move(Vector2 dir)
         {
         }
 

@@ -32,7 +32,7 @@ namespace mytest2.Character
         private const float m_DELTA_ANGLE_TO_DIR = 0.1f;
 
 
-        public abstract void Move(Vector3 dir);
+        public abstract void Move(Vector2 dir);
 
         /// <summary>
         /// Начать выполнять уклон (за реализацию уклона отвечает компонент iDodging)
@@ -61,12 +61,14 @@ namespace mytest2.Character
             {
                 if (m_StaminaController.HasEnoughStamina(GameManager.Instance.GameState.DataTableAbilities.GetAbilityData(type).Stamina))
                 {
-					if (m_AbilityController.CanUseABility (type)) 
-						HandleUseAbility (type, dir);
+                    if (m_AbilityController.CanUseABility(type))
+                        HandleUseAbility(type, dir);
                 }
                 else
                     Debug.LogWarning("Not enought stamina");
             }
+            else
+                Debug.Log("Cant use ability: Is dodging");
         }
     
         /// <summary>

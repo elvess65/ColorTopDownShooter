@@ -108,7 +108,7 @@ namespace mytest2.UI.InputSystem
 
     public abstract class BaseInputManager : MonoBehaviour
     {
-        public System.Action<Vector3> OnMove;
+        public System.Action<Vector2> OnMove;
 
         protected virtual void Start()
         { }
