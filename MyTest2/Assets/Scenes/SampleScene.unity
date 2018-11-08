@@ -421,45 +421,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 224137450189957392, guid: c010b5552c9227c4ba511299b93cb7a8,
+    - target: {fileID: 114791324530177738, guid: c010b5552c9227c4ba511299b93cb7a8,
         type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.0000076293945
-      objectReference: {fileID: 0}
-    - target: {fileID: 224137450189957392, guid: c010b5552c9227c4ba511299b93cb7a8,
-        type: 2}
-      propertyPath: m_AnchoredPosition.y
+      propertyPath: PreferVirtualJoystickInEditor
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224137450189957392, guid: c010b5552c9227c4ba511299b93cb7a8,
-        type: 2}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224137450189957392, guid: c010b5552c9227c4ba511299b93cb7a8,
-        type: 2}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224137450189957392, guid: c010b5552c9227c4ba511299b93cb7a8,
-        type: 2}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224137450189957392, guid: c010b5552c9227c4ba511299b93cb7a8,
-        type: 2}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224137450189957392, guid: c010b5552c9227c4ba511299b93cb7a8,
-        type: 2}
-      propertyPath: m_Pivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 224137450189957392, guid: c010b5552c9227c4ba511299b93cb7a8,
-        type: 2}
-      propertyPath: m_Pivot.y
-      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c010b5552c9227c4ba511299b93cb7a8, type: 2}

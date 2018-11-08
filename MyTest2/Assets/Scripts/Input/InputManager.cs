@@ -7,7 +7,12 @@ namespace mytest2.UI.InputSystem
     public class InputManager : MonoBehaviour
     {
         public static InputManager Instance;
+
         public System.Action<bool> OnInputStateChange;
+        public System.Action<Vector2> OnShieldInputStart;
+        public System.Action<Vector2> OnShieldInputUpdate;
+        public System.Action OnShieldInputEnd;
+
         public bool PreferVirtualJoystickInEditor = false;
 
         private BaseInputManager m_Input;
@@ -20,8 +25,7 @@ namespace mytest2.UI.InputSystem
         public KeyboardInputManager KeyboardInput
         {
             get; private set;
-        }
-        
+        }   
         public bool InputIsEnabled
         {
             get { return m_InputState; }
@@ -73,36 +77,37 @@ namespace mytest2.UI.InputSystem
                 InputIsEnabled = true;
         }
 
-        public System.Action<Vector2> OnInputStart;
-        public System.Action<Vector2> OnInputUpdate;
-        public System.Action OnInputEnd;
+
         void HandleShieldInput()
         {
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(1) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
-                Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-                Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
-                Vector2 dirFromCenterToMouse = mousePos - screenCenter;
-
-                if (OnInputStart != null)
-                    OnInputStart(dirFromCenterToMouse.normalized);
+                Vector2 dirFromCenterToMouse = GetDirFromScreenCenterToMouse();
+                if (OnShieldInputStart != null)
+                    OnShieldInputStart(dirFromCenterToMouse.normalized);
             }
 
             if(Input.GetMouseButton(1))
-            {
-                Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-                Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
-                Vector2 dirFromCenterToMouse = mousePos - screenCenter;
-
-                if (OnInputUpdate != null)
-                    OnInputUpdate(dirFromCenterToMouse.normalized);
+            {;
+                Vector2 dirFromCenterToMouse = GetDirFromScreenCenterToMouse();
+                if (OnShieldInputUpdate != null)
+                    OnShieldInputUpdate(dirFromCenterToMouse.normalized);
             }
 
             if (Input.GetMouseButtonUp(1))
             {
-                if (OnInputEnd != null)
-                    OnInputEnd();
+                if (OnShieldInputEnd != null)
+                    OnShieldInputEnd();
             }
+        }
+
+        Vector2 GetDirFromScreenCenterToMouse()
+        {
+            Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
+            Vector2 dirFromCenterToMouse = mousePos - screenCenter;
+
+            return dirFromCenterToMouse;
         }
     }
 

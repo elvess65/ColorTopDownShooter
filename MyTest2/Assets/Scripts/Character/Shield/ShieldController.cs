@@ -29,10 +29,40 @@ namespace mytest2.Character.Shield
                 GameManager.Instance.GameState.DataContainerController.ShieldContainer.RemoveShield(shield);
             };
 
+            CreateShieldVisuals(position, origin, angle);
+
             //Добавить програмное представление щита в список активных щитов
             GameManager.Instance.GameState.DataContainerController.ShieldContainer.AddShield(shield);
             //Инициализировать визуальное обображение щита
             shieldObj.Init(type, origin, ShieldRadius, angle, ShieldExistsTimeMiliseconds);
+        }
+
+        void CreateShieldVisuals(Vector3 position, Vector3 origin, float angle)
+        {
+            int step = 15;
+            float angle1 = Vector3.Angle(Vector3.forward, origin);
+            Debug.Log(angle + " " + (angle * 2 / step) + " " + angle1 + " " + Vector3.Dot(Vector3.right, origin));
+            Vector3 center = GameManager.Instance.GameState.Player.transform.position;
+            int startAngle = -(int)(angle1 + angle);
+            int finishAngle = startAngle + (int)angle * 2;
+            for (int i = startAngle; i < finishAngle; i += step)
+            {
+                Vector3 pos = PositionOnCircle(center, ShieldRadius, i);
+                float scale = 0.5f;
+                GameObject ob = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                ob.transform.localScale = new Vector3(scale, scale, scale);
+                ob.transform.position = pos;
+            }
+        }
+
+        Vector3 PositionOnCircle(Vector3 center, float radius, int angle)
+        {
+            float ang = angle;
+            Vector3 pos;
+            pos.x = center.x + radius * Mathf.Sin(ang * Mathf.Deg2Rad);
+            pos.y = center.y;
+            pos.z = center.z + radius * Mathf.Cos(ang * Mathf.Deg2Rad);
+            return pos;
         }
     }
 

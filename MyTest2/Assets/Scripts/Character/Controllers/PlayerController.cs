@@ -290,9 +290,9 @@ namespace mytest2.Character
 #endif
 
             InputManager.Instance.OnInputStateChange += InputStatusChangeHandler;
-            InputManager.Instance.OnInputStart += OnShieldInputStart;
-            InputManager.Instance.OnInputUpdate += OnShieldInputUpdate;
-            InputManager.Instance.OnInputEnd += OnShieldInputEnd;
+            InputManager.Instance.OnShieldInputStart += OnShieldInputStart;
+            InputManager.Instance.OnShieldInputUpdate += OnShieldInputUpdate;
+            InputManager.Instance.OnShieldInputEnd += OnShieldInputEnd;
         }
         protected override void SubscribeForControllerEvents()
         {
