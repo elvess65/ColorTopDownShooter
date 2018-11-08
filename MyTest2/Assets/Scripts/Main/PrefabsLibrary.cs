@@ -16,7 +16,8 @@ namespace mytest2.Main
         public CreatureController EnemyPrefab;
         //UI Prefabs
         public UIPlayerActionDirectionController UIAbilityDirectionPrefab;
-        public UIJoystickCooldownController UIJoystickCooldownPrefab;
+        public UICooldownController UIJoystickCooldownPrefab;
+        public UICooldownController UIKeyboardCooldownPrefab;
         public UIHealthBarController UIHealthBarPrefab;
         public UIHealthBarSegment UIHealthBarSegmentPrefab; 
         //Ability prefabs

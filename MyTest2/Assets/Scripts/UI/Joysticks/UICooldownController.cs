@@ -9,7 +9,7 @@ namespace mytest2.UI.Controllers
     /// Контроллер UI - визуальное отображение отката способности, а так же блокировка нажатия (игрок использовал способность)
     /// </summary>
     [RequireComponent(typeof(Timer))]
-    public class UIJoystickCooldownController : PoolObject
+    public class UICooldownController : PoolObject
     {
         public Text Text_Cooldown;
         public Image Image_Cooldown;

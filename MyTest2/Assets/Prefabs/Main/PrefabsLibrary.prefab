@@ -59,6 +59,8 @@ MonoBehaviour:
     type: 2}
   UIJoystickCooldownPrefab: {fileID: 114476327918838136, guid: 08c786d09ac49874b8e3dbc2e22ecfd3,
     type: 2}
+  UIKeyboardCooldownPrefab: {fileID: 114476327918838136, guid: b3aab9eef019a9d448d69689819b712b,
+    type: 2}
   UIHealthBarPrefab: {fileID: 114947821057253970, guid: 28d8daf79e99afd4ab2694ff19f8d701,
     type: 2}
   UIHealthBarSegmentPrefab: {fileID: 114645438117021352, guid: f459ab94328565a4987bf600a3a9f2b2,

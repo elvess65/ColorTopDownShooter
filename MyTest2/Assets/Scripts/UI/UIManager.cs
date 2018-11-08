@@ -11,6 +11,7 @@ namespace mytest2.UI
     {
         private System.Action<AbilityTypes> m_OnSelectAbilityVisuals;
         private System.Action<AbilityTypes, int> m_OnAbilityUpdateAmmo;
+        private System.Action<AbilityTypes, float> m_OnAbilityCooldown;
 
         [Header("Animation Controllers")]
         public BaseUIAnimationController MoveJoystickAnimationController;
@@ -41,30 +42,11 @@ namespace mytest2.UI
 
                 m_OnSelectAbilityVisuals = KeyboardSelectAbility;
                 m_OnAbilityUpdateAmmo = KeyboardUpdateAbilityAmmo;
+                m_OnAbilityCooldown = CooldownKeyboard;
             }
 #else
             SubscribeForVirtualJoystick();
 #endif
-        }
-
-
-        public void CooldownAbilityJoystick(AbilityTypes type, float timeMiliseconds)
-        {
-            AbilityVirtualJoystickWrapper targetJoystick = InputManager.Instance.VirtualJoystickInput.GetAbilityJoystick(type);
-            if (targetJoystick != null)
-            {
-                UIJoystickCooldownController joystickCooldownController = Utils.Pool.PoolManager.GetObject(GameManager.Instance.PrefabLibrary.UIJoystickCooldownPrefab) as UIJoystickCooldownController;
-                RectTransform joystickRectTransform = targetJoystick.GetComponent<RectTransform>();
-                RectTransform cooldownControllerRectTransform = joystickCooldownController.GetComponent<RectTransform>();
-
-                cooldownControllerRectTransform.SetParent(joystickRectTransform.parent);
-                cooldownControllerRectTransform.anchorMin = joystickRectTransform.anchorMin;
-                cooldownControllerRectTransform.anchorMax = joystickRectTransform.anchorMax;
-                cooldownControllerRectTransform.offsetMin = joystickRectTransform.offsetMin;
-                cooldownControllerRectTransform.offsetMax = joystickRectTransform.offsetMax;
-
-                joystickCooldownController.Cooldown(timeMiliseconds);
-            }
         }
 
         public UIWindow_Base ShowWindow(UIWindow_Base source)
@@ -112,6 +94,50 @@ namespace mytest2.UI
                 targetKeyboard.UpdateAbilityAmmo(ammoAmount);
         }
 
+        //Cooldown
+        public void CooldownAbilityJoystick(AbilityTypes type, float timeMiliseconds)
+        {
+            m_OnAbilityCooldown(type, timeMiliseconds);
+        }
+
+        void CooldownJoystick(AbilityTypes type, float timeMiliseconds)
+        {
+            AbilityVirtualJoystickWrapper targetJoystick = InputManager.Instance.VirtualJoystickInput.GetAbilityJoystick(type);
+            if (targetJoystick != null)
+            {
+                UICooldownController joystickCooldownController = Utils.Pool.PoolManager.GetObject(GameManager.Instance.PrefabLibrary.UIJoystickCooldownPrefab) as UICooldownController;
+                RectTransform joystickRectTransform = targetJoystick.GetComponent<RectTransform>();
+                RectTransform cooldownControllerRectTransform = joystickCooldownController.GetComponent<RectTransform>();
+
+                cooldownControllerRectTransform.SetParent(joystickRectTransform.parent);
+                cooldownControllerRectTransform.anchorMin = joystickRectTransform.anchorMin;
+                cooldownControllerRectTransform.anchorMax = joystickRectTransform.anchorMax;
+                cooldownControllerRectTransform.offsetMin = joystickRectTransform.offsetMin;
+                cooldownControllerRectTransform.offsetMax = joystickRectTransform.offsetMax;
+
+                joystickCooldownController.Cooldown(timeMiliseconds);
+            }
+        }
+
+        void CooldownKeyboard(AbilityTypes type, float timeMiliseconds)
+        {
+            AbilityKeyboardWrapper targetKeyboard = InputManager.Instance.KeyboardInput.GetAbilityKeyboard(type);
+            if (targetKeyboard != null)
+            {
+                UICooldownController keyboardCooldownController = Utils.Pool.PoolManager.GetObject(GameManager.Instance.PrefabLibrary.UIKeyboardCooldownPrefab) as UICooldownController;
+                RectTransform keyboardRectTransform = targetKeyboard.GetComponent<RectTransform>();
+                RectTransform cooldownControllerRectTransform = keyboardCooldownController.GetComponent<RectTransform>();
+
+                cooldownControllerRectTransform.SetParent(keyboardRectTransform.parent);
+                cooldownControllerRectTransform.anchorMin = keyboardRectTransform.anchorMin;
+                cooldownControllerRectTransform.anchorMax = keyboardRectTransform.anchorMax;
+                cooldownControllerRectTransform.offsetMin = keyboardRectTransform.offsetMin;
+                cooldownControllerRectTransform.offsetMax = keyboardRectTransform.offsetMax;
+
+                keyboardCooldownController.Cooldown(timeMiliseconds);
+            }
+        }
+
 
         void SubscribeForVirtualJoystick()
         {
@@ -123,6 +149,7 @@ namespace mytest2.UI
 
             m_OnSelectAbilityVisuals = VirtualJoystickSelectAbility;
             m_OnAbilityUpdateAmmo = VirtualJoystickUpdateAbilityAmmo;
+            m_OnAbilityCooldown = CooldownJoystick;
         }
     }
 }
