@@ -85,3 +85,14 @@ MonoBehaviour:
     Prefab: {fileID: 114671828048507940, guid: 744fb367d3ac23d498bd6a73e1277e3b, type: 2}
   - Type: 4
     Prefab: {fileID: 114799265689409630, guid: 3b1fd63274594cb42a2e00d684ba0f32, type: 2}
+  AbilityItemPrefabs:
+  - Type: 0
+    Prefab: {fileID: 114613634721358584, guid: 66bc4fda76df89045bc4865e6d18cf28, type: 2}
+  - Type: 1
+    Prefab: {fileID: 114445095815750684, guid: 970a52cd052b31b4ea701101dee61c7e, type: 2}
+  - Type: 2
+    Prefab: {fileID: 114869357439971270, guid: e1351f5ceb15cf243a0f3ea2fc922440, type: 2}
+  - Type: 3
+    Prefab: {fileID: 114853426120320028, guid: 9fe76cd5793a95e4488a0ba3b8efa7be, type: 2}
+  - Type: 4
+    Prefab: {fileID: 114108848434644096, guid: 99bc7244eaad68645b36142e74b716ca, type: 2}

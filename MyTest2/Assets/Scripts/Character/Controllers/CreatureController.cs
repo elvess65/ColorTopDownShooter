@@ -165,7 +165,6 @@ namespace mytest2.Character
             Item item = collider.GetComponent<Item>();
             if (item != null)
             {
-                Debug.Log("Collide with item");
                 m_AbilityController.AddAmmo(item.Type, 1);
                 item.Pick();
             }

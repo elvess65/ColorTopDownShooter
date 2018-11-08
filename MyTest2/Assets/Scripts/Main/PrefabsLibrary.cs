@@ -1,6 +1,7 @@
 ﻿using mytest2.Character;
 using mytest2.Character.Abilities;
 using mytest2.Character.Shield;
+using mytest2.Items;
 using mytest2.Projectiles;
 using mytest2.UI.Controllers;
 using mytest2.UI.Controllers3D;
@@ -21,9 +22,11 @@ namespace mytest2.Main
         //Ability prefabs
         public AbilityProjectilePrefab[] AbilityProjectilePrefabs;
         public AbilityShieldPrefab[] AbilityShieldPrefabs;
+        public AbilityItemPrefab[] AbilityItemPrefabs;
 
         private Dictionary<AbilityTypes, AbilityProjectilePrefab> m_AbilityProjectiles;
         private Dictionary<AbilityTypes, AbilityShieldPrefab> m_AbilityShields;
+        private Dictionary<AbilityTypes, AbilityItemPrefab> m_AbilityItems;
 
         void Awake()
         {
@@ -47,6 +50,14 @@ namespace mytest2.Main
                 if (!m_AbilityShields.ContainsKey(AbilityShieldPrefabs[i].Type))
                     m_AbilityShields.Add(AbilityShieldPrefabs[i].Type, AbilityShieldPrefabs[i]);
             }
+
+            //Items
+            m_AbilityItems = new Dictionary<AbilityTypes, AbilityItemPrefab>();
+            for (int i = 0; i < AbilityItemPrefabs.Length; i++)
+            {
+                if (!m_AbilityItems.ContainsKey(AbilityItemPrefabs[i].Type))
+                    m_AbilityItems.Add(AbilityItemPrefabs[i].Type, AbilityItemPrefabs[i]);
+            }
         }
 
 
@@ -57,7 +68,6 @@ namespace mytest2.Main
 
             return null;
         }
-
         public ShieldObject GetAbilityShieldPrefab(AbilityTypes type)
         {
             if (m_AbilityShields.ContainsKey(type))
@@ -65,7 +75,13 @@ namespace mytest2.Main
 
             return null;
         }
+        public Item GetAbilityItemPrefab(AbilityTypes type)
+        {
+            if (m_AbilityItems.ContainsKey(type))
+                return m_AbilityItems[type].Prefab;
 
+            return null;
+        }
 
         [System.Serializable]
         public class AbilityProjectilePrefab
@@ -73,12 +89,17 @@ namespace mytest2.Main
             public AbilityTypes Type;
             public Projectile Prefab;
         }
-
         [System.Serializable]
         public class AbilityShieldPrefab
         {
             public AbilityTypes Type;
             public ShieldObject Prefab;
+        }
+        [System.Serializable]
+        public class AbilityItemPrefab
+        {
+            public AbilityTypes Type;
+            public Item Prefab;
         }
     }
 }

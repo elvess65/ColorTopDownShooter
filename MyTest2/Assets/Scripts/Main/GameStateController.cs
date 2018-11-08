@@ -1,6 +1,7 @@
 ﻿using mytest2.Character;
 using mytest2.Character.Abilities;
 using mytest2.Character.Container;
+using mytest2.Items;
 using UnityEngine;
 
 namespace mytest2.Main
@@ -22,12 +23,14 @@ namespace mytest2.Main
         {
             get; private set;
         }
+        public ItemSpawmController ItemSpawnController;
 
         void Start()
         {
             m_GameOverController = GetComponent<GameOverController>();
             DataTableAbilities = GetComponent<DataTableAbilities>();
             DataContainerController = GetComponent<DataContainerController>();
+            ItemSpawnController = GetComponent<ItemSpawmController>();
         }
 
         public void GameOver()

@@ -280,6 +280,8 @@ namespace mytest2.Character
 			base.FinishInitialization ();
 
             m_AbilityController.SetAndCallUpdateAmmoEventForAllAbilities();
+
+            GameManager.Instance.GameState.ItemSpawnController.SpawnItems();
         }
         private void SubscribeForJoystickEvents()
         {
