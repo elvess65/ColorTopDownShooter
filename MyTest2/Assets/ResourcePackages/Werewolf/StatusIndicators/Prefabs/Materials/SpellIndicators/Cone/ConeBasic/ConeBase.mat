@@ -41,9 +41,9 @@ Material:
     m_Floats:
     - _DistortX: 0.005
     - _DistortY: 0.01
-    - _Expand: 0.63611114
+    - _Expand: 0.31388888
     - _ExpandAmount: 0.23333333
-    - _Fill: 0.816
+    - _Fill: 1
     - _FillAmount: 0
     - _InvFade: 1
     - _OffsetX: 0

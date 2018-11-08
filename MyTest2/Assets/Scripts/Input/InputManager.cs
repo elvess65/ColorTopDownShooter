@@ -80,21 +80,21 @@ namespace mytest2.UI.InputSystem
 
         void HandleShieldInput()
         {
-            if (Input.GetMouseButtonDown(1) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            if (Input.GetMouseButtonDown(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
                 Vector2 dirFromCenterToMouse = GetDirFromScreenCenterToMouse();
                 if (OnShieldInputStart != null)
                     OnShieldInputStart(dirFromCenterToMouse.normalized);
             }
 
-            if(Input.GetMouseButton(1))
+            if(Input.GetMouseButton(0))
             {;
                 Vector2 dirFromCenterToMouse = GetDirFromScreenCenterToMouse();
                 if (OnShieldInputUpdate != null)
                     OnShieldInputUpdate(dirFromCenterToMouse.normalized);
             }
 
-            if (Input.GetMouseButtonUp(1))
+            if (Input.GetMouseButtonUp(0))
             {
                 if (OnShieldInputEnd != null)
                     OnShieldInputEnd();
