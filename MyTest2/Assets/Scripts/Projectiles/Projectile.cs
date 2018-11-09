@@ -71,9 +71,10 @@ namespace mytest2.Projectiles
             }
         }
 
-        void CollisionWithAnythingHandler(Collider other)
+        void CollisionWithAnythingHandler(Collider collider)
 		{
-			Disable ();
+			if (collider.GetComponent<Projectile>() == null)
+				Disable ();
 		}
     }
 }

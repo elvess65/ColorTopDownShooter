@@ -30,6 +30,11 @@ namespace mytest2.UI.InputSystem
                 OnMove(movePosition);
         }
 
+		public override int GetShieldInputButton ()
+		{
+			return 0;
+		}
+
         protected override void Start()
         {
             base.Start();

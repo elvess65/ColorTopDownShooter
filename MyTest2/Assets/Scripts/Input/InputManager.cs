@@ -17,6 +17,7 @@ namespace mytest2.UI.InputSystem
 
         private BaseInputManager m_Input;
         private bool m_InputState = false;
+		private bool m_ShieldInputStarted = false;
 
         public VirtualJoystickInputManager VirtualJoystickInput
         {
@@ -80,25 +81,32 @@ namespace mytest2.UI.InputSystem
 
         void HandleShieldInput()
         {
-            if (Input.GetMouseButtonDown(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+			if (Input.GetMouseButtonDown(m_Input.GetShieldInputButton()) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
                 Vector2 dirFromCenterToMouse = GetDirFromScreenCenterToMouse();
+				m_ShieldInputStarted = true;
+
                 if (OnShieldInputStart != null)
                     OnShieldInputStart(dirFromCenterToMouse.normalized);
             }
 
-            if(Input.GetMouseButton(0))
-            {;
-                Vector2 dirFromCenterToMouse = GetDirFromScreenCenterToMouse();
-                if (OnShieldInputUpdate != null)
-                    OnShieldInputUpdate(dirFromCenterToMouse.normalized);
-            }
+			if (m_ShieldInputStarted) 
+			{
+				if (Input.GetMouseButton (m_Input.GetShieldInputButton())) 
+				{
+					Vector2 dirFromCenterToMouse = GetDirFromScreenCenterToMouse ();
+					if (OnShieldInputUpdate != null)
+						OnShieldInputUpdate (dirFromCenterToMouse.normalized);
+				}
 
-            if (Input.GetMouseButtonUp(0))
-            {
-                if (OnShieldInputEnd != null)
-                    OnShieldInputEnd();
-            }
+				if (Input.GetMouseButtonUp (m_Input.GetShieldInputButton())) 
+				{
+					m_ShieldInputStarted = false;
+
+					if (OnShieldInputEnd != null)
+						OnShieldInputEnd ();
+				}
+			}
         }
 
         Vector2 GetDirFromScreenCenterToMouse()
@@ -119,5 +127,9 @@ namespace mytest2.UI.InputSystem
         { }
 
         public abstract void UpdateInput();
+		public virtual int GetShieldInputButton()
+		{
+			return 1;
+		}
     }
 }

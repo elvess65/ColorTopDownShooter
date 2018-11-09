@@ -7,17 +7,18 @@ namespace mytest2.UI.Controllers
     /// </summary>
     public class UIAbilitySelectionController : MonoBehaviour
     {
-        public GameObject SelectionObj;
+		public RectTransform SelectionObj;
 
         private void Start()
         {
-            SelectionObj.SetActive(false);
+			SelectionObj.gameObject.SetActive(false);
         }
 
         public void Select(Transform joystickTransform)
         {
-            SelectionObj.SetActive(true);
-            SelectionObj.transform.position = joystickTransform.position;
+			SelectionObj.gameObject.SetActive(true);
+			SelectionObj.SetParent(joystickTransform);
+			SelectionObj.anchoredPosition = Vector3.zero;
         }
     }
 }

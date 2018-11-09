@@ -19,13 +19,8 @@ namespace mytest2.UI.InputSystem
 
         public AbilityKeyboardWrapper[] AbilityKeyboardWrappers;
 
-        private float m_AbilityPressTime;
-        private bool m_AbilityIsActivated = false;
-        private bool m_AbilitySelected = false;
-
         private Dictionary<AbilityTypes, AbilityKeyboardWrapper> m_KeyboardWrappers; //Словарь создан для более удобного доступа к иконкам способностей
-        private const float m_PRES_TIME_TO_ACTIVATE_ABILITY = 0.5f;
-
+       
 
         public AbilityKeyboardWrapper GetAbilityKeyboard(AbilityTypes type)
         {
@@ -39,7 +34,7 @@ namespace mytest2.UI.InputSystem
         {
             Vector2 dir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
             if (OnMove != null)
-                OnMove(dir);
+				OnMove(dir.normalized);
 
             ProcessDodgeKey(KeyCode.Space);
 
@@ -48,6 +43,8 @@ namespace mytest2.UI.InputSystem
             ProcessAbilityKey(KeyCode.Alpha3, AbilityTypes.Blue);
             ProcessAbilityKey(KeyCode.Alpha4, AbilityTypes.Yellow);
             ProcessAbilityKey(KeyCode.Alpha5, AbilityTypes.Violet);
+
+			ProcessAbilityUse ();
         }
 
         protected override void Start()
@@ -88,58 +85,36 @@ namespace mytest2.UI.InputSystem
 
         void ProcessAbilityKey(KeyCode key, AbilityTypes type)
         {
-            if (Input.GetKeyDown(key))
-            {
-                m_AbilitySelected = type == PlayerController.SelectedAbility;
-                m_AbilityIsActivated = false;
-
-                m_AbilityPressTime = Time.time;
-            }
-            else if (Input.GetKey(key))
-            {
-                float timeSincePress = Time.time - m_AbilityPressTime;
-                if (timeSincePress >= m_PRES_TIME_TO_ACTIVATE_ABILITY)
-                {
-                    //Если способность не выделенна
-                    if (!m_AbilitySelected)
-                    {
-                        m_AbilitySelected = true;
-
-                        if (OnAbilitySelect != null)
-                            OnAbilitySelect(type);
-                    }
-
-                    if (!m_AbilityIsActivated)
-                    {
-                        m_AbilityIsActivated = true;
-
-                        if (OnAbilityActivate != null)
-                            OnAbilityActivate(type);
-                    }
-                    else
-                    {
-                        Vector2 abilityDir = GetMouseScreenDir();
-                        if (OnAbilityMove != null)
-                            OnAbilityMove(abilityDir.normalized);
-                    }
-                }
-            }
-            else if (Input.GetKeyUp(key))
-            {
-                float timeSincePress = Time.time - m_AbilityPressTime;
-                if (timeSincePress >= m_PRES_TIME_TO_ACTIVATE_ABILITY)
-                {
-                    Vector2 abilityDir = GetMouseScreenDir();
-                    if (OnAbilityEnd != null)
-                        OnAbilityEnd(abilityDir.normalized);
-                }
-                else
-                {
-                    if (OnAbilitySelect != null)
-                        OnAbilitySelect(type);
-                }
-            }
+			if (Input.GetKeyUp (key)) 
+			{
+				if (OnAbilitySelect != null)
+					OnAbilitySelect(type);
+			}
         }
+
+		void ProcessAbilityUse()
+		{
+			if (Input.GetMouseButtonDown(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+			{
+				Vector2 dirFromCenterToMouse = GetMouseScreenDir();
+				if (OnAbilityActivate != null)
+					OnAbilityActivate(PlayerController.SelectedAbility);
+			}
+
+			if(Input.GetMouseButton(0))
+			{
+				Vector2 abilityDir = GetMouseScreenDir();
+				if (OnAbilityMove != null)
+					OnAbilityMove(abilityDir.normalized);
+			}
+
+			if (Input.GetMouseButtonUp(0))
+			{
+				Vector2 abilityDir = GetMouseScreenDir();
+				if (OnAbilityEnd != null)
+					OnAbilityEnd(abilityDir.normalized);
+			}
+		}
 
         Vector2 GetMouseScreenDir()
         {
