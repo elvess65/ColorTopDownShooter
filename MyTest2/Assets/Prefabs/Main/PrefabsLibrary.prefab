@@ -65,6 +65,8 @@ MonoBehaviour:
     type: 2}
   UIHealthBarSegmentPrefab: {fileID: 114645438117021352, guid: f459ab94328565a4987bf600a3a9f2b2,
     type: 2}
+  UIShieldRadiusPrefab: {fileID: 114958680163636532, guid: 938ba2f9565fbee4e96cc4ab93d514cc,
+    type: 2}
   AbilityProjectilePrefabs:
   - Type: 0
     Prefab: {fileID: 114913794172199788, guid: 4a99df9ae182e0f4f83744258eff80cf, type: 2}

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using mytest2.Character.Abilities;
+using mytest2.UI.Controllers3D;
 using mytest2.Utils.Pool;
 using UnityEngine;
 
@@ -15,6 +16,30 @@ namespace mytest2.Character.Shield
 
         public float ShieldRadius = 2;
         public int ShieldExistsTimeMiliseconds = 1500;
+
+        private UIShieldController m_ShieldUI;
+
+        public void ShowShieldUI(Vector3 origin)
+        {
+            if (m_ShieldUI == null)
+            {
+                m_ShieldUI = PoolManager.GetObject(GameManager.Instance.PrefabLibrary.UIShieldRadiusPrefab) as UIShieldController;
+                m_ShieldUI.transform.parent = transform;
+                m_ShieldUI.transform.localPosition = Vector3.zero;
+            }
+
+            m_ShieldUI.Init(origin);
+        }
+
+        public void UpdateShieldUI(float angle)
+        {
+            m_ShieldUI.UpdateUI(angle);
+        }
+
+        public void HideSieldUI()
+        {
+
+        }
 
         public void CreateShield(Vector3 position, Vector3 origin, float angle, AbilityTypes type, int senderTeamID)
         {

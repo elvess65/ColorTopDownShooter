@@ -5,6 +5,7 @@ using mytest2.Items;
 using mytest2.Projectiles;
 using mytest2.UI.Controllers;
 using mytest2.UI.Controllers3D;
+using mytest2.Utils.Pool;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,7 +20,8 @@ namespace mytest2.Main
         public UICooldownController UIJoystickCooldownPrefab;
         public UICooldownController UIKeyboardCooldownPrefab;
         public UIHealthBarController UIHealthBarPrefab;
-        public UIHealthBarSegment UIHealthBarSegmentPrefab; 
+        public UIHealthBarSegment UIHealthBarSegmentPrefab;
+        public PoolObject UIShieldRadiusPrefab;
         //Ability prefabs
         public AbilityProjectilePrefab[] AbilityProjectilePrefabs;
         public AbilityShieldPrefab[] AbilityShieldPrefabs;

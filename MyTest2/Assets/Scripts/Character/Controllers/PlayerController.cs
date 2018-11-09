@@ -200,6 +200,8 @@ namespace mytest2.Character
             m_PerpendicularToOrigin = new Vector3(m_PerpendicularToOrigin2D.x, 0, m_PerpendicularToOrigin2D.y);
             //Граница щита, которая автоматически сдвигаеться
             m_AutoBound = m_ShieldOrigin;
+
+            m_ShieldController.ShowShieldUI(m_ShieldOrigin);
         }
 
         void OnShieldInputUpdate(Vector2 dirToTarget)
@@ -213,6 +215,8 @@ namespace mytest2.Character
             float dot = Vector2.Dot(m_PerpendicularToOrigin2D, dirToTarget);
             float dir = Mathf.Sign(dot);
 
+            m_ShieldController.UpdateShieldUI(m_ShieldAngle);
+
             //Автоматическое смещение границы
             m_AutoBound = Quaternion.Euler(0, -m_ShieldAngle * dir, 0) * m_ShieldOrigin;
         }
@@ -224,24 +228,28 @@ namespace mytest2.Character
 
         private void OnDrawGizmos()
         {
-            //Радиус щита
-            Gizmos.DrawWireSphere(transform.position, m_ShieldController.ShieldRadius);
+            if (m_ShieldController != null)
+            {
+                //Радиус щита
+                Gizmos.DrawWireSphere(transform.position, m_ShieldController.ShieldRadius);
 
-            //Начало щита
-            Gizmos.color = Color.white;
-            Gizmos.DrawLine(transform.position, transform.position + m_ShieldOrigin * m_ShieldController.ShieldRadius);
+                //Начало щита
+                Gizmos.color = Color.white;
+                Gizmos.DrawLine(transform.position, transform.position + m_ShieldOrigin * m_ShieldController.ShieldRadius);
 
-            //Перпендикуляр к началу щита
-            Gizmos.color = Color.black;
-            Gizmos.DrawLine(transform.position, transform.position + m_PerpendicularToOrigin * m_ShieldController.ShieldRadius);
+                //Перпендикуляр к началу щита
+                Gizmos.color = Color.black;
+                Gizmos.DrawLine(transform.position, transform.position + m_PerpendicularToOrigin * m_ShieldController.ShieldRadius);
 
-            //Автоматическая граница
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position, transform.position + m_AutoBound * m_ShieldController.ShieldRadius);
+                //Автоматическая граница
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(transform.position, transform.position + m_AutoBound * m_ShieldController.ShieldRadius);
 
-            //Граница контролируемая вводом
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(transform.position, transform.position + m_InputBound * m_ShieldController.ShieldRadius);
+                //Граница контролируемая вводом
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawLine(transform.position, transform.position + m_InputBound * m_ShieldController.ShieldRadius);
+
+            }
         }
         #endregion
         #region Other Handlers
