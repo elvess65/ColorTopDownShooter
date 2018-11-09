@@ -223,6 +223,7 @@ namespace mytest2.Character
 
         void OnShieldInputEnd()
         {
+            m_ShieldController.HideShieldUI();
             CreateShield(m_ShieldOrigin, m_ShieldAngle, m_CurAbilityType);
         }
 

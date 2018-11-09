@@ -22,13 +22,9 @@ namespace mytest2.Character.Shield
         public void ShowShieldUI(Vector3 origin)
         {
             if (m_ShieldUI == null)
-            {
                 m_ShieldUI = PoolManager.GetObject(GameManager.Instance.PrefabLibrary.UIShieldRadiusPrefab) as UIShieldController;
-                m_ShieldUI.transform.parent = transform;
-                m_ShieldUI.transform.localPosition = Vector3.zero;
-            }
 
-            m_ShieldUI.Init(origin);
+            m_ShieldUI.Init(transform, origin);
         }
 
         public void UpdateShieldUI(float angle)
@@ -36,9 +32,9 @@ namespace mytest2.Character.Shield
             m_ShieldUI.UpdateUI(angle);
         }
 
-        public void HideSieldUI()
+        public void HideShieldUI()
         {
-
+            m_ShieldUI.HideUI();
         }
 
         public void CreateShield(Vector3 position, Vector3 origin, float angle, AbilityTypes type, int senderTeamID)
