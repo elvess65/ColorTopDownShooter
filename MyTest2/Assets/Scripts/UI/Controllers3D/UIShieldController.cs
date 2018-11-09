@@ -4,19 +4,38 @@ using Werewolf.StatusIndicators.Components;
 
 namespace mytest2.UI.Controllers3D
 {
+    /// <summary>
+    /// Отображение выбора направления действия щита
+    /// </summary>
+    [RequireComponent(typeof(FollowTransformController))]
     public class UIShieldController : PoolObject
     {
         public Cone IndicatorController;
 
-        public void Init(Transform followTransform, Vector3 origin)
-        {
-            if (!gameObject.activeSelf)
-                gameObject.SetActive(true);
+        private FollowTransformController m_Follow;
+        private const float m_INDICATOR_SCALE = 2.3f;
 
+        public void ShowUI(Transform followTransform, Vector3 origin, float shieldRadius)
+        {
+            if (m_Follow == null)
+                m_Follow = GetComponent<FollowTransformController>();
+
+            //Переместить объект в позицию игрока
             transform.position = followTransform.position;
 
+            //Начать следовать за игроком
+            m_Follow.Init(followTransform);
+
+            //Размер индикатора
+            IndicatorController.Scale = m_INDICATOR_SCALE * shieldRadius;
+            //Включить индикатор
+            IndicatorController.gameObject.SetActive(true);
+
+            //Вращение индикатора 
             Vector3 lookRotationEuler = Quaternion.LookRotation(origin).eulerAngles;
-            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, lookRotationEuler.y, transform.localEulerAngles.z);
+            transform.eulerAngles = new Vector3(transform.localEulerAngles.x, lookRotationEuler.y, transform.localEulerAngles.z);
+
+            //Обнулить угол
             IndicatorController.Angle = 0;
         }
 
@@ -27,7 +46,8 @@ namespace mytest2.UI.Controllers3D
 
         public void HideUI()
         {
-            gameObject.SetActive(false);
+            IndicatorController.gameObject.SetActive(false);
+            m_Follow.StopFollowing();
         }
     }
 }

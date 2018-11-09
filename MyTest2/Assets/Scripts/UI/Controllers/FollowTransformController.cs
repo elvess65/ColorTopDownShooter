@@ -19,6 +19,11 @@ namespace mytest2.UI.Controllers3D
 			m_Parent = parent;
 		}
 
+        public void StopFollowing()
+        {
+            m_Parent = null;
+        }
+
         void LateUpdate()
         {
 			if (m_Parent != null) 

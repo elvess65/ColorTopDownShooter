@@ -34,7 +34,7 @@ namespace Werewolf.StatusIndicators.Components {
 
     public override void Update() {
       if (Manager != null) {
-				Manager.transform.rotation = Quaternion.LookRotation(FlattenVector(Manager.Get3DMousePosition()) - Manager.transform.position);
+			//Manager.transform.rotation = Quaternion.LookRotation(FlattenVector(Manager.Get3DMousePosition()) - Manager.transform.position);
       }
     }
 

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using mytest2.Character.Abilities;
+﻿using mytest2.Character.Abilities;
 using mytest2.UI.Controllers3D;
 using mytest2.Utils.Pool;
 using UnityEngine;
@@ -19,13 +17,17 @@ namespace mytest2.Character.Shield
         public bool CreateSplatOnStart = false;
 
         private UIShieldController m_ShieldUI;
+        private const float m_MIN_ANGLE_TO_CREATE = 15;
+
+        public void Init()
+        {
+            if (CreateSplatOnStart)
+                m_ShieldUI = PoolManager.GetObject(GameManager.Instance.PrefabLibrary.UIShieldRadiusPrefab) as UIShieldController;
+        }
 
         public void ShowShieldUI(Vector3 origin)
         {
-            if (m_ShieldUI == null)
-                m_ShieldUI = PoolManager.GetObject(GameManager.Instance.PrefabLibrary.UIShieldRadiusPrefab) as UIShieldController;
-
-            m_ShieldUI.Init(transform, origin);
+            m_ShieldUI.ShowUI(transform, origin, ShieldRadius);
         }
 
         public void UpdateShieldUI(float angle)
@@ -40,6 +42,12 @@ namespace mytest2.Character.Shield
 
         public void CreateShield(Vector3 position, Vector3 origin, float angle, AbilityTypes type, int senderTeamID)
         {
+            if (angle < m_MIN_ANGLE_TO_CREATE)
+            {
+                Debug.Log("ShieldController: Cannot create shield. Angle is to small");
+                return;
+            }
+
             //Создать визуальное отображение щита
             ShieldObject shieldObj = PoolManager.GetObject(GameManager.Instance.PrefabLibrary.GetAbilityShieldPrefab(type)) as ShieldObject;
             shieldObj.transform.position = position;

@@ -370,6 +370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShieldRadius: 2
   ShieldExistsTimeMiliseconds: 1500
+  CreateSplatOnStart: 1
 --- !u!114 &114855795973970398
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -70,6 +70,7 @@ GameObject:
   - component: {fileID: 4286974099066566}
   - component: {fileID: 114958680163636532}
   - component: {fileID: 114243346017374108}
+  - component: {fileID: 114497610085532010}
   m_Layer: 0
   m_Name: ShieldUI
   m_TagString: Untagged
@@ -252,13 +253,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   progress: 1
-  scale: 7
+  scale: 4.6
   width: 0
   RangeIndicator: {fileID: 0}
   range: 0
   LBorder: {fileID: 119160021383573534}
   RBorder: {fileID: 119823115296162462}
   angle: 0
+--- !u!114 &114497610085532010
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1808695866945932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bafa265fb371af44ab775db853907d2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FollowSpeed: 10
 --- !u!114 &114958680163636532
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -296,7 +309,7 @@ Projector:
   m_FieldOfView: 30
   m_AspectRatio: 1
   m_Orthographic: 1
-  m_OrthographicSize: 3.5
+  m_OrthographicSize: 2.3
   m_Material: {fileID: 2100000, guid: 38322027f63884249b99d6b7fb1abe46, type: 2}
   m_IgnoreLayers:
     serializedVersion: 2
@@ -314,7 +327,7 @@ Projector:
   m_FieldOfView: 30
   m_AspectRatio: 1
   m_Orthographic: 1
-  m_OrthographicSize: 3.5
+  m_OrthographicSize: 2.3
   m_Material: {fileID: 2100000, guid: cdaae274ec0f8f644933402f7486957b, type: 2}
   m_IgnoreLayers:
     serializedVersion: 2
@@ -332,7 +345,7 @@ Projector:
   m_FieldOfView: 30
   m_AspectRatio: 1
   m_Orthographic: 1
-  m_OrthographicSize: 3.5
+  m_OrthographicSize: 2.3
   m_Material: {fileID: 2100000, guid: 32a0c60323b6d5945afb56d2a3f3f3c7, type: 2}
   m_IgnoreLayers:
     serializedVersion: 2
@@ -350,7 +363,7 @@ Projector:
   m_FieldOfView: 30
   m_AspectRatio: 1
   m_Orthographic: 1
-  m_OrthographicSize: 3.5
+  m_OrthographicSize: 2.3
   m_Material: {fileID: 2100000, guid: 7dc498cb0f03f8b49b46a48e9f86224a, type: 2}
   m_IgnoreLayers:
     serializedVersion: 2
@@ -368,7 +381,7 @@ Projector:
   m_FieldOfView: 30
   m_AspectRatio: 1
   m_Orthographic: 1
-  m_OrthographicSize: 3.5
+  m_OrthographicSize: 2.3
   m_Material: {fileID: 2100000, guid: 1c2098f79a9cc9a4c95e3f920b4a3728, type: 2}
   m_IgnoreLayers:
     serializedVersion: 2

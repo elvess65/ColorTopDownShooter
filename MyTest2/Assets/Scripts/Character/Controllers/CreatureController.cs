@@ -13,6 +13,13 @@ namespace mytest2.Character
     /// <summary>
     /// Общий класс для всех существ в игре
     /// </summary>
+    [RequireComponent(typeof(iMovement))]
+    [RequireComponent(typeof(iDodging))]
+    [RequireComponent(typeof(AbilityController))]
+    [RequireComponent(typeof(StaminaController))]
+    [RequireComponent(typeof(HealthController))]
+    [RequireComponent(typeof(TriggerCollisionController))]
+    [RequireComponent(typeof(ShieldController))]
     public abstract class CreatureController : MonoBehaviour
     {
         public int TeamID;
@@ -120,8 +127,10 @@ namespace mytest2.Character
             m_HealthController = GetComponent<HealthController>();
             m_HealthController.Init();
 
-            m_CollisionController = GetComponent<TriggerCollisionController>();
             m_ShieldController = GetComponent<ShieldController>();
+            m_ShieldController.Init();
+
+            m_CollisionController = GetComponent<TriggerCollisionController>();
         }                 //Инициализация всех контроллеров
         protected virtual void SubscribeForInputEvents() { }    //Подписаться на события ввода
         protected virtual void SubscribeForControllerEvents()   //Подписаться на события контроллеров

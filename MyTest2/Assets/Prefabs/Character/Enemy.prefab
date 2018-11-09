@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 114848260492821724}
   - component: {fileID: 143473104650476784}
   - component: {fileID: 65613056743363338}
+  - component: {fileID: 114345232222397988}
   m_Layer: 12
   m_Name: Enemy
   m_TagString: Untagged
@@ -306,6 +307,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AbilitySpawnPoint: {fileID: 4650372934369890}
   Abilities: 0000000001000000020000000300000004000000
+--- !u!114 &114345232222397988
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1790144897601442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e47f5824a7882cf40a99ec74fbde1b00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShieldRadius: 2
+  ShieldExistsTimeMiliseconds: 1500
+  CreateSplatOnStart: 0
 --- !u!114 &114586243822714000
 MonoBehaviour:
   m_ObjectHideFlags: 1
