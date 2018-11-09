@@ -16,6 +16,7 @@ namespace mytest2.Character.Shield
 
         public float ShieldRadius = 2;
         public int ShieldExistsTimeMiliseconds = 1500;
+        public bool CreateSplatOnStart = false;
 
         private UIShieldController m_ShieldUI;
 
