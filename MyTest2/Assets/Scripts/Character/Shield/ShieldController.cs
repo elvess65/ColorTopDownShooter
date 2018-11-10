@@ -49,8 +49,7 @@ namespace mytest2.Character.Shield
             }
 
             //Создать визуальное отображение щита
-            ShieldObject shieldObj = PoolManager.GetObject(GameManager.Instance.PrefabLibrary.GetAbilityShieldPrefab(type)) as ShieldObject;
-            shieldObj.transform.position = position;
+			ShieldVisuals shieldObj = PoolManager.GetObject(GameManager.Instance.PrefabLibrary.ShieldVisualsPrefab) as ShieldVisuals;
 
             //Создать програмное представление щита
             Shield shield = new Shield(position, origin, ShieldRadius, angle, type, senderTeamID, shieldObj);
@@ -86,12 +85,12 @@ namespace mytest2.Character.Shield
         { get; private set; }
         public int SenderTeamID
         { get; private set; }
-        public ShieldObject ObjectReference
+        public ShieldVisuals ObjectReference
         { get; private set; }
 
         private float m_SQRRadius;
 
-        public Shield(Vector3 position, Vector3 origin, float radius, float angle, AbilityTypes type, int senderTeamID, ShieldObject objReference)
+        public Shield(Vector3 position, Vector3 origin, float radius, float angle, AbilityTypes type, int senderTeamID, ShieldVisuals objReference)
         {
             Position = position;
             Origin = origin;
