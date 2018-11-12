@@ -180,6 +180,10 @@ namespace mytest2.Character
             //Начать вращение в направлении способности
             m_State = States.RotatingToAbility;
 		}
+        protected virtual void SelectAbility(AbilityTypes abilityType)
+        {
+            m_AbilityController.SelectAbilityeffect(abilityType);
+        }
         protected virtual void HandleTriggerEnter(Collider collider)
         {
             Projectile projectile = collider.GetComponent<Projectile>();

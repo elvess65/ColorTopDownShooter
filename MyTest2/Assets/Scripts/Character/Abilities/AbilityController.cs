@@ -12,12 +12,14 @@ namespace mytest2.Character.Abilities
     {
         public System.Action<AbilityTypes> OnAbilityUse; 
         public System.Action<AbilityTypes, int> OnUpdateAmmo;
+        public Renderer SelectedAbilityEffect;
 
         public Transform AbilitySpawnPoint;
         
         [Tooltip("Доступные способности")]
         public AbilityTypes[] Abilities;
 
+        private Material m_SelectedAbilityEffectMaterial;
         private Dictionary<AbilityTypes, CreatureAbility> m_Abilities;
 
 		public static int ABILITY_CODE_COOLDOWN = -1;
@@ -102,6 +104,16 @@ namespace mytest2.Character.Abilities
 			return false;
 		}
 
+        public void SelectAbilityeffect(AbilityTypes type)
+        {
+            if (m_SelectedAbilityEffectMaterial == null)
+            {
+                m_SelectedAbilityEffectMaterial = new Material(SelectedAbilityEffect.sharedMaterial);
+                SelectedAbilityEffect.sharedMaterial = m_SelectedAbilityEffectMaterial;
+            }
+
+            //SelectedAbilityEffect.sharedMaterial.color = Color
+        }
 
 		/// <summary>
 		/// Внутреняя функция проверки возможности использовать способность с получением типов причин отказа

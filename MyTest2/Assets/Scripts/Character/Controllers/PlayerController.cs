@@ -161,10 +161,11 @@ namespace mytest2.Character
             GameManager.Instance.UIManager.UpdateAbilityAmmo(type, ammoAmmount);
         }
 
-        void SelectAbility(AbilityTypes abilityType)
+        protected override void SelectAbility(AbilityTypes abilityType)
         {
             if (m_CurAbilityType != abilityType)
             {
+                base.SelectAbility(abilityType);
                 m_CurAbilityType = abilityType;
                 GameManager.Instance.UIManager.SelectAbilityVisuals(abilityType);
             }
