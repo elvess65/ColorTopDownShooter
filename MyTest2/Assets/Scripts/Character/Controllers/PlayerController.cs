@@ -32,7 +32,7 @@ namespace mytest2.Character
             base.Update();
 
 			//Передвижение и вращение если персонаж не уклоняеться или не вращаеться к направлению способности (применение)
-			if (!m_DodgeController.IsDodging && !m_IsRotating2Ability)
+			if (m_State == States.Normal)
             {
                 //Debug.Log(m_LastMoveDir2D);
                 m_MoveController.Move(m_TargetMoveDir);
@@ -82,10 +82,10 @@ namespace mytest2.Character
         /// <param name="dir"></param>
         void DodgeInputTouchEnd(Vector2 dir)
         {
-            if (m_IsRotating2Ability)
+            if (m_State != States.Normal)
             {
-                //TODO: Возможно следует прерывать вразение для применения способности если игрок хочет сделать уклон
-                Debug.Log("Cant dodge: is rotating to ability");
+                //TODO: Возможно следует прерывать вращение для применения способности если игрок хочет сделать уклон
+                Debug.Log("Cant dodge: Cur state is " + m_State);
                 return;
             }
 
@@ -98,25 +98,6 @@ namespace mytest2.Character
             Dodge(m_LastMoveDir2D);
             //2 Уклон в выбранную сторону
             //Dodge(dir);
-        }
-
-
-        /// <summary>
-        /// Персонаж начал выполнять уклон
-        /// </summary>
-        void DodgeStartedHandler()
-        {
-            Debug.Log("DodgeStarted");
-            //TODO: Translate to animation
-        }
-
-        /// <summary>
-        /// Персонаж закончил выполнять уклон
-        /// </summary>
-        void DodgeFinishedHandler()
-        {
-            Debug.Log("DodgeFinished");
-            //TODO: Translate to animation
         }
         #endregion
         #region Ability Handlers
@@ -306,9 +287,6 @@ namespace mytest2.Character
         protected override void SubscribeForControllerEvents()
         {
 			base.SubscribeForControllerEvents ();
-
-            m_DodgeController.OnDodgeStarted += DodgeStartedHandler;
-            m_DodgeController.OnDodgeFinished += DodgeFinishedHandler;
 
             m_StaminaController.OnStaminaUpdate += StaminaUpdateHandler;
             m_AbilityController.OnAbilityUse += AbilityUseHandler;

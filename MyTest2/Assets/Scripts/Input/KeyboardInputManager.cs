@@ -96,7 +96,6 @@ namespace mytest2.UI.InputSystem
 		{
 			if (Input.GetMouseButtonDown(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
 			{
-				Vector2 dirFromCenterToMouse = GetMouseScreenDir();
 				if (OnAbilityActivate != null)
 					OnAbilityActivate(PlayerController.SelectedAbility);
 			}

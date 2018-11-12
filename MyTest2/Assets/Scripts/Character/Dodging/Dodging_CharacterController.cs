@@ -16,10 +16,6 @@ namespace mytest2.Character.Dodging
         private CharacterController m_CharacterController;
         private Utils.InterpolationData<float> m_DodgeTimeLerpData;
 
-        public bool IsDodging
-        {
-            get { return m_DodgeTimeLerpData.IsStarted; }
-        }
         public int Stamina
         {
             get { return StaminaPerDodge; }

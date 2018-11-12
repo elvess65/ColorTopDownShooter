@@ -25,7 +25,7 @@ namespace mytest2.Character.Movement
         public void Rotate(float angle)
         {
             Quaternion targetRot = Quaternion.AngleAxis(angle, Vector3.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * RotationSpeed);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, Time.deltaTime * RotationSpeed);
         }
     }
 }

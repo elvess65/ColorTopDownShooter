@@ -12,8 +12,6 @@ namespace mytest2.Character.Dodging
         event System.Action OnDodgeStarted;
         event System.Action OnDodgeFinished;
 
-        bool IsDodging { get; }
-
         void Init();
         void Dodge(Vector2 dir);
     }

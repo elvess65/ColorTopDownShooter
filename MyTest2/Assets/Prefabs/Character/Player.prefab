@@ -319,7 +319,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveSpeed: 3
-  RotationSpeed: 5
+  RotationSpeed: 10
 --- !u!114 &114189207720716302
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -355,7 +355,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DodgeDist: 2
-  DodgeSpeed: 5
+  DodgeSpeed: 15
   StaminaPerDodge: 2
 --- !u!114 &114630413703338230
 MonoBehaviour:

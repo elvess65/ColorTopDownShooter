@@ -24,6 +24,12 @@ namespace mytest2.Character
     {
         public int TeamID;
 
+        protected enum States
+        {
+            Normal,
+            Dodging,
+            RotatingToAbility
+        }
         protected iMovement m_MoveController;
         protected iDodging m_DodgeController;
         protected AbilityController m_AbilityController;
@@ -32,11 +38,12 @@ namespace mytest2.Character
         protected TriggerCollisionController m_CollisionController;
         protected ShieldController m_ShieldController;
 
-        protected bool m_IsRotating2Ability = false;
+        protected States m_State = States.Normal;
         protected float m_CachedAbilityAngle;
         private Vector2 m_CachedAbilityDir;
         private System.Action m_OnRotation2AbilityFinished;
-        private const float m_DELTA_ANGLE_TO_DIR = 0.1f;
+
+        private const float m_DELTA_ANGLE_TO_DIR = 1f;
 
 
         public abstract void Move(Vector2 dir);
@@ -64,10 +71,12 @@ namespace mytest2.Character
         /// <param name="dir">Направление способности в 2D координатах</param>
         public void TryUseAbility(AbilityTypes type, Vector2 dir)
         {
-            if (!m_DodgeController.IsDodging)
+            if (m_State == States.Normal)
             {
+                //Если для выполнения действия хватает выносливости
                 if (m_StaminaController.HasEnoughStamina(GameManager.Instance.GameState.DataTableAbilities.GetAbilityData(type).Stamina))
                 {
+                    //Попытаться использовать способность (Причини отказа обрабатывают события)
                     if (m_AbilityController.CanUseABility(type))
                         HandleUseAbility(type, dir);
                 }
@@ -75,7 +84,7 @@ namespace mytest2.Character
                     Debug.LogWarning("Not enought stamina");
             }
             else
-                Debug.Log("Cant use ability: Is dodging");
+                Debug.Log("Cant use ability: Cur state is: " + m_State);
         }
     
         /// <summary>
@@ -141,6 +150,10 @@ namespace mytest2.Character
 				m_StaminaController.ReduceStamina(GameManager.Instance.GameState.DataTableAbilities.GetAbilityData(type).Stamina);
 			};
 
+            //Уклонение
+            m_DodgeController.OnDodgeStarted += DodgeStartedHandler;
+            m_DodgeController.OnDodgeFinished += DodgeFinishedHandler;
+
             //ХП
             m_HealthController.OnDestroy += HandleDestroyCreature;
             m_HealthController.OnWrongAbility += HandleWrongAbilityDamage;
@@ -165,7 +178,7 @@ namespace mytest2.Character
 			m_CachedAbilityAngle = Mathf.Atan2(dir.x, dir.y) * Mathf.Rad2Deg;
 
             //Начать вращение в направлении способности
-			m_IsRotating2Ability = true;
+            m_State = States.RotatingToAbility;
 		}
         protected virtual void HandleTriggerEnter(Collider collider)
         {
@@ -182,13 +195,13 @@ namespace mytest2.Character
         }
         private void HandleRotatation2AbilityDir()
         {
-            if (m_IsRotating2Ability)
+            if (m_State == States.RotatingToAbility)
             {
                 m_MoveController.Rotate(m_CachedAbilityAngle);
 
                 if (DeltaAngleToDir(m_CachedAbilityDir) < m_DELTA_ANGLE_TO_DIR)
                 {
-                    m_IsRotating2Ability = false;
+                    m_State = States.Normal;
 
                     if (m_OnRotation2AbilityFinished != null)
                         m_OnRotation2AbilityFinished();
@@ -203,6 +216,25 @@ namespace mytest2.Character
         protected virtual void HandleWrongAbilityDamage(AbilityTypes type)
         {
             Debug.Log("Wrong ability: " + type);
+        }
+
+        /// <summary>
+        /// Персонаж начал выполнять уклон
+        /// </summary>
+        protected virtual void DodgeStartedHandler()
+        {
+            Debug.Log("DodgeStarted");
+            m_State = States.Dodging;
+            //TODO: Translate to animation
+        }
+        /// <summary>
+        /// Персонаж закончил выполнять уклон
+        /// </summary>
+        protected virtual void DodgeFinishedHandler()
+        {
+            Debug.Log("DodgeFinished");
+            m_State = States.Normal;
+            //TODO: Translate to animation
         }
 
         private float DeltaAngleToDir(Vector2 dir)
