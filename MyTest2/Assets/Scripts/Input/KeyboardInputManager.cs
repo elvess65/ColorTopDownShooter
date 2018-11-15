@@ -97,7 +97,7 @@ namespace mytest2.UI.InputSystem
 			if (Input.GetMouseButtonDown(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
 			{
 				if (OnAbilityActivate != null)
-					OnAbilityActivate(PlayerController.SelectedAbility);
+					OnAbilityActivate(GameManager.Instance.GameState.Player.SelectedAbility);
 			}
 
 			if(Input.GetMouseButton(0))

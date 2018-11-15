@@ -30,13 +30,17 @@ namespace mytest2.UI.Controllers3D
 			//Rotation
 			m_TargetRot = parent.rotation;
 
-
 			//Color
             if (m_Material == null)
             {
                 m_Material = new Material(Renderer.sharedMaterial);
                 Renderer.sharedMaterial = m_Material;
             }
+
+            //Length
+            Vector3 scale = transform.localScale;
+            scale.z = GameManager.Instance.GameState.DataTableAbilities.GetAbilityData(type).Length;
+            transform.localScale = scale;
 
             m_Material.color = GameManager.Instance.GameState.AbilityColorController.GetAbilityColor(type);
 

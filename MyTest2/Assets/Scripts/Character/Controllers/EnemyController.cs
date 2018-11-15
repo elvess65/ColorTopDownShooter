@@ -14,6 +14,12 @@ namespace mytest2.Character
         {
         }
 
+        protected override void Start()
+        {
+            base.Start();
+
+            SelectAbility(m_AbilityController.Abilities[0]);
+        }
 
         protected override void Update()
         {

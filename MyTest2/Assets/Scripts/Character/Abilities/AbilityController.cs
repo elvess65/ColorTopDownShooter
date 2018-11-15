@@ -12,8 +12,8 @@ namespace mytest2.Character.Abilities
     {
         public System.Action<AbilityTypes> OnAbilityUse; 
         public System.Action<AbilityTypes, int> OnUpdateAmmo;
-        public Renderer SelectedAbilityEffect;
 
+        public Renderer SelectedAbilityEffect;
         public Transform AbilitySpawnPoint;
         
         [Tooltip("Доступные способности")]
@@ -28,6 +28,8 @@ namespace mytest2.Character.Abilities
 
         public void Init()
         {
+            SelectedAbilityEffect.gameObject.SetActive(false);
+
             m_Abilities = new Dictionary<AbilityTypes, CreatureAbility>();
             for (int i = 0; i < Abilities.Length; i++)
             {
@@ -104,15 +106,22 @@ namespace mytest2.Character.Abilities
 			return false;
 		}
 
-        public void SelectAbilityeffect(AbilityTypes type)
+        /// <summary>
+        /// Показать эффект выделенной способности
+        /// </summary>
+        /// <param name="type">Тип способности</param>
+        public void SelectAbilityEffect(AbilityTypes type)
         {
             if (m_SelectedAbilityEffectMaterial == null)
             {
                 m_SelectedAbilityEffectMaterial = new Material(SelectedAbilityEffect.sharedMaterial);
                 SelectedAbilityEffect.sharedMaterial = m_SelectedAbilityEffectMaterial;
+
+                if (!SelectedAbilityEffect.gameObject.activeSelf)
+                    SelectedAbilityEffect.gameObject.SetActive(true);
             }
 
-            //SelectedAbilityEffect.sharedMaterial.color = Color
+            SelectedAbilityEffect.sharedMaterial.color = GameManager.Instance.GameState.AbilityColorController.GetAbilityColor(type);
         }
 
 		/// <summary>
@@ -144,7 +153,7 @@ namespace mytest2.Character.Abilities
         {
             Projectile projectile = PoolManager.GetObject(GameManager.Instance.PrefabLibrary.GetAbilityProjectilePrefab(type)) as Projectile;
             projectile.transform.position = AbilitySpawnPoint.position;
-            projectile.Launch(dir, type, senderTeamID);
+            projectile.Launch(dir, type, senderTeamID, GameManager.Instance.GameState.DataTableAbilities.GetAbilityData(type).Length);
         }
     }
 

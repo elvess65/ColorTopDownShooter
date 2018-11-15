@@ -42,5 +42,6 @@ namespace mytest2.Character.Abilities
         public int Damage;
         public int Stamina;
         public float CooldownMiliseconds;
+        public float Length;
     }
 }

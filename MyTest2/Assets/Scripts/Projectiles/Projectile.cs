@@ -23,7 +23,7 @@ namespace mytest2.Projectiles
         public AbilityTypes Type
         { get; private set; }
 
-        public void Launch(Vector2 dir, AbilityTypes type, int senderTeamID)
+        public void Launch(Vector2 dir, AbilityTypes type, int senderTeamID, float distance)
         {
 			if (m_CollisionController == null) 
 			{
@@ -31,6 +31,7 @@ namespace mytest2.Projectiles
 				m_CollisionController.OnTriggerEnterEvent = CollisionWithAnythingHandler;
 			}
 
+            m_MaxSQRDist = distance * distance;
             Type = type;
             m_SenderTeamID = senderTeamID;
             m_Dir = new Vector3(dir.x, 0, dir.y);

@@ -39,12 +39,18 @@ namespace mytest2.Character
         protected ShieldController m_ShieldController;
 
         protected States m_State = States.Normal;
+        protected AbilityTypes m_CurAbilityType = AbilityTypes.None;
         protected float m_CachedAbilityAngle;
+
         private Vector2 m_CachedAbilityDir;
         private System.Action m_OnRotation2AbilityFinished;
 
-        private const float m_DELTA_ANGLE_TO_DIR = 1f;
+        public AbilityTypes SelectedAbility
+        {
+            get { return m_CurAbilityType; }
+        }
 
+        private const float m_DELTA_ANGLE_TO_DIR = 1f;
 
         public abstract void Move(Vector2 dir);
 
@@ -163,7 +169,15 @@ namespace mytest2.Character
         }
         protected virtual void FinishInitialization() { }       //Окончание инициализации
         //Обработка
-		protected virtual void HandleUseAbility(AbilityTypes type, Vector2 dir)
+        public virtual void SelectAbility(AbilityTypes abilityType)
+        {
+            if (m_CurAbilityType != abilityType)
+            {
+                m_CurAbilityType = abilityType;
+                m_AbilityController.SelectAbilityEffect(abilityType);
+            }
+        }
+        protected virtual void HandleUseAbility(AbilityTypes type, Vector2 dir)
 		{
             //Начать вращение в направлении применения способности
 
@@ -179,11 +193,7 @@ namespace mytest2.Character
 
             //Начать вращение в направлении способности
             m_State = States.RotatingToAbility;
-		}
-        protected virtual void SelectAbility(AbilityTypes abilityType)
-        {
-            m_AbilityController.SelectAbilityeffect(abilityType);
-        }
+		}    
         protected virtual void HandleTriggerEnter(Collider collider)
         {
             Projectile projectile = collider.GetComponent<Projectile>();

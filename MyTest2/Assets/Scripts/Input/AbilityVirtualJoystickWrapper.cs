@@ -33,7 +33,7 @@ namespace mytest2.UI.InputSystem
             base.HandleTouchStart();
 
             //Являеться ли способность этого джойстика выделенной
-            m_AbilitySelected = AbilityType == PlayerController.SelectedAbility;
+            m_AbilitySelected = AbilityType == GameManager.Instance.GameState.Player.SelectedAbility;
             m_AbilityIsActivated = false;
 
             m_TouchStartMousePos = Input.mousePosition;

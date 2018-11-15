@@ -1,8 +1,10 @@
 ﻿using mytest2.CameraSystem;
+using mytest2.Character;
 using mytest2.Main;
 using mytest2.UI;
 using mytest2.UI.InputSystem;
 using mytest2.UI.Loading;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -17,6 +19,7 @@ public class GameManager : MonoBehaviour
     public GameStateController GameState;
     public Transform PlayerSpawnPoint;
     public Transform EnemySpawnPoint;
+    public List<CreatureController> Enemies;
 
     private bool m_IsActive = false;
     private PrefabsLibrary m_PrefabsLibrary;
@@ -65,7 +68,10 @@ public class GameManager : MonoBehaviour
     void CreatePlayer()
     {
         GameState.Player = Instantiate(m_PrefabsLibrary.PlayerPrefab, PlayerSpawnPoint.position, Quaternion.identity);
-        Instantiate(m_PrefabsLibrary.EnemyPrefab, EnemySpawnPoint.position, Quaternion.identity);
+
+        Enemies = new List<CreatureController>();
+        CreatureController enemy = Instantiate(m_PrefabsLibrary.EnemyPrefab, EnemySpawnPoint.position, Quaternion.identity).GetComponent<CreatureController>();
+        Enemies.Add(enemy);
     }
 
     void StartLoop()

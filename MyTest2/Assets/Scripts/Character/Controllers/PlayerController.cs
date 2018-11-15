@@ -8,6 +8,7 @@ namespace mytest2.Character
 {
     public class PlayerController : CreatureController
     {
+        private AbilityFocusAssistant m_AbilityFocusAssistant;
         private UIPlayerActionDirectionController m_UIActionDirectionController;
 		private Vector3 m_TargetMoveDir = Vector3.zero;
         private Vector2 m_LastMoveDir2D;
@@ -19,13 +20,6 @@ namespace mytest2.Character
         private Vector3 m_AutoBound;                //Для отрисовки Gizmo
         private Vector3 m_PerpendicularToOrigin;    //Для отрисовки Gizmo 
         private Vector2 m_PerpendicularToOrigin2D;  //Для отрисовки Gizmo (скорее всего)
-
-        private static AbilityTypes m_CurAbilityType = AbilityTypes.None;
-
-        public static AbilityTypes SelectedAbility
-        { 
-            get { return m_CurAbilityType; }
-        }
 
         protected override void Update()
         {
@@ -124,6 +118,7 @@ namespace mytest2.Character
         /// </summary>
         void AbilityInputDrag(Vector2 dir)
         {
+            dir = m_AbilityFocusAssistant.GetFocusedDir(m_CurAbilityType, dir);
             UpdateUIActionDirectionController(dir);
         }
 
@@ -152,7 +147,7 @@ namespace mytest2.Character
         }
 
         /// <summary>
-        /// Обносить количество заряжов способности
+        /// Обновить количество зарядов способности
         /// </summary>
         /// <param name="type">Тип способности</param>
         /// <param name="ammoAmmount">Количество зарядов</param>
@@ -161,14 +156,16 @@ namespace mytest2.Character
             GameManager.Instance.UIManager.UpdateAbilityAmmo(type, ammoAmmount);
         }
 
-        protected override void SelectAbility(AbilityTypes abilityType)
+        /// <summary>
+        /// Выделить способность
+        /// </summary>
+        /// <param name="abilityType"></param>
+        public override void SelectAbility(AbilityTypes abilityType)
         {
             if (m_CurAbilityType != abilityType)
-            {
-                base.SelectAbility(abilityType);
-                m_CurAbilityType = abilityType;
                 GameManager.Instance.UIManager.SelectAbilityVisuals(abilityType);
-            }
+
+            base.SelectAbility(abilityType);
         }
         #endregion
         #region Shield Handlers
@@ -303,6 +300,8 @@ namespace mytest2.Character
             m_LastMoveDir2D = new Vector2(transform.forward.x, -transform.forward.z);
             //Создать предметы для подъема
             GameManager.Instance.GameState.ItemSpawnController.SpawnItems();
+            //Помощь в наведении способностей
+            m_AbilityFocusAssistant = GetComponent<AbilityFocusAssistant>();
         }
         private void SubscribeForJoystickEvents()
         {
@@ -342,7 +341,9 @@ namespace mytest2.Character
         void UpdateUIActionDirectionController(Vector2 dir)
         {
             if (m_UIActionDirectionController != null && m_UIActionDirectionController.IsEnabled)
+            {
                 m_UIActionDirectionController.SetDirection(dir);
+            }
         }
         void HideUIActionDirectionController()
         {
