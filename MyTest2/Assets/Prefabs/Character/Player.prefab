@@ -430,7 +430,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DodgeDist: 2
-  DodgeSpeed: 15
+  DodgeSpeed: 7
   StaminaPerDodge: 2
 --- !u!114 &114630413703338230
 MonoBehaviour:

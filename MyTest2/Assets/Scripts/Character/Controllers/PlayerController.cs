@@ -131,7 +131,11 @@ namespace mytest2.Character
         {
             //Если нельзя использовать способность длина вектора 0 (если способность была только выделена, но не использована)
             if (dir.sqrMagnitude > 0)
+            {
+                dir = m_AbilityFocusAssistant.GetFocusedDir(m_CurAbilityType, dir);
+
                 TryUseAbility(SelectedAbility, dir);
+            }
 
             //Спрятать указатель направления
             HideUIActionDirectionController();
