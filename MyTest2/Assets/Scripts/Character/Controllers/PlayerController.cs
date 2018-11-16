@@ -101,6 +101,7 @@ namespace mytest2.Character
         /// <param name="type">Тип способности</param>
         void AbilityInputActivate(AbilityTypes type)
         {
+            m_AbilityFocusAssistant.InitForAbility(type);
             ShowUIActionDirectionController(type);
         }
 
