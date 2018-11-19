@@ -18,7 +18,7 @@ namespace mytest2.Character.Abilities
             {
                 Vector3 dirToEnemy = GameManager.Instance.Enemies[i].transform.position - transform.position;
                 if (dirToEnemy.sqrMagnitude <= m_AbilityLengthSQR)
-                    return new Vector2(dirToEnemy.x, dirToEnemy.z).normalized;
+                    return new Vector2(dirToEnemy.x, dirToEnemy.z).normalized; ;
             }
 
             return originDir;

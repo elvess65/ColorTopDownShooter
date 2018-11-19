@@ -8,17 +8,19 @@ namespace mytest2.UI.InputSystem
     {
         public string MoveJoystickName = "MainJoystick";
 
-        [Header("Virtual Joystick Wrappers")]
-        public VirtualJoystickWrapper DodgeJoystickWrapper;
-        [Header(" - Ability Wrappers")]
-        public AbilityVirtualJoystickWrapper[] AbilityJoystickWrappers;
+        public VirtualButtonWrapper AttackButtonWrapper;
+        public VirtualButtonWrapper DodgeButtonWrapper;
+        public VirtualButtonWrapper ShieldButtonWrapper;
+        [Header("Ability")]
+        public AbilityVirtualButtonWrapper[] AbilityButtonWrappers;
 
-        private Dictionary<AbilityTypes, AbilityVirtualJoystickWrapper> m_JoystickWrappers; //Словарь создан для более удобного доступа к джойстикам способностей
+        private Dictionary<AbilityTypes, AbilityVirtualButtonWrapper> m_AbilityWrappers; //Словарь создан для более удобного доступа к способностям
 
-        public AbilityVirtualJoystickWrapper GetAbilityJoystick(AbilityTypes type)
+
+        public AbilityVirtualButtonWrapper GetAbilityJoystick(AbilityTypes type)
         {
-            if (m_JoystickWrappers.ContainsKey(type))
-                return m_JoystickWrappers[type];
+            if (m_AbilityWrappers.ContainsKey(type))
+                return m_AbilityWrappers[type];
 
             return null;
         }
@@ -35,16 +37,17 @@ namespace mytest2.UI.InputSystem
 			return 0;
 		}
 
+
         protected override void Start()
         {
             base.Start();
 
             //Создать словать джойстиков способностей
-            m_JoystickWrappers = new Dictionary<AbilityTypes, AbilityVirtualJoystickWrapper>();
-            for (int i = 0; i < AbilityJoystickWrappers.Length; i++)
+            m_AbilityWrappers = new Dictionary<AbilityTypes, AbilityVirtualButtonWrapper>();
+            for (int i = 0; i < AbilityButtonWrappers.Length; i++)
             {
-                if (!m_JoystickWrappers.ContainsKey(AbilityJoystickWrappers[i].AbilityType))
-                    m_JoystickWrappers.Add(AbilityJoystickWrappers[i].AbilityType, AbilityJoystickWrappers[i]);
+                if (!m_AbilityWrappers.ContainsKey(AbilityButtonWrappers[i].AbilityType))
+                    m_AbilityWrappers.Add(AbilityButtonWrappers[i].AbilityType, AbilityButtonWrappers[i]);
             }
 
 #if UNITY_EDITOR
@@ -57,10 +60,10 @@ namespace mytest2.UI.InputSystem
 
         void InitializeWrappers()
         {
-            DodgeJoystickWrapper.Init();
+            /*DodgeJoystickWrapper.Init();
 
             for (int i = 0; i < AbilityJoystickWrappers.Length; i++)
-                AbilityJoystickWrappers[i].Init();
+                AbilityJoystickWrappers[i].Init();*/
         }
     }
 }

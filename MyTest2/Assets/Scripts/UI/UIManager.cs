@@ -62,7 +62,7 @@ namespace mytest2.UI
 
         void VirtualJoystickSelectAbility(AbilityTypes type)
         {
-            AbilityVirtualJoystickWrapper targetJoystick = InputManager.Instance.VirtualJoystickInput.GetAbilityJoystick(type);
+            AbilityVirtualButtonWrapper targetJoystick = InputManager.Instance.VirtualJoystickInput.GetAbilityJoystick(type);
             if (targetJoystick != null)
                 JoystickSelectionController.Select(targetJoystick.transform);
         }
@@ -82,7 +82,7 @@ namespace mytest2.UI
 
         void VirtualJoystickUpdateAbilityAmmo(AbilityTypes type, int ammoAmount)
         {
-            AbilityVirtualJoystickWrapper targetJoystick = InputManager.Instance.VirtualJoystickInput.GetAbilityJoystick(type);
+            AbilityVirtualButtonWrapper targetJoystick = InputManager.Instance.VirtualJoystickInput.GetAbilityJoystick(type);
             if (targetJoystick != null)
                 targetJoystick.UpdateAbilityAmmo(ammoAmount);
         }
@@ -102,7 +102,7 @@ namespace mytest2.UI
 
         void CooldownJoystick(AbilityTypes type, float timeMiliseconds)
         {
-            AbilityVirtualJoystickWrapper targetJoystick = InputManager.Instance.VirtualJoystickInput.GetAbilityJoystick(type);
+            AbilityVirtualButtonWrapper targetJoystick = InputManager.Instance.VirtualJoystickInput.GetAbilityJoystick(type);
             if (targetJoystick != null)
             {
                 UICooldownController joystickCooldownController = Utils.Pool.PoolManager.GetObject(GameManager.Instance.PrefabLibrary.UIJoystickCooldownPrefab) as UICooldownController;

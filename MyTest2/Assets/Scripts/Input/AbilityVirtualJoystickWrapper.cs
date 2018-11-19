@@ -1,5 +1,4 @@
-﻿using mytest2.Character;
-using mytest2.Character.Abilities;
+﻿using mytest2.Character.Abilities;
 using UnityEngine;
 using UnityEngine.UI;
 
