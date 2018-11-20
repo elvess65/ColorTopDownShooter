@@ -9,13 +9,15 @@ namespace mytest2.UI
 {
     public class UIManager : MonoBehaviour
     {
-        private System.Action<AbilityTypes> m_OnSelectAbilityVisuals;
-        private System.Action<AbilityTypes, int> m_OnAbilityUpdateAmmo;
-        private System.Action<AbilityTypes, float> m_OnAbilityCooldown;
+        private System.Action<AbilityTypes> m_OnSelectAbilityVisuals;   //Визуальное отображение выделения способности
+        private System.Action<AbilityTypes, int> m_OnAbilityUpdateAmmo; //Визуальное отображение обновления количества зарядов
+        private System.Action<AbilityTypes, float> m_OnAbilityCooldown; //Визуальное отображение отката способности
 
         [Header("Animation Controllers")]
         public BaseUIAnimationController MoveJoystickAnimationController;
+        public BaseUIAnimationController AttackJoystickAnimationController;
         public BaseUIAnimationController DodgeJoystickAnimationController;
+        public BaseUIAnimationController ShieldJoystickAnimationController;
         public BaseUIAnimationController[] AbilityJoysticksAnimationController;
         public BaseUIAnimationController[] AbilityKeyboardAnimationController;
         [Header("UI Controllers")]
@@ -109,11 +111,14 @@ namespace mytest2.UI
                 RectTransform joystickRectTransform = targetJoystick.GetComponent<RectTransform>();
                 RectTransform cooldownControllerRectTransform = joystickCooldownController.GetComponent<RectTransform>();
 
-                cooldownControllerRectTransform.SetParent(joystickRectTransform.parent);
+                cooldownControllerRectTransform.SetParent(joystickRectTransform.parent, false);
+
                 cooldownControllerRectTransform.anchorMin = joystickRectTransform.anchorMin;
                 cooldownControllerRectTransform.anchorMax = joystickRectTransform.anchorMax;
                 cooldownControllerRectTransform.offsetMin = joystickRectTransform.offsetMin;
                 cooldownControllerRectTransform.offsetMax = joystickRectTransform.offsetMax;
+
+                cooldownControllerRectTransform.anchoredPosition = joystickRectTransform.anchoredPosition;
 
                 joystickCooldownController.Cooldown(timeMiliseconds);
             }
@@ -142,7 +147,9 @@ namespace mytest2.UI
         void SubscribeForVirtualJoystick()
         {
             InputManager.Instance.OnInputStateChange += MoveJoystickAnimationController.PlayAnimation;
+            InputManager.Instance.OnInputStateChange += AttackJoystickAnimationController.PlayAnimation;
             InputManager.Instance.OnInputStateChange += DodgeJoystickAnimationController.PlayAnimation;
+            InputManager.Instance.OnInputStateChange += ShieldJoystickAnimationController.PlayAnimation;
 
             for (int i = 0; i < AbilityJoysticksAnimationController.Length; i++)
                 InputManager.Instance.OnInputStateChange += AbilityJoysticksAnimationController[i].PlayAnimation;

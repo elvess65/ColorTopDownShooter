@@ -219,7 +219,7 @@ namespace mytest2.Character
             m_InputBound = new Vector3(dirToTarget.x, 0, dirToTarget.y);
             //Угол между началом щита и текущей границей
             m_ShieldAngle = Vector3.Angle(m_ShieldOrigin, m_InputBound);
-
+            Debug.Log("PLAYER ANGLE: " + m_ShieldAngle);
             //Сравнение Dot с пермендикуляром к началу щита для определения знака угла 
             float dot = Vector2.Dot(m_PerpendicularToOrigin2D, dirToTarget);
             float dir = Mathf.Sign(dot);

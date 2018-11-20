@@ -19,6 +19,8 @@ namespace mytest2.UI.Controllers
 			SelectionObj.gameObject.SetActive(true);
 			SelectionObj.SetParent(joystickTransform);
 			SelectionObj.anchoredPosition = Vector3.zero;
+            SelectionObj.offsetMin = Vector2.zero;
+            SelectionObj.offsetMax = Vector2.zero;
         }
     }
 }

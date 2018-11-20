@@ -12,13 +12,13 @@ namespace mytest2.UI.InputSystem
         public System.Action<Vector2> OnButtonMove;
         public System.Action<Vector2> OnButtonTouchEnd;
 
-        public void OnDrag(PointerEventData eventData)
+        public virtual void OnDrag(PointerEventData eventData)
         {
             if (OnButtonMove != null)
                 OnButtonMove(eventData.position);
         }
 
-        public void OnPointerDown(PointerEventData eventData)
+        public virtual void OnPointerDown(PointerEventData eventData)
         {
             if (OnButtonTouchStart != null)
                 OnButtonTouchStart(eventData.position);
