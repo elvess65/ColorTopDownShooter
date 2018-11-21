@@ -11,13 +11,14 @@ namespace mytest2.UI.Controllers3D
     public class UIPlayerActionDirectionController : PoolObject
     {
         public MeshRenderer Renderer;
+        public float RotationSpeed = 10;
 
-		private bool m_IsActive = false;
+        private bool m_IsActive = false;
         private Quaternion m_TargetRot;
         private Material m_Material;
 		private FollowTransformController m_FollowController;
 
-		private const float m_ROTATION_SPEED = 10;
+	    
 
         public void Init(Transform parent, AbilityTypes type)
         {
@@ -63,7 +64,7 @@ namespace mytest2.UI.Controllers3D
         private void Update()
         {
 			if (m_IsActive)
-				transform.rotation = Quaternion.Slerp(transform.rotation, m_TargetRot, Time.deltaTime * m_ROTATION_SPEED);
+				transform.rotation = Quaternion.Slerp(transform.rotation, m_TargetRot, Time.deltaTime * RotationSpeed);
         }
     }
 }

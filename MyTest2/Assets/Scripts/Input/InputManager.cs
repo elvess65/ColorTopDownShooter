@@ -9,15 +9,11 @@ namespace mytest2.UI.InputSystem
         public static InputManager Instance;
 
         public System.Action<bool> OnInputStateChange;
-        public System.Action<Vector2> OnShieldInputStart;
-        public System.Action<Vector2> OnShieldInputUpdate;
-        public System.Action OnShieldInputEnd;
 
         public bool PreferVirtualJoystickInEditor = false;
 
         private BaseInputManager m_Input;
         private bool m_InputState = false;
-		private bool m_ShieldInputStarted = false;
 
         public VirtualJoystickInputManager VirtualJoystickInput
         {
@@ -65,57 +61,13 @@ namespace mytest2.UI.InputSystem
         void Update()
         {
             if (GameManager.Instance.IsActive && m_InputState)
-            {
                 m_Input.UpdateInput();
-
-                HandleShieldInput();
-            }
 
             if (Input.GetKeyDown(KeyCode.L))
                 InputIsEnabled = false;
 
             if (Input.GetKeyDown(KeyCode.U))
                 InputIsEnabled = true;
-        }
-
-
-        void HandleShieldInput()
-        {
-			if (Input.GetMouseButtonDown(m_Input.GetShieldInputButton()) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
-            {
-                Vector2 dirFromCenterToMouse = GetDirFromScreenCenterToMouse();
-				m_ShieldInputStarted = true;
-
-                if (OnShieldInputStart != null)
-                    OnShieldInputStart(dirFromCenterToMouse.normalized);
-            }
-
-			if (m_ShieldInputStarted) 
-			{
-				if (Input.GetMouseButton (m_Input.GetShieldInputButton())) 
-				{
-					Vector2 dirFromCenterToMouse = GetDirFromScreenCenterToMouse ();
-					if (OnShieldInputUpdate != null)
-						OnShieldInputUpdate (dirFromCenterToMouse.normalized);
-				}
-
-				if (Input.GetMouseButtonUp (m_Input.GetShieldInputButton())) 
-				{
-					m_ShieldInputStarted = false;
-
-					if (OnShieldInputEnd != null)
-						OnShieldInputEnd ();
-				}
-			}
-        }
-
-        Vector2 GetDirFromScreenCenterToMouse()
-        {
-            Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
-            Vector2 dirFromCenterToMouse = mousePos - screenCenter;
-
-            return dirFromCenterToMouse;
         }
     }
 

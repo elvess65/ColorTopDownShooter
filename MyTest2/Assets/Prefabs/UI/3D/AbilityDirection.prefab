@@ -126,6 +126,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Renderer: {fileID: 23667549166053192}
+  RotationSpeed: 20
 --- !u!114 &114258080893139864
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -10,7 +10,7 @@ namespace mytest2.UI.InputSystem
 
         public VirtualButtonWrapper AttackButtonWrapper;
         public VirtualButtonWrapper DodgeButtonWrapper;
-        public VirtualButtonWrapper ShieldButtonWrapper;
+        public ShieldVirtualButtonWrapper ShieldButtonWrapper;
         [Header("Ability")]
         public AbilityVirtualButtonWrapper[] AbilityButtonWrappers;
 
@@ -31,11 +31,6 @@ namespace mytest2.UI.InputSystem
             if (OnMove != null)
                 OnMove(movePosition);
         }
-
-		public override int GetShieldInputButton ()
-		{
-			return 0;
-		}
 
 
         protected override void Start()

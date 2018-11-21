@@ -35,6 +35,8 @@ namespace mytest2.UI.Controllers3D
             Vector3 lookRotationEuler = Quaternion.LookRotation(origin).eulerAngles;
             transform.eulerAngles = new Vector3(transform.localEulerAngles.x, lookRotationEuler.y, transform.localEulerAngles.z);
 
+            Debug.Log("Shield dir " + origin + " Shield euler: " + lookRotationEuler);
+
             //Обнулить угол
             IndicatorController.Angle = 0;
         }

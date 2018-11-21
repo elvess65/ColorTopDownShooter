@@ -210,6 +210,7 @@ namespace mytest2.Character
             //Граница щита, которая автоматически сдвигаеться
             m_AutoBound = m_ShieldOrigin;
 
+            //Показать UI
             m_ShieldController.ShowShieldUI(m_ShieldOrigin);
         }
 
@@ -219,11 +220,11 @@ namespace mytest2.Character
             m_InputBound = new Vector3(dirToTarget.x, 0, dirToTarget.y);
             //Угол между началом щита и текущей границей
             m_ShieldAngle = Vector3.Angle(m_ShieldOrigin, m_InputBound);
-            Debug.Log("PLAYER ANGLE: " + m_ShieldAngle);
             //Сравнение Dot с пермендикуляром к началу щита для определения знака угла 
             float dot = Vector2.Dot(m_PerpendicularToOrigin2D, dirToTarget);
             float dir = Mathf.Sign(dot);
 
+            //Обновить UI с учетом нового угла
             m_ShieldController.UpdateShieldUI(m_ShieldAngle);
 
             //Автоматическое смещение границы
@@ -232,8 +233,14 @@ namespace mytest2.Character
 
         void OnShieldInputEnd()
         {
+            //Спрятать UI
             m_ShieldController.HideShieldUI();
+
+            //Создать щит
             CreateShield(m_ShieldOrigin, m_ShieldAngle, m_SelectedAbility);
+
+            //Обнулить глобальные значения
+            m_ShieldAngle = 0;
         }
 
         private void OnDrawGizmos()
@@ -302,15 +309,16 @@ namespace mytest2.Character
                 InputManager.Instance.KeyboardInput.OnAbilitySelect += AbilityInputSelect;
                 InputManager.Instance.KeyboardInput.OnAbilityEnd += AbilityInputTouchEnd;
                 InputManager.Instance.KeyboardInput.OnAbilityMove += AbilityInputDrag;
+
+                InputManager.Instance.KeyboardInput.OnShieldInputStart += OnShieldInputStart;
+                InputManager.Instance.KeyboardInput.OnShieldInputUpdate += OnShieldInputUpdate;
+                InputManager.Instance.KeyboardInput.OnShieldInputEnd += OnShieldInputEnd;
             }
 #else
             SubscribeForJoystickEvents();
 #endif
 
             InputManager.Instance.OnInputStateChange += InputStatusChangeHandler;
-            InputManager.Instance.OnShieldInputStart += OnShieldInputStart;
-            InputManager.Instance.OnShieldInputUpdate += OnShieldInputUpdate;
-            InputManager.Instance.OnShieldInputEnd += OnShieldInputEnd;
         }
         protected override void SubscribeForControllerEvents()
         {
@@ -339,17 +347,24 @@ namespace mytest2.Character
             InputManager.Instance.VirtualJoystickInput.OnMove += Move;
 
             //Уклон
+            InputManager.Instance.VirtualJoystickInput.DodgeButtonWrapper.OnButtonTouchStart += DodgeInputTouchEnd;
             /*InputManager.Instance.VirtualJoystickInput.DodgeJoystickWrapper.OnJoystickTouchStart += DodgeInputTouchStart;
             InputManager.Instance.VirtualJoystickInput.DodgeJoystickWrapper.OnJoystickMove += DodgeInputDrag;
             InputManager.Instance.VirtualJoystickInput.DodgeJoystickWrapper.OnJoystickTouchEnd += DodgeInputTouchEnd;*/
 
+            //Щит
+            InputManager.Instance.VirtualJoystickInput.ShieldButtonWrapper.OnShieldInputStart += OnShieldInputStart;
+            InputManager.Instance.VirtualJoystickInput.ShieldButtonWrapper.OnShieldInputUpdate += OnShieldInputUpdate;
+            InputManager.Instance.VirtualJoystickInput.ShieldButtonWrapper.OnShieldInputEnd += OnShieldInputEnd;
+
+            //Атака
             InputManager.Instance.VirtualJoystickInput.AttackButtonWrapper.OnButtonTouchStart += AttackInputTouchStart;
             InputManager.Instance.VirtualJoystickInput.AttackButtonWrapper.OnButtonMove += AttackInputDrag;
             InputManager.Instance.VirtualJoystickInput.AttackButtonWrapper.OnButtonTouchEnd += AttackInputTouchEnd;
 
-            InputManager.Instance.VirtualJoystickInput.DodgeButtonWrapper.OnButtonTouchStart += DodgeInputTouchEnd;
-
             //Способности
+            for (int i = 0; i < InputManager.Instance.VirtualJoystickInput.AbilityButtonWrappers.Length; i++)
+                InputManager.Instance.VirtualJoystickInput.AbilityButtonWrappers[i].OnAbilitySelect += AbilityInputSelect;
             /*for (int i = 0; i < InputManager.Instance.VirtualJoystickInput.AbilityJoystickWrappers.Length; i++)
             {
                 InputManager.Instance.VirtualJoystickInput.AbilityJoystickWrappers[i].OnAbilityActivate += AbilityInputActivate;
@@ -357,11 +372,6 @@ namespace mytest2.Character
                 InputManager.Instance.VirtualJoystickInput.AbilityJoystickWrappers[i].OnJoystickTouchEnd += AbilityInputTouchEnd;
                 InputManager.Instance.VirtualJoystickInput.AbilityJoystickWrappers[i].OnJoystickMove += AbilityInputDrag;
             }*/
-
-            for (int i = 0; i < InputManager.Instance.VirtualJoystickInput.AbilityButtonWrappers.Length; i++)
-            {
-                InputManager.Instance.VirtualJoystickInput.AbilityButtonWrappers[i].OnAbilitySelect += AbilityInputSelect;
-            }
         }
 
         //Обработка
