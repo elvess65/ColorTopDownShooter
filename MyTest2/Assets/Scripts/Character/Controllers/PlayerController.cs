@@ -119,7 +119,7 @@ namespace mytest2.Character
         /// </summary>
         void AbilityInputDrag(Vector2 dir)
         {
-            dir = m_AbilityFocusAssistant.GetFocusedDir(m_CurAbilityType, dir);
+            dir = m_AbilityFocusAssistant.GetFocusedDir(m_SelectedAbility, dir);
             UpdateUIActionDirectionController(dir);
         }
 
@@ -132,7 +132,7 @@ namespace mytest2.Character
             //Если нельзя использовать способность длина вектора 0 (если способность была только выделена, но не использована)
             if (dir.sqrMagnitude > 0)
             {
-                dir = m_AbilityFocusAssistant.GetFocusedDir(m_CurAbilityType, dir);
+                dir = m_AbilityFocusAssistant.GetFocusedDir(m_SelectedAbility, dir);
 
                 TryUseAbility(SelectedAbility, dir);
             }
@@ -140,6 +140,31 @@ namespace mytest2.Character
             //Спрятать указатель направления
             HideUIActionDirectionController();
         }
+
+        #region Attack
+        void AttackInputTouchStart(Vector2 screenPos)
+        {
+            //ShowUIActionDirectionController(m_SelectedAbility);
+            m_AbilityFocusAssistant.InitForAbility(m_SelectedAbility);
+        }
+
+        void AttackInputDrag(Vector2 screenPos)
+        {
+            //UpdateUIActionDirectionController(dir.normalized);
+        }
+
+        void AttackInputTouchEnd(Vector2 screenPos)
+        {
+            //Направление способности по-умолчанию - вперед 
+            Vector2 abilityDir = new Vector2(transform.forward.x, transform.forward.z);
+            //Коректировка направления способности
+            abilityDir = m_AbilityFocusAssistant.GetFocusedDir(m_SelectedAbility, abilityDir);
+
+            TryUseAbility(SelectedAbility, abilityDir);
+
+            //HideUIActionDirectionController();
+        }
+        #endregion
 
         /// <summary>
         /// Обновить состояние джойстика способности (откат)
@@ -167,7 +192,7 @@ namespace mytest2.Character
         /// <param name="abilityType"></param>
         public override void SelectAbility(AbilityTypes abilityType)
         {
-            if (m_CurAbilityType != abilityType)
+            if (m_SelectedAbility != abilityType)
                 GameManager.Instance.UIManager.SelectAbilityVisuals(abilityType);
 
             base.SelectAbility(abilityType);
@@ -185,6 +210,7 @@ namespace mytest2.Character
             //Граница щита, которая автоматически сдвигаеться
             m_AutoBound = m_ShieldOrigin;
 
+            //Показать UI
             m_ShieldController.ShowShieldUI(m_ShieldOrigin);
         }
 
@@ -194,11 +220,11 @@ namespace mytest2.Character
             m_InputBound = new Vector3(dirToTarget.x, 0, dirToTarget.y);
             //Угол между началом щита и текущей границей
             m_ShieldAngle = Vector3.Angle(m_ShieldOrigin, m_InputBound);
-
             //Сравнение Dot с пермендикуляром к началу щита для определения знака угла 
             float dot = Vector2.Dot(m_PerpendicularToOrigin2D, dirToTarget);
             float dir = Mathf.Sign(dot);
 
+            //Обновить UI с учетом нового угла
             m_ShieldController.UpdateShieldUI(m_ShieldAngle);
 
             //Автоматическое смещение границы
@@ -207,8 +233,14 @@ namespace mytest2.Character
 
         void OnShieldInputEnd()
         {
+            //Спрятать UI
             m_ShieldController.HideShieldUI();
-            CreateShield(m_ShieldOrigin, m_ShieldAngle, m_CurAbilityType);
+
+            //Создать щит
+            CreateShield(m_ShieldOrigin, m_ShieldAngle, m_SelectedAbility);
+
+            //Обнулить глобальные значения
+            m_ShieldAngle = 0;
         }
 
         private void OnDrawGizmos()
@@ -277,15 +309,16 @@ namespace mytest2.Character
                 InputManager.Instance.KeyboardInput.OnAbilitySelect += AbilityInputSelect;
                 InputManager.Instance.KeyboardInput.OnAbilityEnd += AbilityInputTouchEnd;
                 InputManager.Instance.KeyboardInput.OnAbilityMove += AbilityInputDrag;
+
+                InputManager.Instance.KeyboardInput.OnShieldInputStart += OnShieldInputStart;
+                InputManager.Instance.KeyboardInput.OnShieldInputUpdate += OnShieldInputUpdate;
+                InputManager.Instance.KeyboardInput.OnShieldInputEnd += OnShieldInputEnd;
             }
 #else
             SubscribeForJoystickEvents();
 #endif
 
             InputManager.Instance.OnInputStateChange += InputStatusChangeHandler;
-            InputManager.Instance.OnShieldInputStart += OnShieldInputStart;
-            InputManager.Instance.OnShieldInputUpdate += OnShieldInputUpdate;
-            InputManager.Instance.OnShieldInputEnd += OnShieldInputEnd;
         }
         protected override void SubscribeForControllerEvents()
         {
@@ -314,18 +347,31 @@ namespace mytest2.Character
             InputManager.Instance.VirtualJoystickInput.OnMove += Move;
 
             //Уклон
-            InputManager.Instance.VirtualJoystickInput.DodgeJoystickWrapper.OnJoystickTouchStart += DodgeInputTouchStart;
+            InputManager.Instance.VirtualJoystickInput.DodgeButtonWrapper.OnButtonTouchStart += DodgeInputTouchEnd;
+            /*InputManager.Instance.VirtualJoystickInput.DodgeJoystickWrapper.OnJoystickTouchStart += DodgeInputTouchStart;
             InputManager.Instance.VirtualJoystickInput.DodgeJoystickWrapper.OnJoystickMove += DodgeInputDrag;
-            InputManager.Instance.VirtualJoystickInput.DodgeJoystickWrapper.OnJoystickTouchEnd += DodgeInputTouchEnd;
+            InputManager.Instance.VirtualJoystickInput.DodgeJoystickWrapper.OnJoystickTouchEnd += DodgeInputTouchEnd;*/
+
+            //Щит
+            InputManager.Instance.VirtualJoystickInput.ShieldButtonWrapper.OnShieldInputStart += OnShieldInputStart;
+            InputManager.Instance.VirtualJoystickInput.ShieldButtonWrapper.OnShieldInputUpdate += OnShieldInputUpdate;
+            InputManager.Instance.VirtualJoystickInput.ShieldButtonWrapper.OnShieldInputEnd += OnShieldInputEnd;
+
+            //Атака
+            InputManager.Instance.VirtualJoystickInput.AttackButtonWrapper.OnButtonTouchStart += AttackInputTouchStart;
+            InputManager.Instance.VirtualJoystickInput.AttackButtonWrapper.OnButtonMove += AttackInputDrag;
+            InputManager.Instance.VirtualJoystickInput.AttackButtonWrapper.OnButtonTouchEnd += AttackInputTouchEnd;
 
             //Способности
-            for (int i = 0; i < InputManager.Instance.VirtualJoystickInput.AbilityJoystickWrappers.Length; i++)
+            for (int i = 0; i < InputManager.Instance.VirtualJoystickInput.AbilityButtonWrappers.Length; i++)
+                InputManager.Instance.VirtualJoystickInput.AbilityButtonWrappers[i].OnAbilitySelect += AbilityInputSelect;
+            /*for (int i = 0; i < InputManager.Instance.VirtualJoystickInput.AbilityJoystickWrappers.Length; i++)
             {
                 InputManager.Instance.VirtualJoystickInput.AbilityJoystickWrappers[i].OnAbilityActivate += AbilityInputActivate;
                 InputManager.Instance.VirtualJoystickInput.AbilityJoystickWrappers[i].OnAbilitySelect += AbilityInputSelect;
                 InputManager.Instance.VirtualJoystickInput.AbilityJoystickWrappers[i].OnJoystickTouchEnd += AbilityInputTouchEnd;
                 InputManager.Instance.VirtualJoystickInput.AbilityJoystickWrappers[i].OnJoystickMove += AbilityInputDrag;
-            }
+            }*/
         }
 
         //Обработка

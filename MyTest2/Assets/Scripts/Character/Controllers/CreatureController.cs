@@ -39,7 +39,7 @@ namespace mytest2.Character
         protected ShieldController m_ShieldController;
 
         protected States m_State = States.Normal;
-        protected AbilityTypes m_CurAbilityType = AbilityTypes.None;
+        protected AbilityTypes m_SelectedAbility = AbilityTypes.None;
         protected float m_CachedAbilityAngle;
 
         private Vector2 m_CachedAbilityDir;
@@ -47,7 +47,7 @@ namespace mytest2.Character
 
         public AbilityTypes SelectedAbility
         {
-            get { return m_CurAbilityType; }
+            get { return m_SelectedAbility; }
         }
 
         private const float m_DELTA_ANGLE_TO_DIR = 1f;
@@ -171,9 +171,9 @@ namespace mytest2.Character
         //Обработка
         public virtual void SelectAbility(AbilityTypes abilityType)
         {
-            if (m_CurAbilityType != abilityType)
+            if (m_SelectedAbility != abilityType)
             {
-                m_CurAbilityType = abilityType;
+                m_SelectedAbility = abilityType;
                 m_AbilityController.SelectAbilityEffect(abilityType);
             }
         }
