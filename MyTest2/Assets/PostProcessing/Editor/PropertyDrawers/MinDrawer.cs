@@ -3,6 +3,7 @@ using UnityEngine.PostProcessing;
 
 namespace UnityEditor.PostProcessing
 {
+    /*
     [CustomPropertyDrawer(typeof(MinAttribute))]
     sealed class MinDrawer : PropertyDrawer
     {
@@ -25,5 +26,5 @@ namespace UnityEditor.PostProcessing
                 EditorGUI.LabelField(position, label.text, "Use Min with float or int.");
             }
         }
-    }
+    }*/
 }
